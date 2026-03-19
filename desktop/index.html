@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" data-view="desktop">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Material Desktop (Desktop)</title>
+    <link rel="stylesheet" href="../shared/css/common.css" />
+  </head>
+  <body>
+    <main class="viewport viewport--desktop">
+      <div
+        id="material-base"
+        class="material-base"
+        data-base-src="../assets/base-image.jpg"
+      >
+        <div class="material-placeholder">
+          Drop a scanned image into <code>assets/base-image.jpg</code> (or update
+          <code>data-base-src</code>).
+        </div>
+      </div>
+
+      <canvas
+        id="overlay-canvas"
+        class="overlay-canvas"
+        aria-hidden="true"
+      ></canvas>
+
+      <div class="hud" aria-hidden="true">
+        <div class="hud__title">Material Desktop</div>
+        <div class="hud__sub">Generative overlay placeholder</div>
+      </div>
+    </main>
+
+    <script type="module" src="../shared/js/overlay.js"></script>
+  </body>
+</html>
+
