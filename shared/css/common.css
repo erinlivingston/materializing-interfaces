@@ -13,7 +13,7 @@ body {
   margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
     Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  background: #0b0c10;
+  background: #cfb492;
   color: #fff;
   overflow: hidden;
 }
@@ -22,32 +22,16 @@ body {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: #0b0c10;
+  background: #cfb492;
 }
 
 .material-base {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #1a1d2b, #0d1020);
+  background: #cfb492;
   background-size: cover;
   background-position: center;
   transform: translateZ(0);
-}
-
-.material-placeholder {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  text-align: center;
-  background: radial-gradient(
-    circle at 20% 20%,
-    rgba(255, 255, 255, 0.08),
-    rgba(255, 255, 255, 0.01) 55%,
-    rgba(0, 0, 0, 0) 75%
-  );
-  color: rgba(255, 255, 255, 0.85);
 }
 
 .overlay-canvas {
@@ -68,6 +52,7 @@ body {
   border: 1px solid var(--hud-border);
   border-radius: 14px;
   backdrop-filter: blur(10px);
+  display: none;
 }
 
 .hud__title {
@@ -87,12 +72,63 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 10% 15%,
-    rgba(255, 255, 255, 0.18),
-    rgba(0, 0, 0, 0) 45%
-  );
-  mix-blend-mode: screen;
+  background: none;
   pointer-events: none;
+}
+
+.material-placeholder {
+  display: none;
+  position: absolute;
+  inset: 0;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: rgba(50, 35, 20, 0.9);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.window-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.desktop-window {
+  position: absolute;
+  width: min(32vw, 420px);
+  min-width: 260px;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.desktop-window__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.desktop-window__hotspot {
+  position: absolute;
+  top: 5%;
+  width: 8%;
+  height: 8%;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.desktop-window__hotspot:hover {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+.desktop-window__hotspot--close {
+  left: 3%;
+}
+
+.desktop-window__hotspot--spawn {
+  left: 13%;
 }
 
