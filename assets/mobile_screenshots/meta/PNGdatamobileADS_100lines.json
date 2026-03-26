@@ -1,0 +1,2109 @@
+{
+  "schemaVersion": 1,
+  "description": "First 100 mobile screenshot ads with crop/UI metadata for generative collage prototype.",
+  "uiZonesPx": {
+    "top_bar": {
+      "width": 1167,
+      "height": 130,
+      "note": "clock left, signal/wifi/battery right"
+    },
+    "bottom_bar": {
+      "width": 1167,
+      "height": 275,
+      "note": "Instagram nav: home, reels, compose, search, profile"
+    },
+    "safeContentRect": "Region between top_bar and bottom_bar; use non_adcontent_* flags to avoid bleed from feed above/below ad."
+  },
+  "count": 100,
+  "items": [
+    {
+      "imagefilename": "IMG_4858.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4858.PNG",
+      "insta_location": "feed",
+      "brand": "nintendoamerica",
+      "emotionorsense": [
+        "fun",
+        "game"
+      ],
+      "adtext": "create your very own cozy paradise from the ground up alongside pokemon friends in",
+      "keywords": [
+        "nintendo switch",
+        "gaming",
+        "pokemon",
+        "fun",
+        "cute",
+        "illustration"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4859.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4859.PNG",
+      "insta_location": "feed",
+      "brand": "levoit",
+      "emotionorsense": [
+        "self-care"
+      ],
+      "adtext": "levoit core mini-p air purifier are you breathing clean air at home? experience",
+      "keywords": [
+        "air",
+        "purifier"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": true
+    },
+    {
+      "imagefilename": "IMG_4860.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4860.PNG",
+      "insta_location": "feed",
+      "brand": "teva",
+      "emotionorsense": [
+        "adventure"
+      ],
+      "adtext": "closed-toe confidence unlocked the hurricane XLT3 CT is your go-all-day",
+      "keywords": [
+        "shoes",
+        "teva",
+        "outdoor",
+        "athletic",
+        "legs"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": true
+    },
+    {
+      "imagefilename": "IMG_4861.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4861.PNG",
+      "insta_location": "feed",
+      "brand": "heusompets",
+      "emotionorsense": [
+        "responsibility"
+      ],
+      "adtext": "is nail trimming a nightmare for your dog? Switch to the silent groom pro for a safe",
+      "keywords": [
+        "nail trim",
+        "dog",
+        "petcare"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4862.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4862.PNG",
+      "insta_location": "feed",
+      "brand": "hulu",
+      "emotionorsense": [
+        "curiosity"
+      ],
+      "adtext": "missing daughter. Frantic family. conflicting",
+      "keywords": [
+        "friends like these",
+        "hulu on disney+",
+        "portrait",
+        "thriller",
+        "streaming"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4863.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4863.PNG",
+      "insta_location": "feed",
+      "brand": "polaroid",
+      "emotionorsense": [
+        "creativity"
+      ],
+      "adtext": "polaroid now gen3. now in pink and teal. Welcome to your new aesthetic.",
+      "keywords": [
+        "camera",
+        "photography",
+        "pink",
+        "teal",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4871.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4871.PNG",
+      "insta_location": "feed",
+      "brand": "kirrinfinch",
+      "emotionorsense": [
+        "confidence"
+      ],
+      "adtext": "look sharp & feel confident you deserve clothes that fit-not just your body",
+      "keywords": [
+        "clothing",
+        "formal",
+        "gender-affirming",
+        "confidence",
+        "comfort",
+        "queermodel",
+        "queer"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": true
+    },
+    {
+      "imagefilename": "IMG_4872.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4872.PNG",
+      "insta_location": "feed",
+      "brand": "riflepaperco",
+      "emotionorsense": [
+        "cozy"
+      ],
+      "adtext": "just arrived: new rifle paper co. x the company store bedding",
+      "keywords": [
+        "bedding",
+        "pattern",
+        "color",
+        "companystore",
+        "cozy"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4873.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4873.PNG",
+      "insta_location": "story",
+      "brand": "vegaplantnutrition",
+      "emotionorsense": [
+        "strength"
+      ],
+      "adtext": "voted most trusted protein powder in canada, shop now",
+      "keywords": [
+        "protein powder",
+        "nutrition",
+        "health",
+        "gym",
+        "fitness"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4874.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4874.PNG",
+      "insta_location": "story",
+      "brand": "wilderdog",
+      "emotionorsense": [
+        "dog care"
+      ],
+      "adtext": "it's indestructible and easy to clean! 32oz stainless steel bowl, shop now",
+      "keywords": [
+        "dog food",
+        "pet love",
+        "review",
+        "fivestars",
+        "slowfeeder"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4875.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4875.PNG",
+      "insta_location": "story",
+      "brand": "wearewildfang",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "tap to shop here, best self guaranteed",
+      "keywords": [
+        "clothing",
+        "pattern",
+        "style",
+        "closeup"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4876.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4876.PNG",
+      "insta_location": "reel",
+      "brand": "originalbagbalm",
+      "emotionorsense": [
+        "self-care"
+      ],
+      "adtext": "new! A limited-edition tin design from",
+      "keywords": [
+        "bagbalm",
+        "moisturizer",
+        "dry skin",
+        "pattern"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4877.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4877.PNG",
+      "insta_location": "reel",
+      "brand": "patternbeauty",
+      "emotionorsense": [
+        "self-care"
+      ],
+      "adtext": "meet PATTERN beauty's new scent: indigo, our popular styles in a fresh + bright scent, new!",
+      "keywords": [
+        "conditioner",
+        "cosmetic",
+        "graphicillustration"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4878.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4878.PNG",
+      "insta_location": "reel",
+      "brand": "wearhuha",
+      "emotionorsense": [],
+      "adtext": "five stars, I will not ever go back to",
+      "keywords": [
+        "videoad",
+        "woman"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4880.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4880.PNG",
+      "insta_location": "story",
+      "brand": "wilderdog",
+      "emotionorsense": [
+        "dog care"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "dog food",
+        "pet love",
+        "review",
+        "fivestars",
+        "slowfeeder"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4881.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4881.PNG",
+      "insta_location": "story",
+      "brand": "warmies_usa",
+      "emotionorsense": [
+        "self-care",
+        "cozy"
+      ],
+      "adtext": "pompompurin warmies! Limited drop, hello kitty x warmies, pudding-sweer & ready to snuggle",
+      "keywords": [
+        "stuffed animal",
+        "cute",
+        "cozy",
+        "warm"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4882.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4882.PNG",
+      "insta_location": "story",
+      "brand": "nintendoamerica",
+      "emotionorsense": [
+        "fun",
+        "game"
+      ],
+      "adtext": "pokemon pokopia available 3/5/26 only on nintendo switch 2, learn more",
+      "keywords": [
+        "nintendo switch",
+        "gaming",
+        "pokemon",
+        "fun",
+        "cute",
+        "illustration"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4883.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4883.PNG",
+      "insta_location": "story",
+      "brand": "palladium",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "tap to star shopping",
+      "keywords": [
+        "shoes",
+        "style",
+        "sneakers",
+        "platform shoes",
+        "puffer shoes",
+        "productimages"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4884.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4884.PNG",
+      "insta_location": "feed",
+      "brand": "lucyandyak",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "barrel pants",
+        "green",
+        "smallfashion",
+        "queerbrand"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4885.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4885.PNG",
+      "insta_location": "feed",
+      "brand": "sparkpawsofficial",
+      "emotionorsense": [
+        "dog style"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "leash",
+        "rainbow",
+        "ombre",
+        "pink",
+        "spark paws",
+        "dog fashion"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4886.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4886.PNG",
+      "insta_location": "feed",
+      "brand": "wearewildfang",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "formal pants",
+        "businesscasual",
+        "queer brand",
+        "pinstripes"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4887.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4887.PNG",
+      "insta_location": "feed",
+      "brand": "vegaplantnutrition",
+      "emotionorsense": [
+        "strength"
+      ],
+      "adtext": "vega performance protein shop now",
+      "keywords": [
+        "protein powder",
+        "nutrition",
+        "creamy vanilla",
+        "health"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4888.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4888.PNG",
+      "insta_location": "feed",
+      "brand": "brooklinen",
+      "emotionorsense": [
+        "cozy"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "pillows",
+        "sheets",
+        "flannel",
+        "pattern",
+        "colorful",
+        "soft",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4889.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4889.PNG",
+      "insta_location": "feed",
+      "brand": "dandylionworld",
+      "emotionorsense": [
+        "dog care"
+      ],
+      "adtext": "2026: the year of hydrated paws meet your daily paw relief duo",
+      "keywords": [
+        "dog paws",
+        "productimage",
+        "foam",
+        "cosmetic",
+        "cleanliness"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4890.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4890.PNG",
+      "insta_location": "feed",
+      "brand": "ruggable",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "ella slate blue rug by anthropologies the secret to a perfect room: cozy, durable, and",
+      "keywords": [
+        "rug",
+        "homedecor",
+        "flowers",
+        "pretty",
+        "entrymat",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4891.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4891.PNG",
+      "insta_location": "feed",
+      "brand": "wilderdog",
+      "emotionorsense": [
+        "dog care"
+      ],
+      "adtext": "love the stainless steel 32 oz stainless steel bowl",
+      "keywords": [
+        "dog bowl",
+        "dog products",
+        "slowfeeder"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4892.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4892.PNG",
+      "insta_location": "feed",
+      "brand": "bombas",
+      "emotionorsense": [
+        "cozy"
+      ],
+      "adtext": "womens modern rib quarter socks, shop now",
+      "keywords": [
+        "socks",
+        "purple",
+        "cozy",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4893.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4893.PNG",
+      "insta_location": "feed",
+      "brand": "keltyusa",
+      "emotionorsense": [
+        "adventure",
+        "outside",
+        "gear"
+      ],
+      "adtext": "window seta built for campsites, road trips, dogs, couches, and everything in between",
+      "keywords": [
+        "camping",
+        "gear",
+        "container",
+        "organization",
+        "adventure"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": true
+    },
+    {
+      "imagefilename": "IMG_4894.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4894.PNG",
+      "insta_location": "feed",
+      "brand": "oatsovernightusa",
+      "emotionorsense": [
+        "nutrition"
+      ],
+      "adtext": "fruity cereal better flavors. Better mornings. A healthy",
+      "keywords": [],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4895.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4895.PNG",
+      "insta_location": "reel",
+      "brand": "loopearplugs",
+      "emotionorsense": [
+        "self-care"
+      ],
+      "adtext": "find your match in just 60 seconds",
+      "keywords": [
+        "earplugs",
+        "health",
+        "noise",
+        "peace",
+        "comfort",
+        "style",
+        "productvideo",
+        "productgraph"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4896.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4896.PNG",
+      "insta_location": "reel",
+      "brand": "seescandies",
+      "emotionorsense": [
+        "celebration"
+      ],
+      "adtext": "celebrate st. patrick's day with our festive st pat's favorites",
+      "keywords": [
+        "candy",
+        "chocolate",
+        "treat",
+        "holiday",
+        "irish",
+        "stpaddys"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4897.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4897.PNG",
+      "insta_location": "reel",
+      "brand": "onlyny",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "shop new arrivals from Only NY",
+      "keywords": [
+        "style",
+        "model",
+        "tennis",
+        "nyc street style",
+        "cool",
+        "graphictee"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4898.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4898.PNG",
+      "insta_location": "reel",
+      "brand": "smokonow",
+      "emotionorsense": [
+        "cute"
+      ],
+      "adtext": "perfect to accessorize your home and as",
+      "keywords": [
+        "toys",
+        "cute",
+        "keychain",
+        "miffy",
+        "productimages",
+        "productgrid"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4915.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4915.PNG",
+      "insta_location": "story",
+      "brand": "parksproject",
+      "emotionorsense": [
+        "style",
+        "outdoors"
+      ],
+      "adtext": "explore park habitats & get lost in the moss; tap to shop now",
+      "keywords": [
+        "parks",
+        "outdoors",
+        "trendy",
+        "style",
+        "graphicdesign",
+        "patterns",
+        "productimages",
+        "productgrid"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4916.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4916.PNG",
+      "insta_location": "story",
+      "brand": "nyseg.co",
+      "emotionorsense": [],
+      "adtext": "upgrading the grid, curious? Check it out",
+      "keywords": [
+        "energy",
+        "newyorkstate media",
+        "electric grid"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4917.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4917.PNG",
+      "insta_location": "feed",
+      "brand": "parksproject",
+      "emotionorsense": [
+        "style",
+        "outdoors"
+      ],
+      "adtext": "meet park habitats, shop now",
+      "keywords": [
+        "parks",
+        "outdoors",
+        "trendy",
+        "style",
+        "graphicdesign",
+        "patterns",
+        "productimages",
+        "productgrid",
+        "productcarosel"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4918.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4918.PNG",
+      "insta_location": "reel",
+      "brand": "kalashi",
+      "emotionorsense": [
+        "money"
+      ],
+      "adtext": "trade on anything with kalshi, what will karoline leavitt say in the next press briefing china",
+      "keywords": [
+        "betting",
+        "gambling",
+        "worldevents"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4919.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4919.PNG",
+      "insta_location": "reel",
+      "brand": "hbomax",
+      "emotionorsense": [],
+      "adtext": "from showstopping stories to blockbuster, the ultimate bundle sign up",
+      "keywords": [
+        "disney+",
+        "streaming",
+        "hbomax"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4920.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4920.PNG",
+      "insta_location": "reel",
+      "brand": "igloocoolers",
+      "emotionorsense": [
+        "gear",
+        "adventure"
+      ],
+      "adtext": "stock up and get free shipping with orders",
+      "keywords": [
+        "coolers",
+        "productimages",
+        "productgrid",
+        "productcarosel",
+        "hydration"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4921.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4921.PNG",
+      "insta_location": "reel",
+      "brand": "retrospekt",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "say hello to retro vibes! Our hello kitty",
+      "keywords": [
+        "techgear",
+        "camera",
+        "stereo",
+        "polaroid",
+        "hellokitty",
+        "productimages"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4922.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4922.PNG",
+      "insta_location": "reel",
+      "brand": "threadheads",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "too spicy for your bland takes and your basic, shipping worldwide, kimchi",
+      "keywords": [
+        "graphict",
+        "graphicdesign",
+        "cool",
+        "style",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4923.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4923.PNG",
+      "insta_location": "reel",
+      "brand": "topjoblab",
+      "emotionorsense": [],
+      "adtext": "editing in the living room while watching",
+      "keywords": [
+        "desk",
+        "influencerad",
+        "videostill"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4924.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4924.PNG",
+      "insta_location": "reel",
+      "brand": "cedarplanters",
+      "emotionorsense": [
+        "outdoor gear"
+      ],
+      "adtext": "success is just a cedar raised bed away, step into a gardener's paradise! Shop now",
+      "keywords": [
+        "gardening",
+        "planterbox",
+        "cedar",
+        "gardenbed",
+        "building",
+        "diy"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4925.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4925.PNG",
+      "insta_location": "reel",
+      "brand": "lord_ofmaps",
+      "emotionorsense": [
+        "cozy",
+        "style"
+      ],
+      "adtext": "the greatest blanket in all the land",
+      "keywords": [
+        "blanket",
+        "lifestyleimage",
+        "map design",
+        "illustration"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4926.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4926.PNG",
+      "insta_location": "reel",
+      "brand": "yoniman.mp4",
+      "emotionorsense": [
+        "self-care"
+      ],
+      "adtext": "introducin brainrot to the world, stop scrolling. Reclaim your focus and mental clarity",
+      "keywords": [
+        "app",
+        "screenlimit"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4927.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4927.PNG",
+      "insta_location": "reel",
+      "brand": "earthwiseseedco",
+      "emotionorsense": [
+        "outdoors"
+      ],
+      "adtext": "think you missed planting season",
+      "keywords": [
+        "seeds",
+        "flowers",
+        "gardening",
+        "outdoors",
+        "lawncare"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4928.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4928.PNG",
+      "insta_location": "reel",
+      "brand": "truegritttexturesupply",
+      "emotionorsense": [
+        "creativity"
+      ],
+      "adtext": "introducing kolormarc,the ultimate digital markers",
+      "keywords": [
+        "digitalbrushes",
+        "marker",
+        "texture",
+        "art",
+        "digitalart",
+        "coloring"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4929.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4929.PNG",
+      "insta_location": "reel",
+      "brand": "birdcollective",
+      "emotionorsense": [
+        "style",
+        "outdoors"
+      ],
+      "adtext": "chill in the air, warmth in your wear! Cozy up",
+      "keywords": [
+        "graphicdesign",
+        "illustration",
+        "graphictee",
+        "birds"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4930.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4930.PNG",
+      "insta_location": "reel",
+      "brand": "cooksillustrated",
+      "emotionorsense": [],
+      "adtext": "save 81% and receive a FREE gift when you, science is the secret to great cooking, a full year fo $10 + a free gift",
+      "keywords": [
+        "magazine",
+        "cooking",
+        "recipe",
+        "pancakes"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4931.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4931.PNG",
+      "insta_location": "feed",
+      "brand": "vego_garden",
+      "emotionorsense": [
+        "outdoors",
+        "gardening"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "gardening",
+        "planterbox",
+        "metal",
+        "raisedbed",
+        "vegetables"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4932.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4932.PNG",
+      "insta_location": "feed",
+      "brand": "ruggable",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "calloway brown multicolor rug",
+      "keywords": [
+        "rug",
+        "pattern",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4933.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4933.PNG",
+      "insta_location": "feed",
+      "brand": "wearewildfang",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "the essential long sleeve high waisted",
+      "keywords": [
+        "jumpsuit",
+        "style",
+        "queer",
+        "queermodel",
+        "coverall"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4934.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4934.PNG",
+      "insta_location": "reel",
+      "brand": "vego_garden",
+      "emotionorsense": [
+        "outdoors",
+        "gardening"
+      ],
+      "adtext": "don't be late it's time to get your garden",
+      "keywords": [
+        "gardening",
+        "raisedbed",
+        "netting",
+        "compost",
+        "productgrid",
+        "productcarosel"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4935.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4935.PNG",
+      "insta_location": "reel",
+      "brand": "kitchenaidusa",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "meet the kitchaid color of the year",
+      "keywords": [
+        "standmixer",
+        "baking",
+        "colorful",
+        "homedesign"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4936.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4936.PNG",
+      "insta_location": "reel",
+      "brand": "threebythreeseatle",
+      "emotionorsense": [
+        "creativity"
+      ],
+      "adtext": "stay inspired with bold color,smart design",
+      "keywords": [
+        "notepad",
+        "colored pencils",
+        "notes",
+        "organization"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4937.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4937.PNG",
+      "insta_location": "reel",
+      "brand": "vans",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "shop clothing: streetwear-inspired",
+      "keywords": [
+        "tshirt",
+        "longsleeve",
+        "pants",
+        "streetstyle",
+        "productcarosel",
+        "productgrid",
+        "stripes",
+        "checkers"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4938.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4938.PNG",
+      "insta_location": "reel",
+      "brand": "cognitivesurplus",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "give your desk and home a nerdy upgrade",
+      "keywords": [
+        "mug",
+        "graphicdesign",
+        "illustration",
+        "gems",
+        "bugs",
+        "pencontainer",
+        "washitape",
+        "accessories",
+        "productimages",
+        "productgrid",
+        "productcarosel"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4939.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4939.PNG",
+      "insta_location": "reel",
+      "brand": "lucyandyak",
+      "emotionorsense": [
+        "style",
+        "comfort"
+      ],
+      "adtext": "join the comfort movement, we promise you",
+      "keywords": [
+        "jumpsuit",
+        "clothing",
+        "barrelpants",
+        "fleece",
+        "pattern",
+        "colorful",
+        "productgrid",
+        "queermodel",
+        "productcarosel"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4940.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4940.PNG",
+      "insta_location": "reel",
+      "brand": "baboontothemoon",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "designed to last forever and that's a very",
+      "keywords": [
+        "bags",
+        "drawstring",
+        "pink",
+        "productgrid",
+        "productcarosel",
+        "packingcubes"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4941.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4941.PNG",
+      "insta_location": "reel",
+      "brand": "peacecollective",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "made to rep your team on repeat-on the go, p/c fanship, new york sirens",
+      "keywords": [
+        "pwhl",
+        "rugbyshirt",
+        "nysirens",
+        "womenshockey",
+        "fanshop",
+        "licensed"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4942.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4942.PNG",
+      "insta_location": "reel",
+      "brand": "thecontainerstore",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "shop the container store and discover",
+      "keywords": [
+        "coatrack",
+        "laundrybasket",
+        "jar",
+        "hamper",
+        "productgrid",
+        "productimages",
+        "container",
+        "organization",
+        "homecare"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4943.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4943.PNG",
+      "insta_location": "reel",
+      "brand": "ruggable",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "the secret to a perfect room: cozy,durable",
+      "keywords": [
+        "rug",
+        "productgrid",
+        "productimages",
+        "rainbow",
+        "checkered",
+        "abstractpatterns",
+        "homestyle"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4957.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4957.PNG",
+      "insta_location": "feed",
+      "brand": "momadesignstore",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "now at moma design store",
+      "keywords": [
+        "hay",
+        "outdoorfurniture",
+        "couch",
+        "seat",
+        "table"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4958.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4958.PNG",
+      "insta_location": "feed",
+      "brand": "humankindswim",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "high neck swim top",
+      "keywords": [
+        "swimtop",
+        "clothing",
+        "queerbrand",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4959.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4959.PNG",
+      "insta_location": "feed",
+      "brand": "lucyandyak",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "clothing",
+        "patternpants",
+        "comfort"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4960.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4960.PNG",
+      "insta_location": "feed",
+      "brand": "newyorkersforcleainair",
+      "emotionorsense": [],
+      "adtext": "what if climate policy could put money back in your, clean air initiative: keeping the lights on. Read the report",
+      "keywords": [
+        "newyorkcleanair",
+        "air",
+        "environmentalpolicy",
+        "newyorkersforcleanair"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4961.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4961.PNG",
+      "insta_location": "feed",
+      "brand": "calvinklein",
+      "emotionorsense": [
+        "comfort"
+      ],
+      "adtext": "shop now calvin klein",
+      "keywords": [
+        "underwearset",
+        "modelimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4962.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4962.PNG",
+      "insta_location": "feed",
+      "brand": "thecompanystore",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "spectrum hand towel limited time only! 30% off cloud-like comforters",
+      "keywords": [
+        "towel",
+        "linen",
+        "colorful"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": true
+    },
+    {
+      "imagefilename": "IMG_4963.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4963.PNG",
+      "insta_location": "feed",
+      "brand": "levoitlifestyle",
+      "emotionorsense": [
+        "self-care"
+      ],
+      "adtext": "levoit core 600s-p smart air purifier are you breathing clean aire at home? Experience",
+      "keywords": [
+        "airpurifier",
+        "air",
+        "levoit"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4964.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4964.PNG",
+      "insta_location": "feed",
+      "brand": "ruggable",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "rug",
+        "pattern",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4965.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4965.PNG",
+      "insta_location": "feed",
+      "brand": "wearewildfang",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "buttondownshirt",
+        "green",
+        "style",
+        "modelimage",
+        "queerbrand"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4966.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4966.PNG",
+      "insta_location": "feed",
+      "brand": "brooklinen",
+      "emotionorsense": [
+        "comfort"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "robe",
+        "fluffy",
+        "gray",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4967.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4967.PNG",
+      "insta_location": "story",
+      "brand": "blueland",
+      "emotionorsense": [
+        "cleanliness"
+      ],
+      "adtext": "32% off bestselling plastic-free detergent tablet trio, shop now, get offer",
+      "keywords": [
+        "dishwashertablet",
+        "ecoproduct",
+        "cleaner",
+        "plasticfree"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4968.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4968.PNG",
+      "insta_location": "story",
+      "brand": "humankindswim",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "new arrivals are here shop now",
+      "keywords": [
+        "queerbrand",
+        "swim",
+        "swimsuits",
+        "trunks",
+        "comfort",
+        "summer"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4969.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4969.PNG",
+      "insta_location": "story",
+      "brand": "zimadental",
+      "emotionorsense": [
+        "cleanliness"
+      ],
+      "adtext": "never brush your retainer again enjoy a hygienically clean mouth appliance every single day. Show now",
+      "keywords": [
+        "retainer",
+        "dentalhygeine",
+        "hygeine",
+        "mouthguard",
+        "productimages",
+        "colorful"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4970.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4970.PNG",
+      "insta_location": "story",
+      "brand": "threebythreeseatle",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "new! Metal kitchen organizing bins tap to star shopping",
+      "keywords": [
+        "organization",
+        "silverware",
+        "flatware",
+        "color",
+        "kitchenorganization"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4971.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4971.PNG",
+      "insta_location": "reel",
+      "brand": "wearewildfang",
+      "emotionorsense": [
+        "style",
+        "comfort"
+      ],
+      "adtext": "new arrivals, and they're not sticking around, shop now",
+      "keywords": [
+        "tanktop",
+        "modelimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4973.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4973.PNG",
+      "insta_location": "story",
+      "brand": "misenkitchen",
+      "emotionorsense": [],
+      "adtext": "free shears $24 valye when you spend $50 first time customers only tap to shop now",
+      "keywords": [
+        "kitchen",
+        "scissors",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4977.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4977.PNG",
+      "insta_location": "story",
+      "brand": "americanexpress",
+      "emotionorsense": [
+        "money"
+      ],
+      "adtext": "",
+      "keywords": [
+        "money",
+        "finance",
+        "creditcard",
+        "amex",
+        "bills",
+        "account"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4978.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4978.PNG",
+      "insta_location": "story",
+      "brand": "keltyusa",
+      "emotionorsense": [
+        "outdoor",
+        "adventure"
+      ],
+      "adtext": "made for together tired of the daily grind? Imagine quality time… start shopping today",
+      "keywords": [
+        "outdoors",
+        "camping",
+        "tent",
+        "family",
+        "dog",
+        "adventure",
+        "vacation",
+        "relax",
+        "nature"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4979.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4979.PNG",
+      "insta_location": "feed",
+      "brand": "humankindswim",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "anywhere jogger with humankind's gender inclusive lifestyle, shop now",
+      "keywords": [
+        "genderaffirming",
+        "queerbrand",
+        "pants",
+        "joggers",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4980.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4980.PNG",
+      "insta_location": "feed",
+      "brand": "keltyusa",
+      "emotionorsense": [
+        "outdoor",
+        "adventure"
+      ],
+      "adtext": "made for together, shop now",
+      "keywords": [
+        "outdoors",
+        "camping",
+        "tent",
+        "woods",
+        "adventure",
+        "qualitytime",
+        "cozy",
+        "couple"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4981.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4981.PNG",
+      "insta_location": "feed",
+      "brand": "woxer",
+      "emotionorsense": [
+        "comfort"
+      ],
+      "adtext": "you can put",
+      "keywords": [
+        "underwear",
+        "boxer",
+        "woxer"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4982.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4982.PNG",
+      "insta_location": "feed",
+      "brand": "ruggable",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "rug",
+        "pattern",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4983.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4983.PNG",
+      "insta_location": "story",
+      "brand": "humankindswim",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "shop",
+      "keywords": [
+        "swimtop",
+        "clothing",
+        "queerbrand",
+        "productimage",
+        "productgrid",
+        "trunks",
+        "tanktop"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4984.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4984.PNG",
+      "insta_location": "story",
+      "brand": "humankindswim",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "shop",
+      "keywords": [
+        "swimtop",
+        "clothing",
+        "queerbrand",
+        "productimage",
+        "productgrid",
+        "trunks",
+        "tanktop"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4985.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4985.PNG",
+      "insta_location": "story",
+      "brand": "keltyusa",
+      "emotionorsense": [
+        "adventure"
+      ],
+      "adtext": "eclipse the world and retreat to your own cozy cocoon for the, tap to shop now",
+      "keywords": [
+        "sleepingbag",
+        "camping",
+        "qualitytime",
+        "dog",
+        "couple",
+        "tent"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4990.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4990.PNG",
+      "insta_location": "feed",
+      "brand": "palladium",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "pampa lt+lo xplr wp+ olive night wether you're navigating city streets or, shop now 30% off",
+      "keywords": [
+        "shoes",
+        "style",
+        "sneakers",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4991.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4991.PNG",
+      "insta_location": "feed",
+      "brand": "vegaplantnutrition",
+      "emotionorsense": [
+        "strength"
+      ],
+      "adtext": "sugar-free pr-workout energizer consistency builds results. Fuel your routine with",
+      "keywords": [
+        "plant-based",
+        "preworkoutpowder",
+        "caffeine",
+        "gymroutine"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": true
+    },
+    {
+      "imagefilename": "IMG_4992.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4992.PNG",
+      "insta_location": "feed",
+      "brand": "keltyusa",
+      "emotionorsense": [
+        "outdoor",
+        "adventure"
+      ],
+      "adtext": "made for together, order now",
+      "keywords": [
+        "camping",
+        "lifestyleimage",
+        "tent",
+        "blanket",
+        "dog",
+        "familytime",
+        "vacation",
+        "connection"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4993.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4993.PNG",
+      "insta_location": "feed",
+      "brand": "comfrt",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "comfort",
+        "sweats",
+        "sweatpants",
+        "cozy",
+        "camo"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4994.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4994.PNG",
+      "insta_location": "feed",
+      "brand": "brooklinen",
+      "emotionorsense": [
+        "comfort"
+      ],
+      "adtext": "new! One fluff and done comforters, doesn't get easier than that, machine washable, no duvet cover required",
+      "keywords": [
+        "bedding",
+        "comfort",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4995.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4995.PNG",
+      "insta_location": "feed",
+      "brand": "ruggable",
+      "emotionorsense": [
+        "home style"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "rug",
+        "pattern",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4996.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4996.PNG",
+      "insta_location": "feed",
+      "brand": "rooted.fare",
+      "emotionorsense": [],
+      "adtext": "crunchy black sesame butter",
+      "keywords": [
+        "food",
+        "sesame",
+        "spread",
+        "productimage"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4997.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4997.PNG",
+      "insta_location": "feed",
+      "brand": "lucyandyak",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "tanktop",
+        "modelimage",
+        "pants"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4998.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4998.PNG",
+      "insta_location": "feed",
+      "brand": "vegaplantnutrition",
+      "emotionorsense": [
+        "strength"
+      ],
+      "adtext": "shop now",
+      "keywords": [
+        "plant-based",
+        "preworkoutpowder",
+        "caffeine",
+        "gymroutine"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_4999.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_4999.PNG",
+      "insta_location": "reel",
+      "brand": "retrospekt",
+      "emotionorsense": [
+        "gear",
+        "creativity"
+      ],
+      "adtext": "",
+      "keywords": [
+        "casette",
+        "nostalgia",
+        "tapes",
+        "techgear"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_5001.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_5001.PNG",
+      "insta_location": "reel",
+      "brand": "pstr.studio",
+      "emotionorsense": [
+        "creativity"
+      ],
+      "adtext": "shop our curated selection of unique art",
+      "keywords": [
+        "poster",
+        "print",
+        "homedecor",
+        "abstract",
+        "design"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": false,
+      "non_adcontent_abovebottombar": false
+    },
+    {
+      "imagefilename": "IMG_5002.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_5002.PNG",
+      "insta_location": "reel",
+      "brand": "foreveryone.collective",
+      "emotionorsense": [
+        "style"
+      ],
+      "adtext": "a new world is growing.shop fashion made",
+      "keywords": [
+        "tshirt",
+        "graphict",
+        "stickers",
+        "productgrid",
+        "productcarosel"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": true
+    },
+    {
+      "imagefilename": "IMG_5003.PNG",
+      "assetRelativePath": "assets/mobile_screenshots/raw/IMG_5003.PNG",
+      "insta_location": "reel",
+      "brand": "whogivesacraptp",
+      "emotionorsense": [
+        "creativity",
+        "style"
+      ],
+      "adtext": "an adventure on every toilet paper roll, shop now, can you find the loo? These limited edition",
+      "keywords": [
+        "toiletpaper",
+        "graphicdesign",
+        "pattern",
+        "limitededition"
+      ],
+      "has_top_bar": true,
+      "has_bottom_bar": true,
+      "non_adcontent_undertopbar": true,
+      "non_adcontent_abovebottombar": false
+    }
+  ]
+}

@@ -303,3 +303,159 @@ body {
   color: rgba(30, 26, 22, 0.65);
 }
 
+/* ===== Mobile app shell ===== */
+
+.viewport--mobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #cfb492;
+}
+
+.mobile-app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 390px;
+  max-height: 844px;
+  overflow: hidden;
+  background: #1a1a1a;
+  border-radius: 0;
+}
+
+@media (min-width: 500px) {
+  .mobile-app {
+    border-radius: 40px;
+    box-shadow:
+      0 0 0 4px #222,
+      0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.mobile-screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  overflow: hidden;
+}
+
+.mobile-screen.active {
+  display: block;
+  animation: screenFadeIn 0.28s ease-out;
+}
+
+@keyframes screenFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Home screen */
+
+.mobile-screen--home {
+  background: #e8ddd0;
+}
+
+.homescreen-pages {
+  display: flex;
+  width: 300%;
+  height: 100%;
+  transition: transform 0.32s ease;
+  will-change: transform;
+}
+
+.homescreen-page {
+  flex: 0 0 calc(100% / 3);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.homescreen-placeholder {
+  color: rgba(60, 45, 30, 0.5);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-align: center;
+  user-select: none;
+}
+
+.homescreen-dots {
+  position: absolute;
+  bottom: 18%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.homescreen-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(80, 60, 40, 0.25);
+  transition: background 0.2s ease;
+}
+
+.homescreen-dot.active {
+  background: rgba(80, 60, 40, 0.65);
+}
+
+/* Back button (desktop preview) */
+
+.mobile-back-btn {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 20;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  padding: 0;
+}
+
+.mobile-back-btn:hover {
+  background: rgba(0, 0, 0, 0.65);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Feed */
+
+.mobile-screen--feed {
+  background: #1a1a1a;
+}
+
+.feed-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+/* Stories */
+
+.mobile-screen--stories {
+  background: #111;
+}
+
+.stories-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: pointer;
+}
+
