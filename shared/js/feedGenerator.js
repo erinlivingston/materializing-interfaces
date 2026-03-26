@@ -1,25 +1,60 @@
 import { getRandomItems } from "./adDataLoader.js";
 import { extractFragment, extractDominantColor } from "./adCropper.js";
 import { navigateTo } from "./mobileApp.js";
+import { renderRisoAdCanvas } from "./risoAdRenderer.js";
 
-const SCROLL_SPEED = 1.2;
-const STORY_CIRCLE_COUNT = 10;
+const SCROLL_SPEED = .8;
+const STORY_CIRCLE_COUNT = 9;
+const MARGIN = 50;
 const BLEND_MODES = ["source-over", "multiply", "screen", "overlay"];
-const EMOTION_COLORS = {
-  "cozy": "rgba(210,170,110,0.18)",
-  "comfort": "rgba(200,175,130,0.16)",
-  "style": "rgba(160,140,190,0.14)",
-  "adventure": "rgba(100,180,170,0.16)",
-  "self-care": "rgba(190,150,170,0.15)",
-  "home style": "rgba(170,160,130,0.14)",
-  "creativity": "rgba(180,130,180,0.16)",
-  "strength": "rgba(150,180,120,0.14)",
-  "outdoors": "rgba(110,170,130,0.16)",
-  "fun": "rgba(220,180,100,0.16)",
-  "dog care": "rgba(180,160,120,0.14)",
-  "cleanliness": "rgba(140,190,200,0.14)",
+const EMOTION_TO_RISO_INK = {
+  cozy: "LIGHTTEAL, SEAFOAM",
+  comfort: "SUNFLOWER, PAPRIKA",
+  style: "AQUA, KELLYGREEN",
+  adventure: "LAGOON,LAKE,HUNTERGREEN",
+  "self-care": "VIOLET,CORNFLOWER",
+  "home style": "DARKMAUVE,PINE",
+  creativity: "LIGHTLIME,GREEN,PINE",
+  strength: "MIDNIGHT,INDIGO",
+  outdoors: "GRASS,IVY,MEDIUMBLUE",
+  fun: "FLUORESCENTYELLOW,CRANBERRY,CRIMSON",
+  "dog care": "STEEL,SMOKYTEAL",
+  cleanliness: "MINT,CLEARMEDIUM,LAKE",
 };
-const DEFAULT_TINT = "rgba(170,160,150,0.12)";
+
+const RISO_FALLBACK_INKS = [
+  "FLATGOLD",
+  "ORCHID",
+  "MOSS",
+  "MIST",
+  "SEAFOAM",
+  "SKYBLUE",
+  "PURPLE",
+  "EMERALD",
+  "BUBBLEGUM",
+  "FLUORESCENTRED",
+  "BLUE",
+  "CHARCOAL",
+];
+
+function parseInkOptions(v) {
+  if (!v) return [];
+  if (Array.isArray(v)) return v.map(String).map((s) => s.trim()).filter(Boolean);
+  if (typeof v !== "string") return [String(v)];
+  // Allow comma-separated ink lists in JSON-to-code mapping:
+  // e.g. "fun": "FLUORESCENTYELLOW, SUNFLOWER"
+  return v
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function hashStringToInt(str) {
+  let h = 0;
+  const s = String(str || "");
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return h;
+}
 
 let container = null;
 let canvas = null;
@@ -34,9 +69,12 @@ let loading = false;
 let lastSpawnY = 0;
 let heatPhase = 0;
 let textOverlays = [];
+let breakPanels = [];
+let spawnCounter = 0;
 let dpr = 1;
 let vw = 0;
 let vh = 0;
+let contentW = 0;
 let touchStartY = 0;
 let touchVelocity = 0;
 let lastTouchY = 0;
@@ -50,60 +88,165 @@ function pickBlendMode() {
   return BLEND_MODES[Math.floor(Math.random() * BLEND_MODES.length)];
 }
 
-function getTintColor(item) {
+function getPrimaryRisoInk(item) {
+  // 1) Use curated overrides for specific emotion strings.
   for (const e of item.emotionorsense || []) {
-    if (EMOTION_COLORS[e]) return EMOTION_COLORS[e];
+    const mapped = EMOTION_TO_RISO_INK[e];
+    if (!mapped) continue;
+    const options = parseInkOptions(mapped);
+    if (!options.length) continue;
+    if (options.length === 1) return options[0];
+
+    // Pick deterministically so items don't flicker between refreshes.
+    const seed = `${item.imagefilename || ""}:${e}`;
+    const h = hashStringToInt(seed);
+    return options[h % options.length];
   }
-  return DEFAULT_TINT;
+
+  // 2) If the JSON contains an emotion we don't explicitly map, hash it to a stable ink color.
+  const first = item.emotionorsense?.[0];
+  if (!first) return "BLACK";
+  let h = 0;
+  const s = first.toString();
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return RISO_FALLBACK_INKS[h % RISO_FALLBACK_INKS.length] || "BLACK";
 }
 
 async function loadStoryCircles() {
   const items = getRandomItems(null, STORY_CIRCLE_COUNT);
   storyCircleColors = [];
+
+  // Pre-render riso icons so we don't re-run p5 every frame.
+  // Circle visuals depend on the current canvas sizing, so compute once on init.
+  const size = Math.min(vw * 0.13, 48);
+  const iconSrcSize = Math.max(6, Math.round(size * dpr));
+
   for (const item of items) {
     try {
-      const color = await extractDominantColor(item);
-      storyCircleColors.push({ color, item });
-    } catch (_) { /* skip */ }
+      const primaryInk = getPrimaryRisoInk(item);
+
+      // Create a simple solid circle source (with transparency outside).
+      const src = document.createElement("canvas");
+      src.width = iconSrcSize;
+      src.height = iconSrcSize;
+      const sctx = src.getContext("2d");
+      if (!sctx) continue;
+      sctx.clearRect(0, 0, iconSrcSize, iconSrcSize);
+
+      // Use a darker gray so the riso output is dense (full visual weight),
+      // but keep the dot texture.
+      sctx.fillStyle = `rgb(95,95,95)`;
+      sctx.beginPath();
+      sctx.arc(iconSrcSize / 2, iconSrcSize / 2, iconSrcSize / 2, 0, Math.PI * 2);
+      sctx.closePath();
+      sctx.fill();
+
+      // Render the circle with the same riso+dither pipeline as ad fragments.
+      const iconCanvas = await renderRisoAdCanvas(src, primaryInk, {
+        maxDim: iconSrcSize,
+        ditherType: "floydsteinberg",
+        threshold: 150,
+        alphaScale: 4,
+      });
+
+      storyCircleColors.push({ iconCanvas, item });
+    } catch (_) {
+      /* skip */
+    }
   }
+}
+
+function insertBreakPanel(item, targetPanels = breakPanels) {
+  const texts = [];
+  if (item.brand) texts.push(item.brand);
+  if (item.adtext) texts.push(item.adtext);
+  const emotions = item.emotionorsense || [];
+  if (emotions.length) texts.push(emotions.join(" \u00b7 "));
+  if (!texts.length) return;
+
+  const panelH = rand(50, 80);
+  targetPanels.push({
+    y: lastSpawnY,
+    h: panelH,
+    lines: texts.slice(0, 3),
+  });
+  lastSpawnY += panelH + 8;
 }
 
 async function spawnFragments(count) {
   if (loading) return;
   loading = true;
   const items = getRandomItems(null, count);
+
+  // Build the entire batch first to avoid "partial" flashes while riso renders.
+  const spawnedFragments = [];
+  const spawnedTextOverlays = [];
+  const spawnedBreakPanels = [];
+
   for (const item of items) {
-    const fragW = Math.round(rand(vw * 0.3, vw * 0.95));
-    const fragH = Math.round(rand(vh * 0.15, vh * 0.55));
+    spawnCounter++;
+    if (spawnCounter % 5 === 0) {
+      insertBreakPanel(item, spawnedBreakPanels);
+      continue;
+    }
+
+    const fragW = Math.round(rand(contentW * 0.4, contentW));
+    const fragH = Math.round(rand(vh * 0.15, vh * 0.5));
     try {
       const fragCanvas = await extractFragment(item, fragW * dpr, fragH * dpr);
-      const x = rand(-fragW * 0.1, vw - fragW * 0.9);
-      const y = lastSpawnY + rand(10, vh * 0.15);
-      lastSpawnY = y + fragH * 0.2;
-      fragments.push({
-        canvas: fragCanvas,
+      const primaryInk = getPrimaryRisoInk(item);
+      let risoCanvas = fragCanvas;
+      try {
+        risoCanvas = await renderRisoAdCanvas(fragCanvas, primaryInk, {
+          maxDim: 220,
+          ditherType: "floydsteinberg",
+          threshold: 140,
+        });
+      } catch (err) {
+        console.warn("Riso render failed; falling back to original fragment.", {
+          item: item?.imagefilename,
+          primaryInk,
+          message: err?.message ? err.message : String(err),
+          stack: err?.stack,
+        });
+      }
+      const x = MARGIN + rand(0, contentW - fragW);
+      const y = lastSpawnY + rand(6, vh * 0.12);
+      lastSpawnY = y + fragH * 0.25;
+      spawnedFragments.push({
+        canvas: risoCanvas,
         x, y,
         w: fragW, h: fragH,
         alpha: rand(0.45, 0.95),
-        blend: pickBlendMode(),
-        tint: getTintColor(item),
+        blend: "source-over",
         rotation: rand(-0.04, 0.04),
       });
 
       if (Math.random() < 0.3) {
         const text = pickTextOverlay(item);
         if (text) {
-          textOverlays.push({
+          spawnedTextOverlays.push({
             text,
-            x: rand(vw * 0.05, vw * 0.6),
+            x: MARGIN + rand(0, contentW * 0.5),
             y: y + rand(0, fragH * 0.6),
             alpha: rand(0.08, 0.25),
             size: Math.round(rand(12, 22)),
           });
         }
       }
-    } catch (_) { /* skip */ }
+    } catch (err) {
+      /* skip */
+      console.warn("Fragment spawn failed.", {
+        item: item?.imagefilename,
+        message: err?.message ? err.message : String(err),
+        stack: err?.stack,
+      });
+    }
   }
+
+  fragments.push(...spawnedFragments);
+  textOverlays.push(...spawnedTextOverlays);
+  breakPanels.push(...spawnedBreakPanels);
   loading = false;
 }
 
@@ -141,25 +284,61 @@ function drawStoryCircles() {
   const y = 14;
 
   for (let i = 0; i < storyCircleColors.length; i++) {
-    const { color } = storyCircleColors[i];
+    const { iconCanvas } = storyCircleColors[i];
     const cx = startX + i * (size + gap);
-
     if (cx > vw + size) break;
 
     ctx.save();
-    ctx.beginPath();
-    ctx.arc(cx + size / 2, y + size / 2, size / 2, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
+    if (iconCanvas) {
+      ctx.drawImage(iconCanvas, cx, y, size, size);
+    } else {
+      // Fallback: flat circle if icon generation failed.
+      ctx.beginPath();
+      ctx.arc(cx + size / 2, y + size / 2, size / 2, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(0,0,0,0.25)";
+      ctx.fill();
+    }
     ctx.restore();
 
     ctx.beginPath();
     ctx.arc(cx + size / 2, y + size / 2, size / 2 + 1, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(255,255,255,0.45)";
+    ctx.strokeStyle = "rgba(20,20,20,0.22)";
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
     storyCircles[i] = { x: cx, y, size };
+  }
+}
+
+function drawBreakPanels() {
+  const buffer = vh * 0.3;
+  for (let i = breakPanels.length - 1; i >= 0; i--) {
+    const bp = breakPanels[i];
+    const screenY = bp.y - scrollY;
+    if (screenY + bp.h < -buffer) {
+      breakPanels.splice(i, 1);
+      continue;
+    }
+    if (screenY > vh + buffer) continue;
+
+    ctx.save();
+    ctx.fillStyle = "rgba(0,0,0,0.03)";
+    ctx.fillRect(MARGIN, screenY, contentW, bp.h);
+
+    ctx.fillStyle = "rgba(30,20,40,0.55)";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    let ty = screenY + 10;
+    for (let j = 0; j < bp.lines.length; j++) {
+      const isFirst = j === 0;
+      ctx.font = isFirst
+        ? "600 13px ui-sans-serif, system-ui, sans-serif"
+        : "400 11px ui-sans-serif, system-ui, sans-serif";
+      ctx.globalAlpha = isFirst ? 0.7 : 0.45;
+      ctx.fillText(bp.lines[j], MARGIN + 8, ty);
+      ty += isFirst ? 18 : 15;
+    }
+    ctx.restore();
   }
 }
 
@@ -186,7 +365,7 @@ function render() {
   if (Math.abs(touchVelocity) < 0.05) touchVelocity = 0;
 
   ctx.clearRect(0, 0, vw, vh);
-  ctx.fillStyle = "#1a1a1a";
+  ctx.fillStyle = "#f3efe3";
   ctx.fillRect(0, 0, vw, vh);
 
   const buffer = vh * 0.3;
@@ -206,12 +385,10 @@ function render() {
     ctx.translate(frag.x + frag.w / 2, screenY + frag.h / 2);
     ctx.rotate(frag.rotation);
     ctx.drawImage(frag.canvas, -frag.w / 2, -frag.h / 2, frag.w, frag.h);
-
-    ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = frag.tint;
-    ctx.fillRect(-frag.w / 2, -frag.h / 2, frag.w, frag.h);
     ctx.restore();
   }
+
+  drawBreakPanels();
 
   for (let i = textOverlays.length - 1; i >= 0; i--) {
     const t = textOverlays[i];
@@ -223,7 +400,7 @@ function render() {
     if (screenY > vh + buffer) continue;
     ctx.save();
     ctx.globalAlpha = t.alpha;
-    ctx.fillStyle = "rgba(240,235,225,0.9)";
+    ctx.fillStyle = "rgba(20,20,20,0.55)";
     ctx.font = `${t.size}px ui-sans-serif, system-ui, sans-serif`;
     ctx.fillText(t.text, t.x, screenY);
     ctx.restore();
@@ -261,9 +438,7 @@ function onTouchMove(e) {
   }
 }
 
-function onTouchEnd() {
-  // velocity decays in render loop
-}
+function onTouchEnd() {}
 
 function onWheel(e) {
   e.preventDefault();
@@ -291,6 +466,7 @@ export async function initFeed(el) {
 
   vw = container.clientWidth;
   vh = container.clientHeight;
+  contentW = vw - MARGIN * 2;
   canvas.width = vw;
   canvas.height = vh;
   canvas.style.width = vw + "px";
@@ -299,9 +475,11 @@ export async function initFeed(el) {
   ctx = canvas.getContext("2d");
 
   scrollY = 0;
-  lastSpawnY = 0;
+  lastSpawnY = 80;
+  spawnCounter = 0;
   fragments = [];
   textOverlays = [];
+  breakPanels = [];
   storyCircles = [];
   storyCircleColors = [];
   heatPhase = 0;
@@ -341,6 +519,7 @@ export function destroyFeed() {
   container = null;
   fragments = [];
   textOverlays = [];
+  breakPanels = [];
   storyCircles = [];
   storyCircleColors = [];
 }

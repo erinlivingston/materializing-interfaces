@@ -74,6 +74,20 @@ export async function extractCircularFragment(item, diameter) {
   return canvas;
 }
 
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0, l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else h = ((r - g) / d + 4) / 6;
+  }
+  return [h * 360, s * 100, l * 100];
+}
+
 export async function extractDominantColor(item) {
   const cropped = await loadAndCropAd(item);
   const sampleSize = 64;
@@ -83,15 +97,23 @@ export async function extractDominantColor(item) {
   const tCtx = tempCanvas.getContext("2d");
   tCtx.drawImage(cropped, 0, 0, cropped.width, cropped.height, 0, 0, sampleSize, sampleSize);
   const data = tCtx.getImageData(0, 0, sampleSize, sampleSize).data;
-  let r = 0, g = 0, b = 0, count = 0;
+  let hSum = 0, sSum = 0, lSum = 0, count = 0;
   for (let i = 0; i < data.length; i += 16) {
     const pr = data[i], pg = data[i + 1], pb = data[i + 2];
     if (pr > 230 && pg > 230 && pb > 230) continue;
     if (pr < 25 && pg < 25 && pb < 25) continue;
-    r += pr; g += pg; b += pb; count++;
+    const [h, s, l] = rgbToHsl(pr, pg, pb);
+    if (s < 8 || l < 18 || l > 88) continue;
+    hSum += h; sSum += s; lSum += l; count++;
   }
-  if (count === 0) return "rgb(140,130,120)";
-  return `rgb(${Math.round(r / count)},${Math.round(g / count)},${Math.round(b / count)})`;
+  if (count === 0) {
+    const h = Math.floor(Math.random() * 360);
+    return `hsl(${h},65%,58%)`;
+  }
+  const hAvg = Math.round(hSum / count);
+  const sOut = Math.min(40, Math.max(10, Math.round(sSum / count) + 5));
+  const lOut = Math.min(65, Math.max(42, Math.round(lSum / count)));
+  return `hsl(${hAvg},${sOut}%,${lOut}%)`;
 }
 
 export function clearCache() {

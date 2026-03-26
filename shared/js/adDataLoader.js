@@ -2,7 +2,7 @@ const DATA_PATH = "../assets/mobile_screenshots/meta/PNGdatamobileADS_100lines.j
 
 const TOP_BAR_HEIGHT = 130;
 const BOTTOM_BAR_HEIGHT = 275;
-const NON_AD_BUFFER = 200;
+const NON_AD_BUFFER = 250;
 
 let _data = null;
 let _grouped = null;
