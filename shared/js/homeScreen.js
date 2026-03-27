@@ -1,92 +1,103 @@
 import { navigateTo } from "./mobileApp.js";
 
 let container = null;
-let currentPage = 0;
-let dots = null;
-let swipeStartX = 0;
-let touchActive = false;
+let infoBtn = null;
+let entrySurface = null;
+let suppressClickUntil = 0;
 
-function showPage(index) {
-  currentPage = ((index % 3) + 3) % 3;
-  const wrapper = container?.querySelector(".homescreen-pages");
-  if (wrapper) {
-    wrapper.style.transform = `translateX(-${currentPage * 100}%)`;
-  }
-  if (dots) {
-    for (let i = 0; i < dots.children.length; i++) {
-      dots.children[i].classList.toggle("active", i === currentPage);
-    }
-  }
+const HOME_PAPER_SOURCES = [
+  "../assets/freedigitalpaper/heather-green-KwLAeH5dHIY-unsplash.jpg",
+  "../assets/freedigitalpaper/heather-green-Lz3lAvRD5Mc-unsplash.jpg",
+  "../assets/freedigitalpaper/heather-green-bOrMAThd09M-unsplash.jpg",
+  "../assets/freedigitalpaper/heather-green-hKfKmfvPY44-unsplash.jpg",
+  "../assets/freedigitalpaper/heather-green-o2lxbgiGEh8-unsplash.jpg",
+  "../assets/freedigitalpaper/joao-vitor-duarte-k4Lt0CjUnb0-unsplash.jpg",
+  "../assets/freedigitalpaper/nordwood-themes-R53t-Tg6J4c-unsplash.jpg",
+  "../assets/freedigitalpaper/olga-thelavart-vS3idIiYxX0-unsplash.jpg",
+  "../assets/freedigitalpaper/plufow-le-studio-zAvE6uAPkZk-unsplash.jpg",
+  "../assets/freedigitalpaper/resource-boy-zJBxYP-hIS8-unsplash.jpg",
+];
+
+function pickRandomPaperSource() {
+  if (!HOME_PAPER_SOURCES.length) return null;
+  const index = Math.floor(Math.random() * HOME_PAPER_SOURCES.length);
+  return HOME_PAPER_SOURCES[index];
 }
 
-function onTouchStart(e) {
-  if (e.touches.length === 1) {
-    swipeStartX = e.touches[0].clientX;
-    touchActive = true;
-  }
+function enterFeed() {
+  navigateTo("feed");
 }
 
-function onTouchEnd(e) {
-  if (!touchActive) return;
-  touchActive = false;
-  const dx = e.changedTouches[0].clientX - swipeStartX;
-  if (Math.abs(dx) > 40) {
-    showPage(currentPage + (dx < 0 ? 1 : -1));
-  } else {
-    navigateTo("feed");
-  }
+function onTouchEnd() {
+  suppressClickUntil = Date.now() + 500;
+  enterFeed();
 }
 
 function onMouseClick(e) {
-  if (touchActive) return;
   if (e.sourceCapabilities?.firesTouchEvents) return;
-  navigateTo("feed");
+  if (Date.now() < suppressClickUntil) return;
+  enterFeed();
 }
 
 export function initHomeScreens(el) {
   container = el;
   container.innerHTML = "";
-  currentPage = 0;
+  suppressClickUntil = 0;
 
-  const wrapper = document.createElement("div");
-  wrapper.className = "homescreen-pages";
+  entrySurface = document.createElement("button");
+  entrySurface.className = "homescreen-entry-surface";
+  entrySurface.type = "button";
 
-  for (let i = 0; i < 3; i++) {
-    const page = document.createElement("div");
-    page.className = "homescreen-page";
-    const placeholder = document.createElement("div");
-    placeholder.className = "homescreen-placeholder";
-    placeholder.textContent = `Home Screen ${i + 1}`;
-    page.appendChild(placeholder);
-    wrapper.appendChild(page);
+  const paperLayer = document.createElement("div");
+  paperLayer.className = "homescreen-paper";
+  const rotation = (Math.random() * 8 - 4).toFixed(2);
+  paperLayer.style.setProperty("--paper-rotation", `${rotation}deg`);
+  const paperSource = pickRandomPaperSource();
+  if (paperSource) {
+    paperLayer.style.backgroundImage = `url("${paperSource}")`;
   }
+  entrySurface.appendChild(paperLayer);
 
-  container.appendChild(wrapper);
+  const prompt = document.createElement("div");
+  prompt.className = "homescreen-entry-card";
 
-  dots = document.createElement("div");
-  dots.className = "homescreen-dots";
-  for (let i = 0; i < 3; i++) {
-    const dot = document.createElement("span");
-    dot.className = "homescreen-dot";
-    if (i === 0) dot.classList.add("active");
-    dots.appendChild(dot);
-  }
-  container.appendChild(dots);
+  const title = document.createElement("p");
+  title.className = "homescreen-entry-title";
+  title.textContent = "materializing the feed";
 
-  wrapper.addEventListener("touchstart", onTouchStart, { passive: true });
-  wrapper.addEventListener("touchend", onTouchEnd, { passive: true });
-  wrapper.addEventListener("click", onMouseClick);
+  const hint = document.createElement("p");
+  hint.className = "homescreen-entry-hint";
+  hint.textContent = "click to enter";
+
+  prompt.appendChild(title);
+  prompt.appendChild(hint);
+  entrySurface.appendChild(prompt);
+  container.appendChild(entrySurface);
+
+  // Placeholder "settings/about" entry point.
+  infoBtn = document.createElement("button");
+  infoBtn.className = "mobile-info-btn";
+  infoBtn.type = "button";
+  infoBtn.textContent = "i";
+  infoBtn.addEventListener("click", () => navigateTo("project"));
+  container.appendChild(infoBtn);
+
+  entrySurface.addEventListener("touchend", onTouchEnd, { passive: true });
+  entrySurface.addEventListener("click", onMouseClick);
 }
 
 export function destroyHomeScreens() {
   if (!container) return;
-  const wrapper = container.querySelector(".homescreen-pages");
-  if (wrapper) {
-    wrapper.removeEventListener("touchstart", onTouchStart);
-    wrapper.removeEventListener("touchend", onTouchEnd);
-    wrapper.removeEventListener("click", onMouseClick);
+  if (entrySurface) {
+    entrySurface.removeEventListener("touchend", onTouchEnd);
+    entrySurface.removeEventListener("click", onMouseClick);
+  }
+  if (infoBtn) {
+    infoBtn.remove();
   }
   container.innerHTML = "";
   container = null;
-  dots = null;
+  entrySurface = null;
+  infoBtn = null;
+  suppressClickUntil = 0;
 }

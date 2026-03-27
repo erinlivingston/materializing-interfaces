@@ -91,7 +91,8 @@ function uniqPreserveOrder(arr) {
 }
 
 /**
- * Render a cropped ad fragment into a riso/dither look using one ink color.
+ * Render a cropped ad fragment into a riso/dither look.
+ * Supports both single-ink and multi-ink (stacked) rendering.
  */
 export async function renderRisoAdCanvas(srcCanvas, primaryInk, options = {}) {
   const p = await ensureP5RisoInstance();
@@ -127,23 +128,37 @@ export async function renderRisoAdCanvas(srcCanvas, primaryInk, options = {}) {
 
   const ditherType = options.ditherType ?? "floydsteinberg";
   const threshold = options.threshold ?? 128;
-  const dithered = ditherImageFn(pImg, ditherType, threshold);
 
   // One render == recreate channels for that fragment.
   RisoClass.channels = [];
-  const ink = (primaryInk || "BLACK").toString().trim().toUpperCase();
+  const inks = Array.isArray(primaryInk)
+    ? primaryInk
+    : [primaryInk || "BLACK"];
+  const normalizedInks = uniqPreserveOrder(
+    inks.map((ink) => (ink || "BLACK").toString().trim().toUpperCase()),
+  ).slice(0, options.maxInks ?? 3);
 
-  const layers = uniqPreserveOrder([ink]).map((inkColor) => {
-    const layer = new RisoClass(inkColor, procW, procH);
-    layer.fill(255);
-    return layer;
-  });
+  const thresholdSpread = typeof options.thresholdSpread === "number" ? options.thresholdSpread : 22;
+  const inkCount = normalizedInks.length;
 
   p.clear();
   p.blendMode(p.BLEND);
 
-  for (const layer of layers) layer.image(dithered, 0, 0);
-  for (const layer of layers) layer.draw();
+  for (let i = 0; i < normalizedInks.length; i++) {
+    const inkColor = normalizedInks[i];
+    const layer = new RisoClass(inkColor, procW, procH);
+    layer.fill(255);
+
+    // Spread thresholds so each ink gets a slightly different dot density.
+    // lower threshold => more dots (darker result), higher => fewer dots.
+    const centered = inkCount <= 1 ? 0 : i - (inkCount - 1) / 2;
+    const inkThreshold = Math.max(1, Math.min(254, threshold - centered * thresholdSpread));
+
+    const dithered = ditherImageFn(pImg, ditherType, inkThreshold);
+    layer.image(dithered, 0, 0);
+  }
+
+  // drawRiso() multiplies/prints all channel layers.
   drawRisoFn();
 
   const out = document.createElement("canvas");

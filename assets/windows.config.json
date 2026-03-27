@@ -21,14 +21,14 @@
         "x": 0.046,
         "y": 0.044,
         "r": 0.019,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       }, {
         "id": "new_circle_zone2",
         "shape": "circle",
         "x": 0.098,
         "y": 0.047,
         "r": 0.017,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       }, {
         "id": "new_rect_zone",
         "shape": "rect",
@@ -36,7 +36,7 @@
         "y": 0.038,
         "w": 0.078,
         "h": 0.04,
-        "actionId": "replace_action_id"
+        "actionId": "menu"
       }], "text": [{
         "id": "new_rect_zone1",
         "shape": "rect",
@@ -44,7 +44,7 @@
         "y": 0.487,
         "w": 0.517,
         "h": 0.149,
-        "actionId": "replace_action_id"
+        "actionId": "project.interface_as_theory"
       }, {
         "id": "new_rect_zone2",
         "shape": "rect",
@@ -52,7 +52,7 @@
         "y": 0.159,
         "w": 0.521,
         "h": 0.112,
-        "actionId": "replace_action_id"
+        "actionId": "project.non_linear_navigation"
       }, {
         "id": "new_rect_zone3",
         "shape": "rect",
@@ -60,16 +60,24 @@
         "y": 0.888,
         "w": 0.328,
         "h": 0.061,
-        "actionId": "replace_action_id"
-      }, {
+        "actionId": "project.paper_as_window"
+      },{
         "id": "new_rect_zone4",
         "shape": "rect",
-        "x": 0.596,
-        "y": 0.23,
-        "w": 0.385,
-        "h": 0.062,
+        "x": 0.599,
+        "y": 0.233,
+        "w": 0.378,
+        "h": 0.057,
         "actionId": "replace_action_id"
-      }] },
+      }, {
+        "id": "new_rect_zone5",
+        "shape": "rect",
+        "x": 0.068,
+        "y": 0.962,
+        "w": 0.018,
+        "h": 0.023,
+        "actionId": "close"
+      } ] },
       "actions": {}
     },
     {
@@ -85,7 +93,7 @@
         "y": 0.058,
         "w": 0.02,
         "h": 0.029,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       }], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -133,96 +141,25 @@
         "x": 0.036,
         "y": 0.036,
         "r": 0.009,
-        "actionId": "replace_action_id"
+        "actionId": "maximize"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.065,
         "y": 0.036,
         "r": 0.01,
-        "actionId": "replace_action_id"
+        "actionId": "minimize"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.097,
         "y": 0.04,
         "r": 0.009,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.875,
-        "y": 0.026,
-        "w": 0.033,
-        "h": 0.062,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.922,
-        "y": 0.025,
-        "w": 0.045,
-        "h": 0.067,
-        "actionId": "replace_action_id"
-      }], "text": [{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.246,
-        "y": 0.026,
-        "w": 0.499,
-        "h": 0.056,
-        "actionId": "replace_action_id"
-      }, {
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.019,
-        "y": 0.673,
-        "w": 0.116,
-        "h": 0.041,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.02,
-        "y": 0.396,
-        "w": 0.119,
-        "h": 0.045,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.019,
-        "y": 0.325,
-        "w": 0.123,
-        "h": 0.047,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.018,
-        "y": 0.254,
-        "w": 0.121,
-        "h": 0.042,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.188,
-        "y": 0.844,
-        "w": 0.526,
-        "h": 0.055,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.319,
-        "y": 0.126,
-        "w": 0.145,
-        "h": 0.042,
-        "actionId": "replace_action_id"
+        "actionId": "close"
       }] },
       "actions": {}
     },
+
     {
       "id": "img_5492",
       "nickname": "googlesearch",
@@ -235,61 +172,53 @@
         "x": 0.045,
         "y": 0.034,
         "r": 0.007,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.066,
         "y": 0.035,
         "r": 0.007,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.094,
         "y": 0.031,
         "r": 0.008,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.918,
         "y": 0.035,
         "w": 0.042,
         "h": 0.053,
-        "actionId": "replace_action_id"
-      }], "text": [{
-        "id": "new_rect_zone",
+        "actionId": "menu"
+      },{
+        "id": "new_rect_zone2",
         "shape": "rect",
         "x": 0.236,
         "y": 0.569,
         "w": 0.555,
         "h": 0.041,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
+        "actionId": "usergoogle"
+      }], "text": [{
+        "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.779,
         "y": 0.052,
         "w": 0.12,
         "h": 0.021,
         "actionId": "replace_action_id"
-      }, {
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.148,
-        "y": 0.025,
-        "w": 0.185,
-        "h": 0.035,
-        "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone4",
         "shape": "rect",
-        "x": 0.34,
-        "y": 0.027,
-        "w": 0.205,
-        "h": 0.042,
-        "actionId": "replace_action_id"
+        "x": 0.835,
+        "y": 0.938,
+        "w": 0.144,
+        "h": 0.018,
+        "actionId": "close"
       }] },
       "actions": {}
     },

@@ -11,6 +11,7 @@ let container = null;
 let canvas = null;
 let ctx = null;
 let backBtn = null;
+let infoBtn = null;
 let totalSlides = 0;
 let currentSlide = 0;
 let slideItems = [];
@@ -309,6 +310,13 @@ export async function initStories(el) {
   backBtn.addEventListener("click", onStoriesBack);
   container.appendChild(backBtn);
 
+  infoBtn = document.createElement("button");
+  infoBtn.className = "mobile-info-btn";
+  infoBtn.type = "button";
+  infoBtn.textContent = "i";
+  infoBtn.addEventListener("click", () => navigateTo("project"));
+  container.appendChild(infoBtn);
+
   vw = container.clientWidth;
   vh = container.clientHeight;
   canvas.width = vw;
@@ -351,11 +359,15 @@ export function destroyStories() {
   if (backBtn) {
     backBtn.removeEventListener("click", onStoriesBack);
   }
+  if (infoBtn) {
+    infoBtn.remove();
+  }
   clearTimeout(holdTimer);
   if (container) container.innerHTML = "";
   canvas = null;
   ctx = null;
   backBtn = null;
+  infoBtn = null;
   container = null;
   slideItems = [];
   slideColors = [];

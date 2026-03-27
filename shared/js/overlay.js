@@ -13,6 +13,8 @@ let windowsConfig = [];
 let lastConfigJson = null;
 let selectedWindowElement = null;
 let debugCursor = 0;
+let paperSources = [];
+let openWindowIds = new Set();
 let windowDrag = {
   active: false,
   pointerId: null,
@@ -35,6 +37,13 @@ function clamp(value, min, max) {
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function chance(probability) {
+  const p = Number(probability);
+  if (!Number.isFinite(p) || p <= 0) return false;
+  if (p >= 1) return true;
+  return Math.random() < p;
 }
 
 function toFixed3(value) {
@@ -140,9 +149,34 @@ function getActionDef(windowDef, actionId) {
     close_tab: { type: "window.closeSelf" },
     spawnRandom: { type: "window.spawnRandom" },
     spawn_tab: { type: "window.spawnRandom" },
+    openAbstractFromPool: {
+      type: "window.spawnFromPoolNonDuplicate",
+      poolIds: [
+        "img_5489",
+        "img_5490",
+        "img_5492",
+        "img_5495",
+        "img_5496",
+        "img_5497",
+        "img_5498",
+        "img_5499",
+        "img_5501",
+        "img_5511",
+      ],
+      spillToPaperChance: 0.1,
+      fallback: "paper",
+    },
+    spawnPaper: { type: "window.spawnDigitalPaper" },
+    openStart: { type: "window.openProjectPage", pageId: "start" },
+    openCodeEditorInfo: { type: "window.spawnCodeEditorInfo" },
+    minimizeSelf: { type: "window.minimizeToggle" },
+    maximizeSelf: { type: "window.maximizeToggle" },
   };
   if (actionId && builtins[actionId]) {
     return builtins[actionId];
+  }
+  if (typeof actionId === "string" && actionId.startsWith("project.")) {
+    return { type: "window.openProjectPage", pageId: actionId.slice("project.".length) };
   }
   return null;
 }
@@ -155,12 +189,77 @@ function runAction(def, ctx) {
   switch (def.type) {
     case "window.closeSelf":
       ctx.container.remove();
+      openWindowIds.delete(ctx.windowDef?.id);
       void refreshHistoryInTextZones();
       break;
     case "window.spawnRandom": {
       if (!windowsConfig.length || !windowLayer || !configJson) break;
-      const pick = windowsConfig[randomInt(0, windowsConfig.length - 1)];
-      spawnWindow(configJson, pick);
+      const pick = pickRandomSpawnableAbstractWindow();
+      if (pick) spawnWindow(configJson, pick);
+      break;
+    }
+    case "window.spawnFromPoolNonDuplicate": {
+      if (!windowLayer || !configJson) break;
+      const pool = Array.isArray(def.poolIds) ? def.poolIds : [];
+      if (!pool.length) break;
+      if (chance(def.spillToPaperChance)) {
+        spawnDigitalPaperWindow();
+        break;
+      }
+      const available = pool.filter((id) => !openWindowIds.has(id));
+      if (!available.length) {
+        if (def.fallback === "paper") {
+          spawnDigitalPaperWindow();
+        } else {
+          const pick = pickRandomSpawnableAbstractWindow();
+          if (pick) spawnWindow(configJson, pick);
+        }
+        break;
+      }
+      const id = available[randomInt(0, available.length - 1)];
+      const target = getWindowById(id);
+      if (target) {
+        spawnWindowByIdNonDuplicate(configJson, target.id);
+      }
+      break;
+    }
+    case "window.spawnWindowByIdNonDuplicate": {
+      if (!windowLayer || !configJson) break;
+      spawnWindowByIdNonDuplicate(configJson, def.targetId);
+      break;
+    }
+    case "window.spawnDigitalPaper":
+      spawnDigitalPaperWindow();
+      break;
+    case "window.openProjectPage":
+      spawnProjectPageWindow(def.pageId);
+      break;
+    case "window.spawnCodeEditorInfo":
+      spawnWindowByIdNonDuplicate(configJson, "img_5491");
+      break;
+    case "window.minimizeToggle": {
+      const container = ctx.container;
+      if (!container?.classList) break;
+      container.classList.toggle("desktop-window--minimized");
+      break;
+    }
+    case "window.maximizeToggle": {
+      const container = ctx.container;
+      if (!container?.classList) break;
+      const isMax = container.classList.toggle("desktop-window--maximized");
+      if (isMax) {
+        container.dataset.prevLeft = container.style.left || "";
+        container.dataset.prevTop = container.style.top || "";
+        container.dataset.prevWidth = container.style.width || "";
+        container.style.left = "10px";
+        container.style.top = "10px";
+        container.style.width = `${Math.max(320, Math.round(window.innerWidth - 20))}px`;
+        bringToFront(container);
+      } else {
+        if (container.dataset.prevLeft != null) container.style.left = container.dataset.prevLeft;
+        if (container.dataset.prevTop != null) container.style.top = container.dataset.prevTop;
+        if (container.dataset.prevWidth != null) container.style.width = container.dataset.prevWidth;
+      }
       break;
     }
     default:
@@ -173,6 +272,7 @@ function populateRuntimeZones(zonesLayer, windowDef, configJson, container) {
   const zones = windowDef.zones || {};
   const widthOverHeight = getWidthOverHeight(windowDef);
   const clickZones = Array.isArray(zones.click) ? zones.click : [];
+  const showLabels = SHOW_ZONES || debugState.enabled;
 
   clickZones.forEach((zone, index) => {
     const el = document.createElement("button");
@@ -187,10 +287,21 @@ function populateRuntimeZones(zonesLayer, windowDef, configJson, container) {
     el.tabIndex = -1;
     el.addEventListener("click", (event) => {
       event.stopPropagation();
-      const def = getActionDef(windowDef, zone.actionId);
+      const inferredActionId = inferActionIdFromZone(zone);
+      const raw = zone.actionId;
+      const actionId = raw && raw !== "replace_action_id" ? raw : inferredActionId;
+      const def = getActionDef(windowDef, actionId);
       runAction(def, { container, windowDef, configJson });
     });
     zonesLayer.appendChild(el);
+
+    if (showLabels) {
+      const label = document.createElement("div");
+      label.className = "zone-label zone-label--click";
+      label.textContent = `${zone.id || `click_${index}`} (click)`;
+      positionZoneElement(label, zone, widthOverHeight);
+      zonesLayer.appendChild(label);
+    }
   });
 
   if (windowDef.role === "interactive") {
@@ -204,6 +315,14 @@ function populateRuntimeZones(zonesLayer, windowDef, configJson, container) {
         el.style.borderRadius = "50%";
       }
       zonesLayer.appendChild(el);
+
+      if (showLabels) {
+        const label = document.createElement("div");
+        label.className = "zone-label zone-label--text";
+        label.textContent = `${zone.id || `text_${index}`} (text)`;
+        positionZoneElement(label, zone, widthOverHeight);
+        zonesLayer.appendChild(label);
+      }
     });
   }
 }
@@ -595,10 +714,12 @@ function clearWindows() {
   if (!windowLayer) return;
   windowLayer.innerHTML = "";
   selectedWindowElement = null;
+  openWindowIds = new Set();
 }
 
 function spawnWindow(configJson, windowDef) {
   if (!windowLayer) return;
+  if (!windowDef?.id) return;
   const aspectRatio = getWindowAspectRatio(windowDef);
   let tempWidth = getScaledWidthPx(configJson, windowDef);
 
@@ -623,8 +744,181 @@ function spawnWindow(configJson, windowDef) {
   win.style.width = `${tempWidth}px`;
   windowLayer.appendChild(win);
   selectedWindowElement = win;
+  openWindowIds.add(windowDef.id);
   syncDebugStatus();
   void refreshHistoryInTextZones();
+}
+
+function getOpenWindowElementById(id) {
+  if (!windowLayer || !id) return null;
+  return windowLayer.querySelector(`:scope > .desktop-window[data-window-id="${CSS.escape(id)}"]`);
+}
+
+function spawnWindowByIdNonDuplicate(configJson, id) {
+  if (!id || !configJson) return;
+  const existing = getOpenWindowElementById(id);
+  if (existing) {
+    bringToFront(existing);
+    return;
+  }
+  const def = getWindowById(id);
+  if (!def) return;
+  spawnWindow(configJson, def);
+}
+
+function pickRandomSpawnableAbstractWindow() {
+  const candidates = windowsConfig.filter((w) => {
+    if (!w || w.role !== "interactive") return false;
+    if (w.id === "img_5491") return false;
+    return true;
+  });
+  if (!candidates.length) return null;
+  return candidates[randomInt(0, candidates.length - 1)];
+}
+
+function inferActionIdFromZone(zone) {
+  if (!zone) return null;
+  const x = Number(zone.x);
+  const y = Number(zone.y);
+  const r = Number(zone.r);
+  const w = Number(zone.w);
+  const h = Number(zone.h);
+  const shape = normalizeZoneShape(zone);
+  const isTopLeftCircle = shape === "circle" && Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(r) && x <= 0.16 && y <= 0.09;
+  const isTopLeftRect = shape === "rect" && Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(w) && Number.isFinite(h) && x <= 0.08 && y <= 0.12 && w <= 0.08 && h <= 0.08;
+  if (isTopLeftCircle || isTopLeftRect) {
+    return "openAbstractFromPool";
+  }
+  return null;
+}
+
+function initPaperSources() {
+  paperSources = [
+    "../assets/freedigitalpaper/heather-green-KwLAeH5dHIY-unsplash copy.jpg",
+    "../assets/freedigitalpaper/heather-green-Lz3lAvRD5Mc-unsplash copy.jpg",
+    "../assets/freedigitalpaper/heather-green-bOrMAThd09M-unsplash copy.jpg",
+    "../assets/freedigitalpaper/heather-green-hKfKmfvPY44-unsplash copy.jpg",
+    "../assets/freedigitalpaper/heather-green-o2lxbgiGEh8-unsplash copy.jpg",
+    "../assets/freedigitalpaper/joao-vitor-duarte-k4Lt0CjUnb0-unsplash copy.jpg",
+    "../assets/freedigitalpaper/nordwood-themes-R53t-Tg6J4c-unsplash copy.jpg",
+    "../assets/freedigitalpaper/olga-thelavart-vS3idIiYxX0-unsplash copy.jpg",
+    "../assets/freedigitalpaper/plufow-le-studio-zAvE6uAPkZk-unsplash copy.jpg",
+    "../assets/freedigitalpaper/resource-boy-zJBxYP-hIS8-unsplash copy.jpg",
+  ];
+}
+
+function spawnDigitalPaperWindow() {
+  if (!windowLayer || !paperSources.length) return;
+  const src = paperSources[randomInt(0, paperSources.length - 1)];
+  const container = document.createElement("article");
+  container.className = "desktop-window desktop-window--paper";
+  container.dataset.windowId = `paper_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+  const width = clamp(Math.round(window.innerWidth * 0.32), 220, 520);
+  container.style.width = `${width}px`;
+
+  const img = new Image();
+  img.className = "desktop-window__image";
+  img.alt = "Digital paper";
+  img.addEventListener("dragstart", (event) => event.preventDefault());
+  img.onload = () => {
+    const ar = img.naturalHeight && img.naturalWidth ? img.naturalHeight / img.naturalWidth : 0.7;
+    const predictedHeight = Math.round(width * ar);
+    const pos = positionWindowAnywhere(width, predictedHeight);
+    container.style.left = `${pos.left}px`;
+    container.style.top = `${pos.top}px`;
+    bringToFront(container);
+  };
+  img.src = src;
+
+  const frame = document.createElement("div");
+  frame.className = "desktop-window__frame";
+  frame.appendChild(img);
+  container.appendChild(frame);
+
+  container.addEventListener("pointerdown", (event) => {
+    bringToFront(container);
+    if (event.button !== 0) return;
+    startWindowDrag(event, container);
+  });
+
+  windowLayer.appendChild(container);
+}
+
+async function spawnProjectPageWindow(pageId) {
+  if (!windowLayer) return;
+  const { getProjectPageById } = await import("./projectPages.js");
+  const page = getProjectPageById(pageId);
+  if (!page) return;
+  const existing = windowLayer.querySelector(`:scope > .desktop-window[data-project-page-id="${CSS.escape(pageId)}"]`);
+  if (existing) {
+    bringToFront(existing);
+    return;
+  }
+
+  const container = document.createElement("article");
+  container.className = "desktop-window desktop-window--content desktop-window--project-page";
+  container.dataset.windowId = `project_${pageId}`;
+  container.dataset.projectPageId = pageId;
+  container.style.width = `${clamp(Math.round(window.innerWidth * 0.38), 320, 640)}px`;
+  bringToFront(container);
+
+  const frame = document.createElement("div");
+  frame.className = "desktop-window__frame desktop-window__frame--content";
+
+  const header = document.createElement("div");
+  header.className = "content-window__header";
+  header.innerHTML = `
+    <div class="content-window__controls" aria-hidden="true">
+      <button type="button" class="content-window__control" data-action-id="closeSelf" tabindex="-1" aria-label="Close"></button>
+      <button type="button" class="content-window__control" data-action-id="minimizeSelf" tabindex="-1" aria-label="Minimize"></button>
+      <button type="button" class="content-window__control" data-action-id="maximizeSelf" tabindex="-1" aria-label="Maximize"></button>
+    </div>
+    <div class="content-window__title"></div>
+  `;
+  header.querySelector(".content-window__title").textContent = page.title || "Project";
+  header.addEventListener("click", (event) => {
+    const btn = event.target.closest?.("button[data-action-id]");
+    if (!btn) return;
+    const actionId = btn.dataset.actionId;
+    const def = getActionDef({ actions: {} }, actionId);
+    runAction(def, { container, windowDef: { id: container.dataset.windowId }, configJson: lastConfigJson });
+  });
+
+  const body = document.createElement("div");
+  body.className = "content-window__body content-window__body--project";
+  if (paperSources.length) {
+    const src = paperSources[randomInt(0, paperSources.length - 1)];
+    body.style.backgroundImage = `url("${src}")`;
+  }
+  body.innerHTML = page.html;
+  const quickNav = document.createElement("p");
+  quickNav.className = "project-window__quick-link";
+  quickNav.innerHTML = `<a href="../mobile/index.html#feed" target="_blank" rel="noopener noreferrer">Open mobile feed</a>`;
+  body.appendChild(quickNav);
+  body.addEventListener("click", (event) => {
+    const link = event.target.closest?.("a[data-project-link]");
+    if (!link) return;
+    event.preventDefault();
+    const next = link.dataset.projectLink;
+    if (!next) return;
+    void spawnProjectPageWindow(next);
+  });
+
+  frame.append(header, body);
+  container.appendChild(frame);
+
+  container.addEventListener("pointerdown", (event) => {
+    bringToFront(container);
+    if (event.button !== 0) return;
+    if (event.target.closest?.("button,a")) return;
+    startWindowDrag(event, container);
+  });
+
+  const rect = { w: Number.parseInt(container.style.width, 10) || 420, h: 420 };
+  const pos = positionWindowAnywhere(rect.w, rect.h);
+  container.style.left = `${pos.left}px`;
+  container.style.top = `${pos.top}px`;
+  windowLayer.appendChild(container);
 }
 
 function spawnDebugWindowByIndex(configJson, index) {
@@ -642,9 +936,15 @@ function spawnInitialDesktopWindows(configJson) {
     spawnDebugWindowByIndex(configJson, debugCursor);
     return;
   }
-  pickRandomWindowDefs(3).forEach((windowDef) => {
-    spawnWindow(configJson, windowDef);
-  });
+  let spawned = 0;
+  let guard = 0;
+  while (spawned < 3 && guard < 50) {
+    guard += 1;
+    const pick = pickRandomSpawnableAbstractWindow();
+    if (!pick) break;
+    spawnWindow(configJson, pick);
+    spawned += 1;
+  }
 }
 
 async function init() {
@@ -653,6 +953,10 @@ async function init() {
   if (SHOW_ZONES) {
     document.querySelector(".viewport")?.classList.add("viewport--show-zones");
   }
+  if (DEBUG_ENABLED) {
+    document.querySelector(".viewport")?.classList.add("viewport--debug-zones");
+  }
+  initPaperSources();
   try {
     const configJson = await loadWindowsConfig();
     lastConfigJson = configJson;
@@ -660,6 +964,21 @@ async function init() {
     spawnInitialDesktopWindows(configJson);
     await refreshHistoryInTextZones();
     createDebugPanel(configJson);
+
+    const startBtn = document.getElementById("desktop-start-btn");
+    if (startBtn) {
+      startBtn.addEventListener("click", () => {
+        const def = getActionDef({ actions: {} }, "openStart");
+        runAction(def, { container: startBtn, windowDef: { id: "start" }, configJson });
+      });
+    }
+    const codeIcon = document.getElementById("desktop-code-icon");
+    if (codeIcon) {
+      codeIcon.addEventListener("click", () => {
+        const def = getActionDef({ actions: {} }, "openCodeEditorInfo");
+        runAction(def, { container: codeIcon, windowDef: { id: "icon" }, configJson });
+      });
+    }
   } catch (error) {
     if (placeholder) {
       placeholder.style.display = "grid";

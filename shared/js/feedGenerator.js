@@ -3,7 +3,7 @@ import { extractFragment, extractDominantColor } from "./adCropper.js";
 import { navigateTo } from "./mobileApp.js";
 import { renderRisoAdCanvas } from "./risoAdRenderer.js";
 
-const SCROLL_SPEED = .8;
+const SCROLL_SPEED = 0.9;
 const STORY_CIRCLE_COUNT = 9;
 const MARGIN = 50;
 const BLEND_MODES = ["source-over", "multiply", "screen", "overlay"];
@@ -60,6 +60,9 @@ let container = null;
 let canvas = null;
 let ctx = null;
 let backBtn = null;
+let exportBtn = null;
+let onExportClick = null;
+let infoBtn = null;
 let animId = null;
 let scrollY = 0;
 let fragments = [];
@@ -80,12 +83,127 @@ let touchVelocity = 0;
 let lastTouchY = 0;
 let lastTouchTime = 0;
 
+let paperImg = null;
+let paperPattern = null;
+let marksCanvas = null;
+let marksCtx = null;
+let drawing = false;
+let lastMarkT = 0;
+let lastMarkX = 0;
+let lastMarkY = 0;
+
+// Tweak knobs
+const PAPER_PATTERN_SCALE = 0.10; // smaller => finer texture
+const MARK_R_MIN = 6;
+const MARK_R_MAX = 10;
+const MARK_ALPHA_MIN = 0.2;
+const MARK_ALPHA_MAX = 0.3;
+//line thickness
+const MARK_LINE_MIN = 6;
+const MARK_LINE_MAX = 10;
+
 function rand(min, max) {
   return min + Math.random() * (max - min);
 }
 
 function pickBlendMode() {
   return BLEND_MODES[Math.floor(Math.random() * BLEND_MODES.length)];
+}
+
+function loadPaperTexture() {
+  if (paperImg) return;
+  paperImg = new Image();
+  paperImg.onload = () => {
+    try {
+      paperPattern = ctx?.createPattern?.(paperImg, "repeat") || null;
+    } catch (_) {
+      paperPattern = null;
+    }
+  };
+  paperImg.src = new URL("../../assets/papertexture.jpg", import.meta.url).toString();
+}
+
+function ensureMarksLayer() {
+  marksCanvas = document.createElement("canvas");
+  marksCanvas.width = vw;
+  marksCanvas.height = vh;
+  marksCtx = marksCanvas.getContext("2d", { willReadFrequently: false });
+}
+
+function stampMark(x, y, strength = 1) {
+  if (!marksCtx) return;
+
+  const r = rand(MARK_R_MIN, MARK_R_MAX) * strength;
+  const rot = rand(0, Math.PI * 2);
+
+  marksCtx.save();
+  marksCtx.translate(x, y);
+  marksCtx.rotate(rot);
+  marksCtx.globalCompositeOperation = "multiply";
+  marksCtx.globalAlpha = rand(MARK_ALPHA_MIN, MARK_ALPHA_MAX) * strength;
+
+  const grad = marksCtx.createRadialGradient(0, 0, 0, 0, 0, r);
+  grad.addColorStop(0, "rgba(40,30,20,0.95)");
+  grad.addColorStop(0.22, "rgba(60,45,30,0.55)");
+  grad.addColorStop(0.5, "rgba(80,60,40,0.12)");
+  grad.addColorStop(1, "rgba(0,0,0,0)");
+  marksCtx.fillStyle = grad;
+  marksCtx.beginPath();
+  marksCtx.ellipse(0, 0, r * rand(0.75, 1.25), r * rand(0.6, 1.1), 0, 0, Math.PI * 2);
+  marksCtx.fill();
+  marksCtx.restore();
+}
+
+function strokeMark(x1, y1, x2, y2, strength = 1) {
+  if (!marksCtx) return;
+  const w = rand(MARK_LINE_MIN, MARK_LINE_MAX) * strength;
+
+  marksCtx.save();
+  marksCtx.globalCompositeOperation = "multiply";
+  marksCtx.globalAlpha = rand(MARK_ALPHA_MIN, MARK_ALPHA_MAX) * strength;
+  marksCtx.lineCap = "round";
+  marksCtx.lineJoin = "round";
+  marksCtx.lineWidth = w;
+  marksCtx.strokeStyle = "rgba(55,40,25,0.9)";
+
+  marksCtx.beginPath();
+  marksCtx.moveTo(x1, y1);
+  marksCtx.lineTo(x2, y2);
+  marksCtx.stroke();
+  marksCtx.restore();
+}
+
+function onPointerDown(e) {
+  // Mouse/pen: allow dragging to draw.
+  if (e.pointerType === "mouse" && e.button !== 0) return;
+  drawing = e.pointerType !== "touch";
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  lastMarkX = x;
+  lastMarkY = y;
+  lastMarkT = performance.now();
+  stampMark(x, y, 1);
+}
+
+function onPointerMove(e) {
+  if (!drawing) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const now = performance.now();
+  const dist = Math.hypot(x - lastMarkX, y - lastMarkY);
+  if (now - lastMarkT > 40 || dist > 18) {
+    const strength = Math.min(1.5, Math.max(0.7, dist / 18));
+    strokeMark(lastMarkX, lastMarkY, x, y, strength);
+    lastMarkX = x;
+    lastMarkY = y;
+    lastMarkT = now;
+  }
+}
+
+function onPointerUp() {
+  drawing = false;
 }
 
 function getPrimaryRisoInk(item) {
@@ -110,6 +228,23 @@ function getPrimaryRisoInk(item) {
   const s = first.toString();
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
   return RISO_FALLBACK_INKS[h % RISO_FALLBACK_INKS.length] || "BLACK";
+}
+
+function getRisoInkOptions(item) {
+  for (const e of item.emotionorsense || []) {
+    const mapped = EMOTION_TO_RISO_INK[e];
+    if (!mapped) continue;
+    const options = parseInkOptions(mapped);
+    if (options.length) return options;
+  }
+
+  // fallback: stable 1-ink choice based on first emotion
+  const first = item.emotionorsense?.[0];
+  if (!first) return ["BLACK"];
+  let h = 0;
+  const s = first.toString();
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return [RISO_FALLBACK_INKS[h % RISO_FALLBACK_INKS.length] || "BLACK"];
 }
 
 async function loadStoryCircles() {
@@ -194,18 +329,20 @@ async function spawnFragments(count) {
     const fragH = Math.round(rand(vh * 0.15, vh * 0.5));
     try {
       const fragCanvas = await extractFragment(item, fragW * dpr, fragH * dpr);
-      const primaryInk = getPrimaryRisoInk(item);
+      const inkOptions = getRisoInkOptions(item);
       let risoCanvas = fragCanvas;
       try {
-        risoCanvas = await renderRisoAdCanvas(fragCanvas, primaryInk, {
+        risoCanvas = await renderRisoAdCanvas(fragCanvas, inkOptions, {
           maxDim: 220,
           ditherType: "floydsteinberg",
           threshold: 140,
+          thresholdSpread: 26,
+          maxInks: 3,
         });
       } catch (err) {
         console.warn("Riso render failed; falling back to original fragment.", {
           item: item?.imagefilename,
-          primaryInk,
+          inkOptions,
           message: err?.message ? err.message : String(err),
           stack: err?.stack,
         });
@@ -365,8 +502,25 @@ function render() {
   if (Math.abs(touchVelocity) < 0.05) touchVelocity = 0;
 
   ctx.clearRect(0, 0, vw, vh);
-  ctx.fillStyle = "#f3efe3";
-  ctx.fillRect(0, 0, vw, vh);
+  if (paperPattern) {
+    ctx.save();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = paperPattern;
+    // Scale the pattern so the paper grain reads finer/coarser.
+    ctx.scale(PAPER_PATTERN_SCALE, PAPER_PATTERN_SCALE);
+    ctx.fillRect(0, 0, vw / PAPER_PATTERN_SCALE, vh / PAPER_PATTERN_SCALE);
+    ctx.restore();
+  } else {
+    ctx.fillStyle = "#f3efe3";
+    ctx.fillRect(0, 0, vw, vh);
+  }
+
+  if (marksCanvas) {
+    ctx.save();
+    ctx.globalAlpha = 1;
+    ctx.drawImage(marksCanvas, 0, 0);
+    ctx.restore();
+  }
 
   const buffer = vh * 0.3;
 
@@ -458,6 +612,90 @@ export async function initFeed(el) {
   canvas.className = "feed-canvas";
   container.appendChild(canvas);
 
+  exportBtn = document.createElement("button");
+  exportBtn.className = "feed-export-btn";
+  exportBtn.type = "button";
+  exportBtn.textContent = "Export PNG";
+  onExportClick = () => {
+    try {
+      // Render to an offscreen buffer so we can omit UI (story circles).
+      const out = document.createElement("canvas");
+      out.width = canvas.width;
+      out.height = canvas.height;
+      const octx = out.getContext("2d");
+      if (!octx) throw new Error("No export 2d context");
+
+      // Background paper
+      if (paperPattern) {
+        octx.save();
+        octx.fillStyle = paperPattern;
+        octx.scale(PAPER_PATTERN_SCALE, PAPER_PATTERN_SCALE);
+        octx.fillRect(0, 0, vw / PAPER_PATTERN_SCALE, vh / PAPER_PATTERN_SCALE);
+        octx.restore();
+      } else {
+        octx.fillStyle = "#f3efe3";
+        octx.fillRect(0, 0, vw, vh);
+      }
+
+      // Marks layer (fixed to screen)
+      if (marksCanvas) octx.drawImage(marksCanvas, 0, 0);
+
+      // Fragments (scrolling)
+      const buffer = vh * 0.3;
+      for (let i = fragments.length - 1; i >= 0; i--) {
+        const frag = fragments[i];
+        const screenY = frag.y - scrollY;
+        if (screenY + frag.h < -buffer) continue;
+        if (screenY > vh + buffer) continue;
+        octx.save();
+        octx.globalAlpha = frag.alpha;
+        octx.globalCompositeOperation = frag.blend;
+        octx.translate(frag.x + frag.w / 2, screenY + frag.h / 2);
+        octx.rotate(frag.rotation);
+        octx.drawImage(frag.canvas, -frag.w / 2, -frag.h / 2, frag.w, frag.h);
+        octx.restore();
+      }
+
+      // Break panels + text overlays (omit story circles)
+      // Reuse the existing draw helpers by temporarily swapping ctx.
+      const prevCtx = ctx;
+      ctx = octx;
+      drawBreakPanels();
+      for (let i = textOverlays.length - 1; i >= 0; i--) {
+        const t = textOverlays[i];
+        const screenY = t.y - scrollY;
+        if (screenY + 30 < -buffer) continue;
+        if (screenY > vh + buffer) continue;
+        octx.save();
+        octx.globalAlpha = t.alpha;
+        octx.fillStyle = "rgba(20,20,20,0.55)";
+        octx.font = `${t.size}px ui-sans-serif, system-ui, sans-serif`;
+        octx.fillText(t.text, t.x, screenY);
+        octx.restore();
+      }
+      ctx = prevCtx;
+
+      const url = out.toDataURL("image/png");
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `feed_${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      console.warn("Export failed:", err);
+    }
+  };
+  exportBtn.addEventListener("click", onExportClick);
+  container.appendChild(exportBtn);
+
+  infoBtn = document.createElement("button");
+  infoBtn.className = "mobile-info-btn";
+  infoBtn.type = "button";
+  infoBtn.textContent = "i";
+  infoBtn.addEventListener("click", () => navigateTo("project"));
+  container.appendChild(infoBtn);
+
   backBtn = document.createElement("button");
   backBtn.className = "mobile-back-btn";
   backBtn.textContent = "\u2190";
@@ -473,6 +711,8 @@ export async function initFeed(el) {
   canvas.style.height = vh + "px";
 
   ctx = canvas.getContext("2d");
+  loadPaperTexture();
+  ensureMarksLayer();
 
   scrollY = 0;
   lastSpawnY = 80;
@@ -490,6 +730,10 @@ export async function initFeed(el) {
   canvas.addEventListener("touchmove", onTouchMove, { passive: false });
   canvas.addEventListener("touchend", onTouchEnd, { passive: true });
   canvas.addEventListener("wheel", onWheel, { passive: false });
+  canvas.addEventListener("pointerdown", onPointerDown);
+  canvas.addEventListener("pointermove", onPointerMove);
+  canvas.addEventListener("pointerup", onPointerUp);
+  canvas.addEventListener("pointercancel", onPointerUp);
 
   await loadStoryCircles();
   await spawnFragments(15);
@@ -508,18 +752,37 @@ export function destroyFeed() {
     canvas.removeEventListener("touchmove", onTouchMove);
     canvas.removeEventListener("touchend", onTouchEnd);
     canvas.removeEventListener("wheel", onWheel);
+    canvas.removeEventListener("pointerdown", onPointerDown);
+    canvas.removeEventListener("pointermove", onPointerMove);
+    canvas.removeEventListener("pointerup", onPointerUp);
+    canvas.removeEventListener("pointercancel", onPointerUp);
   }
   if (backBtn) {
     backBtn.removeEventListener("click", onBackClick);
+  }
+  if (exportBtn) {
+    if (onExportClick) exportBtn.removeEventListener("click", onExportClick);
+    exportBtn.remove();
+  }
+  if (infoBtn) {
+    infoBtn.remove();
   }
   if (container) container.innerHTML = "";
   canvas = null;
   ctx = null;
   backBtn = null;
+  exportBtn = null;
+  onExportClick = null;
+  infoBtn = null;
   container = null;
   fragments = [];
   textOverlays = [];
   breakPanels = [];
   storyCircles = [];
   storyCircleColors = [];
+  paperImg = null;
+  paperPattern = null;
+  marksCanvas = null;
+  marksCtx = null;
+  drawing = false;
 }
