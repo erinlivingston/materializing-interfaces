@@ -11,6 +11,28 @@ const PAGES = [
       <p>
         Try opening a few windows until paper starts showing up. The “paper” isn’t a background—it's another kind of window.
       </p>
+      <div class="project-start-display">
+        <div class="project-start-display__titlebar">
+          <span class="project-start-display__title">Display</span>
+          
+        </div>
+        <div class="project-start-display__body">
+          <details class="project-start-display__details">
+            <summary class="project-start-display__summary">Change background</summary>
+            <fieldset class="project-start-display__fieldset">
+              <legend class="visually-hidden">Desktop background</legend>
+              <label class="project-start-display__option">
+                <input type="radio" name="desktop-bg" value="landscape" checked />
+                <span>Landscape</span>
+              </label>
+              <label class="project-start-display__option">
+                <input type="radio" name="desktop-bg" value="ombre" />
+                <span>Ombre</span>
+              </label>
+            </fieldset>
+          </details>
+        </div>
+      </div>
       <p>
         Suggested paths: <a href="#" data-project-link="interface_as_theory">Interface as theory</a>,
         <a href="#" data-project-link="nonlinear_navigation">Nonlinear navigation</a>,
@@ -110,8 +132,56 @@ const PAGES = [
   },
 ];
 
+const BUILD_PAGES = [
+  {
+    id: "build_project",
+    title: "Project (build view)",
+    html: `
+      <h2>Build view</h2>
+      <p>
+        Narrative essays from the start menu live elsewhere. This surface is for how the piece is constructed:
+        data sources, pipelines, and the studio process behind the desktop collage.
+      </p>
+      <p>
+        <a href="#" data-build-link="data_build">Data build</a>
+        ·
+        <a href="#" data-build-link="studio_build">Studio build</a>
+      </p>
+    `,
+  },
+  {
+    id: "data_build",
+    title: "Data build",
+    html: `
+      <h2>Data build</h2>
+      <p>
+        Placeholder: describe the browser history export, how lines are classified, timestamps, and how text zones
+        pull from the JSON feed. Link out to scripts or notebooks when you have them.
+      </p>
+      <p><a href="#" data-build-link="build_project">Back to build overview</a></p>
+    `,
+  },
+  {
+    id: "studio_build",
+    title: "Studio build",
+    html: `
+      <h2>Studio build</h2>
+      <p>
+        Placeholder: capture decisions about abstract windows, zone authoring, paper spill behavior, and how
+        the mobile feed relates to this desktop view.
+      </p>
+      <p><a href="#" data-build-link="build_project">Back to build overview</a></p>
+    `,
+  },
+];
+
 export function getProjectPageById(id) {
   if (!id) return null;
   return PAGES.find((p) => p.id === id) || null;
+}
+
+export function getBuildProjectPageById(id) {
+  if (!id) return null;
+  return BUILD_PAGES.find((p) => p.id === id) || null;
 }
 

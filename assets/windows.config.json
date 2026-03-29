@@ -1,11 +1,15 @@
 {
   "version": 1,
+  "meta": {
+    "githubRepoUrl": "https://github.com/",
+    "erinPortraitSrc": ""
+  },
   "sizing": {
     "units": "cm",
     "reference": {
       "mode": "cmRelative",
       "baseWindowId": "img_5489",
-      "targetBaseWidthPx": 420
+      "targetBaseWidthPx": 500
     }
   },
   "windows": [
@@ -94,7 +98,15 @@
         "w": 0.02,
         "h": 0.029,
         "actionId": "openAbstractFromPool"
-      }], "text": [{
+      },{
+        "id": "new_rect_zone_close",
+        "shape": "rect",
+        "x": 0.935,
+        "y": 0.11,
+        "w": 0.019,
+        "h": 0.141,
+        "actionId": "close"
+      } ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.509,
@@ -156,7 +168,47 @@
         "y": 0.04,
         "r": 0.009,
         "actionId": "close"
-      }] },
+      },{
+        "id": "rect_zone_whiteboxtop",
+        "shape": "rect",
+        "x": 0.02,
+        "y": 0.254,
+        "w": 0.116,
+        "h": 0.042,
+        "actionId": "codebuild"
+      }, {
+        "id": "rect_zone_whiteboxtop2",
+        "shape": "rect",
+        "x": 0.018,
+        "y": 0.324,
+        "w": 0.124,
+        "h": 0.046,
+        "actionId": "codebuild"
+      }, {
+        "id": "rect_zone_whiteboxtop3",
+        "shape": "rect",
+        "x": 0.02,
+        "y": 0.674,
+        "w": 0.114,
+        "h": 0.041,
+        "actionId": "codebuild"
+      },{
+        "id": "rect_zone_graytoptitlebox",
+        "shape": "rect",
+        "x": 0.251,
+        "y": 0.032,
+        "w": 0.487,
+        "h": 0.042,
+        "actionId": "graycodetitlebox"
+      }, {
+        "id": "new_rect_zone_codewindowtopright",
+        "shape": "rect",
+        "x": 0.837,
+        "y": 0.203,
+        "w": 0.119,
+        "h": 0.304,
+        "actionId": "codebuild"
+      } ] },
       "actions": {}
     },
 
@@ -186,7 +238,7 @@
         "x": 0.094,
         "y": 0.031,
         "r": 0.008,
-        "actionId": "openAbstractFromPool"
+        "actionId": "close"
       },{
         "id": "new_rect_zone1",
         "shape": "rect",
@@ -207,9 +259,9 @@
         "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.779,
-        "y": 0.052,
-        "w": 0.12,
-        "h": 0.021,
+        "y": 0.053,
+        "w": 0.113,
+        "h": 0.018,
         "actionId": "replace_action_id"
       },{
         "id": "new_rect_zone4",
@@ -235,39 +287,39 @@
         "y": 0.124,
         "w": 0.088,
         "h": 0.103,
-        "actionId": "replace_action_id"
+        "actionId": "projectpage"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.735,
         "y": 0.11,
         "w": 0.229,
         "h": 0.031,
-        "actionId": "replace_action_id"
+        "actionId": "colorchange"
       },{
-        "id": "new_circle_zone",
+        "id": "new_circle_green",
         "shape": "circle",
-        "x": 0.244,
-        "y": 0.717,
-        "r": 0.088,
-        "actionId": "replace_action_id"
+        "x": 0.238,
+        "y": 0.726,
+        "r": 0.085,
+        "actionId": "projectpage"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone2_greensquare",
         "shape": "rect",
         "x": 0.082,
         "y": 0.539,
         "w": 0.045,
         "h": 0.052,
-        "actionId": "replace_action_id"
+        "actionId": "close"
       },{
-        "id": "new_circle_zone",
+        "id": "new_circle_zone3",
         "shape": "circle",
-        "x": 0.034,
-        "y": 0.067,
-        "r": 0.011,
-        "actionId": "replace_action_id"
+        "x": 0.033,
+        "y": 0.069,
+        "r": 0.007,
+        "actionId": "openAbstractFromPool"
       }], "text": [{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.229,
         "y": 0.233,
@@ -275,7 +327,7 @@
         "h": 0.099,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone4",
         "shape": "rect",
         "x": 0.421,
         "y": 0.566,
@@ -283,7 +335,7 @@
         "h": 0.316,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone5",
         "shape": "rect",
         "x": 0.206,
         "y": 0.455,
@@ -291,7 +343,7 @@
         "h": 0.06,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone6",
         "shape": "rect",
         "x": 0.64,
         "y": 0.61,
@@ -313,31 +365,62 @@
         "x": 0.057,
         "y": 0.076,
         "r": 0.048,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.109,
         "y": 0.012,
         "w": 0.049,
         "h": 0.043,
-        "actionId": "replace_action_id"
+        "actionId": "menu"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone2",
         "shape": "rect",
         "x": 0.93,
         "y": 0.022,
         "w": 0.049,
         "h": 0.072,
-        "actionId": "replace_action_id"
+        "actionId": "menu"
       },{
-        "id": "new_circle_zone",
+        "id": "new_circle_zone1",
         "shape": "circle",
-        "x": 0.828,
-        "y": 0.558,
-        "r": 0.056,
-        "actionId": "replace_action_id"
-      }], "text": [{
+        "x": 0.827,
+        "y": 0.567,
+        "r": 0.059,
+        "actionId": "userpickcolor"
+      },{
+        "id": "checkbox1",
+        "shape": "rect",
+        "x": 0.02,
+        "y": 0.67,
+        "w": 0.026,
+        "h": 0.03,
+        "actionId": "usercheckbox"
+      },{
+        "id": "checkbox2",
+        "shape": "rect",
+        "x": 0.023,
+        "y": 0.725,
+        "w": 0.022,
+        "h": 0.029,
+        "actionId": "usercheckbox"
+      },{
+        "id": "checkbox3",
+        "shape": "rect",
+        "x": 0.021,
+        "y": 0.774,
+        "w": 0.025,
+        "h": 0.035,
+        "actionId": "usercheckbox"
+      },{
+        "id": "yellowcircle",
+        "shape": "circle",
+        "x": 0.024,
+        "y": 0.571,
+        "r": 0.013,
+        "actionId": "close"
+      } ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.014,
@@ -346,7 +429,7 @@
         "h": 0.16,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.27,
         "y": 0.02,
@@ -354,7 +437,7 @@
         "h": 0.042,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone4",
         "shape": "rect",
         "x": 0.722,
         "y": 0.696,
@@ -362,7 +445,7 @@
         "h": 0.045,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone5",
         "shape": "rect",
         "x": 0.054,
         "y": 0.558,
@@ -370,7 +453,7 @@
         "h": 0.037,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone6",
         "shape": "rect",
         "x": 0.301,
         "y": 0.515,
@@ -378,7 +461,7 @@
         "h": 0.033,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone7",
         "shape": "rect",
         "x": 0.052,
         "y": 0.668,
@@ -394,7 +477,7 @@
         "h": 0.034,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone8",
         "shape": "rect",
         "x": 0.053,
         "y": 0.78,
@@ -402,7 +485,7 @@
         "h": 0.032,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone9",
         "shape": "rect",
         "x": 0.053,
         "y": 0.78,
@@ -410,7 +493,7 @@
         "h": 0.032,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone10",
         "shape": "rect",
         "x": 0.718,
         "y": 0.766,
@@ -418,7 +501,7 @@
         "h": 0.049,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone11",
         "shape": "rect",
         "x": 0.843,
         "y": 0.096,
@@ -440,45 +523,52 @@
         "x": 0.036,
         "y": 0.037,
         "r": 0.015,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
-        "id": "new_circle_zone",
+        "id": "new_circle_zone1",
         "shape": "circle",
         "x": 0.075,
         "y": 0.038,
         "r": 0.014,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
-        "id": "new_circle_zone",
+        "id": "new_circle_zone2",
         "shape": "circle",
         "x": 0.121,
         "y": 0.036,
         "r": 0.015,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
-        "id": "new_circle_zone",
+        "id": "new_circle_zone3",
         "shape": "circle",
         "x": 0.43,
         "y": 0.203,
         "r": 0.02,
-        "actionId": "replace_action_id"
+        "actionId": "close"
       },{
-        "id": "new_circle_zone",
+        "id": "new_circle_zone4",
         "shape": "circle",
         "x": 0.48,
         "y": 0.203,
         "r": 0.02,
-        "actionId": "replace_action_id"
+        "actionId": "close"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.075,
         "y": 0.931,
         "w": 0.319,
         "h": 0.04,
-        "actionId": "replace_action_id"
-      }], "text": [{
-        "id": "new_rect_zone",
+        "actionId": "colorchange"
+      },{
+        "id": "topcirclesticker",
+        "shape": "circle",
+        "x": 0.156,
+        "y": 0.16,
+        "r": 0.063,
+        "actionId": "projectpage"
+      } ], "text": [{
+        "id": "new_rect_zone2",
         "shape": "rect",
         "x": 0.41,
         "y": 0.676,
@@ -486,7 +576,7 @@
         "h": 0.209,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.114,
         "y": 0.445,
@@ -540,21 +630,45 @@
         "x": 0.021,
         "y": 0.05,
         "r": 0.014,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
-        "id": "new_circle_zone",
+        "id": "new_circle_zone1",
         "shape": "circle",
         "x": 0.054,
         "y": 0.058,
         "r": 0.012,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
-        "id": "new_circle_zone",
+        "id": "new_circle_zone2",
         "shape": "circle",
         "x": 0.311,
         "y": 0.388,
         "r": 0.027,
-        "actionId": "replace_action_id"
+        "actionId": "projectpage"
+      }, {
+        "id": "bluestickerbottomeleft",
+        "shape": "rect",
+        "x": 0.007,
+        "y": 0.811,
+        "w": 0.101,
+        "h": 0.157,
+        "actionId": "close"
+      },{
+        "id": "mirrorportrait",
+        "shape": "rect",
+        "x": 0.545,
+        "y": 0.624,
+        "w": 0.194,
+        "h": 0.318,
+        "actionId": "erinportrait"
+      },{
+        "id": "graylinebottomright",
+        "shape": "rect",
+        "x": 0.77,
+        "y": 0.978,
+        "w": 0.214,
+        "h": 0.008,
+        "actionId": "close"
       }], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -610,21 +724,21 @@
         "x": 0.025,
         "y": 0.03,
         "r": 0.017,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.069,
         "y": 0.03,
         "r": 0.018,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.116,
         "y": 0.03,
         "r": 0.015,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -632,7 +746,15 @@
         "y": 0.668,
         "w": 0.313,
         "h": 0.23,
-        "actionId": "replace_action_id"
+        "actionId": "projectpage"
+      },{
+        "id": "grphpaper",
+        "shape": "rect",
+        "x": 0.509,
+        "y": 0.599,
+        "w": 0.149,
+        "h": 0.037,
+        "actionId": "close"
       }], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -688,14 +810,14 @@
         "x": 0.069,
         "y": 0.044,
         "r": 0.033,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.077,
         "y": 0.537,
         "r": 0.023,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -703,7 +825,7 @@
         "y": 0.075,
         "w": 0.05,
         "h": 0.047,
-        "actionId": "replace_action_id"
+        "actionId": "projectpage"
       },{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -711,8 +833,16 @@
         "y": 0.844,
         "w": 0.294,
         "h": 0.044,
-        "actionId": "replace_action_id"
-      }], "text": [{
+        "actionId": "close"
+      },{
+        "id": "peachpillmiddleright",
+        "shape": "rect",
+        "x": 0.61,
+        "y": 0.408,
+        "w": 0.286,
+        "h": 0.031,
+        "actionId": "colorchange"
+      } ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.067,
@@ -759,31 +889,55 @@
         "x": 0.029,
         "y": 0.045,
         "r": 0.018,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.077,
         "y": 0.042,
         "r": 0.019,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.924,
         "y": 0.014,
         "w": 0.076,
         "h": 0.098,
-        "actionId": "replace_action_id"
+        "actionId": "menu"
       },{
-        "id": "new_rect_zone",
+        "id": "greenrecttopleft",
         "shape": "rect",
         "x": 0.149,
         "y": 0.041,
         "w": 0.193,
         "h": 0.063,
-        "actionId": "replace_action_id"
-      }], "text": [{
+        "actionId": "userinput"
+      },{
+        "id": "greenbarmiddleleft",
+        "shape": "rect",
+        "x": 0.026,
+        "y": 0.48,
+        "w": 0.473,
+        "h": 0.067,
+        "actionId": "colorchange"
+      },{
+        "id": "bluesqmiddle",
+        "shape": "rect",
+        "x": 0.403,
+        "y": 0.217,
+        "w": 0.127,
+        "h": 0.175,
+        "actionId": "projectpage"
+      }, {
+        "id": "yellowrect",
+        "shape": "rect",
+        "x": 0.598,
+        "y": 0.033,
+        "w": 0.18,
+        "h": 0.047,
+        "actionId": "close"
+      } ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.216,
@@ -886,28 +1040,28 @@
         "x": 0.027,
         "y": 0.031,
         "r": 0.011,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.056,
         "y": 0.04,
         "r": 0.01,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.088,
         "y": 0.038,
         "r": 0.014,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.96,
         "y": 0.061,
         "r": 0.017,
-        "actionId": "replace_action_id"
+        "actionId": "projectpage"
       },{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -915,7 +1069,29 @@
         "y": 0.119,
         "w": 0.54,
         "h": 0.03,
-        "actionId": "replace_action_id"
+        "actionId": "userinput"
+      },{
+        "id": "bluelinebottomright",
+        "shape": "rect",
+        "x": 0.87,
+        "y": 0.911,
+        "w": 0.083,
+        "h": 0.016,
+        "actionId": "close"
+      },{
+        "id": "bluedot",
+        "shape": "circle",
+        "x": 0.05,
+        "y": 0.085,
+        "r": 0.012,
+        "actionId": "projectpage"
+      },{
+        "id": "bluedot2",
+        "shape": "circle",
+        "x": 0.049,
+        "y": 0.133,
+        "r": 0.01,
+        "actionId": "colorchange"
       }], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -987,44 +1163,60 @@
         "x": 0.046,
         "y": 0.06,
         "r": 0.018,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.094,
         "y": 0.064,
         "r": 0.017,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.138,
         "y": 0.06,
         "r": 0.017,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.884,
         "y": 0.011,
         "w": 0.054,
         "h": 0.056,
-        "actionId": "replace_action_id"
+        "actionId": "menu"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.403,
         "y": 0.495,
         "r": 0.017,
-        "actionId": "replace_action_id"
+        "actionId": "projectpage"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone2",
         "shape": "rect",
         "x": 0.184,
         "y": 0.732,
         "w": 0.102,
         "h": 0.17,
-        "actionId": "replace_action_id"
+        "actionId": "close"
+      },{
+        "id": "bluemarkerrecttopright",
+        "shape": "rect",
+        "x": 0.834,
+        "y": 0.119,
+        "w": 0.141,
+        "h": 0.048,
+        "actionId": "userinput"
+      },{
+        "id": "lightgreenstickerbottomright",
+        "shape": "rect",
+        "x": 0.727,
+        "y": 0.84,
+        "w": 0.058,
+        "h": 0.103,
+        "actionId": "userpickcolorsquare"
       }], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -1112,21 +1304,21 @@
         "x": 0.018,
         "y": 0.018,
         "r": 0.01,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.044,
         "y": 0.018,
         "r": 0.01,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.07,
         "y": 0.02,
         "r": 0.009,
-        "actionId": "replace_action_id"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -1134,9 +1326,32 @@
         "y": 0.008,
         "w": 0.074,
         "h": 0.036,
-        "actionId": "replace_action_id"
-      }], "text": [{
-        "id": "new_rect_zone",
+        "actionId": "menu"
+      }, {
+        "id": "yellowdot",
+        "shape": "circle",
+        "x": 0.142,
+        "y": 0.736,
+        "r": 0.032,
+        "actionId": "close"
+      },{
+        "id": "lefttopyellowrect",
+        "shape": "rect",
+        "x": 0.036,
+        "y": 0.099,
+        "w": 0.094,
+        "h": 0.103,
+        "actionId": "projectpage"
+      },{
+        "id": "bigsquarebottomcenter",
+        "shape": "rect",
+        "x": 0.288,
+        "y": 0.588,
+        "w": 0.143,
+        "h": 0.209,
+        "actionId": "colorchange"
+      } ], "text": [{
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.243,
         "y": 0.076,
@@ -1144,7 +1359,7 @@
         "h": 0.056,
         "actionId": "replace_action_id"
       }, {
-        "id": "new_rect_zone",
+        "id": "new_rect_zone2",
         "shape": "rect",
         "x": 0.289,
         "y": 0.815,
@@ -1152,7 +1367,7 @@
         "h": 0.134,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.333,
         "y": 0.417,
@@ -1160,7 +1375,7 @@
         "h": 0.069,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone4",
         "shape": "rect",
         "x": 0.835,
         "y": 0.162,
@@ -1168,38 +1383,38 @@
         "h": 0.268,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.331,
-        "y": 0.161,
-        "w": 0.49,
-        "h": 0.05,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.334,
-        "y": 0.262,
-        "w": 0.49,
-        "h": 0.049,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.332,
-        "y": 0.363,
-        "w": 0.491,
-        "h": 0.045,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone8",
         "shape": "rect",
         "x": 0.023,
         "y": 0.457,
         "w": 0.099,
         "h": 0.074,
         "actionId": "replace_action_id"
-      }] },
+      }, {
+        "id": "new_rect_zone9",
+        "shape": "rect",
+        "x": 0.337,
+        "y": 0.173,
+        "w": 0.42,
+        "h": 0.024,
+        "actionId": "replace_action_id"
+      },{
+        "id": "new_rect_zone10",
+        "shape": "rect",
+        "x": 0.336,
+        "y": 0.273,
+        "w": 0.479,
+        "h": 0.024,
+        "actionId": "replace_action_id"
+      },{
+        "id": "new_rect_zone",
+        "shape": "rect",
+        "x": 0.337,
+        "y": 0.379,
+        "w": 0.484,
+        "h": 0.015,
+        "actionId": "replace_action_id"
+      } ] },
       "actions": {}
     },
     {
@@ -1214,7 +1429,7 @@
         "x": 0.026,
         "y": 0.03,
         "r": 0.017,
-        "actionId": "replace_action_id"
+        "actionId": "openProjectFromPool"
       },{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -1222,7 +1437,7 @@
         "y": 0.012,
         "w": 0.035,
         "h": 0.051,
-        "actionId": "replace_action_id"
+        "actionId": "menu"
       },{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -1230,9 +1445,33 @@
         "y": 0.487,
         "w": 0.248,
         "h": 0.045,
-        "actionId": "replace_action_id"
+        "actionId": "projectpage"
+      },{
+        "id": "new_rect_zone2",
+        "shape": "rect",
+        "x": 0.027,
+        "y": 0.675,
+        "w": 0.245,
+        "h": 0.246,
+        "actionId": "userinput"
+      },{
+        "id": "new_rect_zone3",
+        "shape": "rect",
+        "x": 0.019,
+        "y": 0.934,
+        "w": 0.237,
+        "h": 0.01,
+        "actionId": "close"
+      },{
+        "id": "new_rect_zone1",
+        "shape": "rect",
+        "x": 0.03,
+        "y": 0.226,
+        "w": 0.252,
+        "h": 0.205,
+        "actionId": "userinput"
       }], "text": [{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.341,
         "y": 0.202,
@@ -1240,23 +1479,7 @@
         "h": 0.092,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.338,
-        "y": 0.329,
-        "w": 0.61,
-        "h": 0.237,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.345,
-        "y": 0.567,
-        "w": 0.59,
-        "h": 0.377,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone4",
         "shape": "rect",
         "x": 0.031,
         "y": 0.09,
@@ -1264,12 +1487,44 @@
         "h": 0.102,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone5",
         "shape": "rect",
         "x": 0.026,
         "y": 0.579,
         "w": 0.247,
         "h": 0.078,
+        "actionId": "replace_action_id"
+      },{
+        "id": "new_rect_zone6",
+        "shape": "rect",
+        "x": 0.341,
+        "y": 0.322,
+        "w": 0.613,
+        "h": 0.111,
+        "actionId": "replace_action_id"
+      },{
+        "id": "new_rect_zone7",
+        "shape": "rect",
+        "x": 0.341,
+        "y": 0.452,
+        "w": 0.616,
+        "h": 0.202,
+        "actionId": "replace_action_id"
+      },{
+        "id": "new_rect_zone8",
+        "shape": "rect",
+        "x": 0.341,
+        "y": 0.669,
+        "w": 0.617,
+        "h": 0.124,
+        "actionId": "replace_action_id"
+      },{
+        "id": "new_rect_zone9",
+        "shape": "rect",
+        "x": 0.341,
+        "y": 0.807,
+        "w": 0.616,
+        "h": 0.145,
         "actionId": "replace_action_id"
       }] },
       "actions": {}
@@ -1286,36 +1541,44 @@
         "x": 0.037,
         "y": 0.03,
         "r": 0.024,
-        "actionId": "replace_action_id"
+        "actionId": "openProjectFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.104,
         "y": 0.027,
         "r": 0.021,
-        "actionId": "replace_action_id"
+        "actionId": "openProjectFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.784,
         "y": 0.963,
         "r": 0.038,
-        "actionId": "replace_action_id"
+        "actionId": "openProjectFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.87,
         "y": 0.964,
         "r": 0.03,
-        "actionId": "replace_action_id"
+        "actionId": "close"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.739,
         "y": 0.095,
         "w": 0.179,
         "h": 0.104,
-        "actionId": "replace_action_id"
+        "actionId": "menu"
+      },{
+        "id": "new_rect_zone2",
+        "shape": "rect",
+        "x": 0.037,
+        "y": 0.881,
+        "w": 0.114,
+        "h": 0.095,
+        "actionId": "projectpage"
       }], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -1374,45 +1637,53 @@
       "role": "interactive",
       "sizeCm": { "width": 17.9, "height": 12 },
       "zones": { "click": [{
-        "id": "new_circle_zone",
+        "id": "new_circle_zone1",
         "shape": "circle",
         "x": 0.033,
         "y": 0.05,
         "r": 0.019,
-        "actionId": "replace_action_id"
+        "actionId": "openProjectFromPool"
       },{
-        "id": "new_circle_zone",
+        "id": "new_circle_zone2",
         "shape": "circle",
         "x": 0.075,
         "y": 0.049,
         "r": 0.02,
-        "actionId": "replace_action_id"
+        "actionId": "openProjectFromPool"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.862,
         "y": 0.025,
         "w": 0.12,
         "h": 0.084,
-        "actionId": "replace_action_id"
+        "actionId": "menu"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone2",
         "shape": "rect",
         "x": 0.673,
         "y": 0.251,
         "w": 0.128,
         "h": 0.184,
-        "actionId": "replace_action_id"
+        "actionId": "userinput"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.028,
         "y": 0.355,
         "w": 0.128,
         "h": 0.188,
-        "actionId": "replace_action_id"
+        "actionId": "projectpage"
+      },{
+        "id": "bottomblueline",
+        "shape": "rect",
+        "x": 0.006,
+        "y": 0.953,
+        "w": 0.697,
+        "h": 0.015,
+        "actionId": "close"
       }], "text": [{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.022,
         "y": 0.223,
@@ -1420,7 +1691,7 @@
         "h": 0.118,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone2",
         "shape": "rect",
         "x": 0.169,
         "y": 0.352,
@@ -1428,7 +1699,7 @@
         "h": 0.094,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.018,
         "y": 0.127,
@@ -1436,7 +1707,7 @@
         "h": 0.048,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone4",
         "shape": "rect",
         "x": 0.05,
         "y": 0.684,
@@ -1444,7 +1715,7 @@
         "h": 0.239,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone5",
         "shape": "rect",
         "x": 0.665,
         "y": 0.141,
@@ -1452,7 +1723,7 @@
         "h": 0.079,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone6",
         "shape": "rect",
         "x": 0.524,
         "y": 0.247,
@@ -1484,7 +1755,7 @@
         "y": 0.822,
         "w": 0.192,
         "h": 0.11,
-        "actionId": "replace_action_id"
+        "actionId": "close"
       },{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -1492,7 +1763,7 @@
         "y": 0.029,
         "w": 0.088,
         "h": 0.044,
-        "actionId": "replace_action_id"
+        "actionId": "close"
       },{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -1500,7 +1771,7 @@
         "y": 0.032,
         "w": 0.078,
         "h": 0.042,
-        "actionId": "replace_action_id"
+        "actionId": "projectpage"
       }], "text": [] },
       "actions": {}
     },
@@ -1511,13 +1782,13 @@
       "role": "decorative",
       "sizeCm": { "width": 14.7, "height": 9.5 },
       "zones": { "click": [{
-        "id": "new_rect_zone",
+        "id": "bluefolder",
         "shape": "rect",
-        "x": 0.02,
-        "y": 0.139,
-        "w": 0.953,
-        "h": 0.816,
-        "actionId": "replace_action_id"
+        "x": 0.217,
+        "y": 0.045,
+        "w": 0.293,
+        "h": 0.065,
+        "actionId": "userinput"
       }], "text": [] },
       "actions": {}
     },
@@ -1528,31 +1799,39 @@
       "role": "interactive",
       "sizeCm": { "width": 20.8, "height": 14.6 },
       "zones": { "click": [{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.011,
         "y": 0.004,
         "w": 0.032,
         "h": 0.043,
-        "actionId": "replace_action_id"
+        "actionId": "openProjectFromPool"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone2",
         "shape": "rect",
         "x": 0.853,
         "y": 0.009,
         "w": 0.137,
         "h": 0.035,
-        "actionId": "replace_action_id"
+        "actionId": "menu"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.016,
         "y": 0.791,
         "w": 0.225,
         "h": 0.186,
+        "actionId": "userinput"
+      },{
+        "id": "new_rect_zone",
+        "shape": "rect",
+        "x": 0.926,
+        "y": 0.929,
+        "w": 0.04,
+        "h": 0.057,
         "actionId": "replace_action_id"
       }], "text": [{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.02,
         "y": 0.085,
@@ -1560,7 +1839,7 @@
         "h": 0.089,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone2",
         "shape": "rect",
         "x": 0.015,
         "y": 0.202,
@@ -1568,7 +1847,7 @@
         "h": 0.096,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.019,
         "y": 0.322,
@@ -1576,7 +1855,7 @@
         "h": 0.293,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone4",
         "shape": "rect",
         "x": 0.289,
         "y": 0.09,
@@ -1584,7 +1863,7 @@
         "h": 0.247,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone5",
         "shape": "rect",
         "x": 0.291,
         "y": 0.4,
@@ -1592,7 +1871,7 @@
         "h": 0.257,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone6",
         "shape": "rect",
         "x": 0.281,
         "y": 0.701,
@@ -1600,7 +1879,7 @@
         "h": 0.036,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone7",
         "shape": "rect",
         "x": 0.278,
         "y": 0.765,
@@ -1608,7 +1887,7 @@
         "h": 0.033,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone8",
         "shape": "rect",
         "x": 0.665,
         "y": 0.091,
@@ -1616,7 +1895,7 @@
         "h": 0.167,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone9",
         "shape": "rect",
         "x": 0.83,
         "y": 0.098,
@@ -1632,15 +1911,7 @@
         "h": 0.395,
         "actionId": "replace_action_id"
       },{
-        "id": "new_rect_zone",
-        "shape": "rect",
-        "x": 0.661,
-        "y": 0.683,
-        "w": 0.262,
-        "h": 0.177,
-        "actionId": "replace_action_id"
-      },{
-        "id": "new_rect_zone",
+        "id": "new_rect_zone10 ",
         "shape": "rect",
         "x": 0.28,
         "y": 0.879,

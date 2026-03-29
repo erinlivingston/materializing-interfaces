@@ -7,12 +7,8 @@
     <link rel="stylesheet" href="../shared/css/common.css" />
   </head>
   <body>
-    <main class="viewport viewport--desktop">
-      <div
-        id="material-base"
-        class="material-base"
-        data-base-src="../assets/base-image.jpg"
-      >
+    <main class="viewport viewport--desktop viewport--bg-landscape">
+      <div id="material-base" class="material-base">
         <div class="material-placeholder"></div>
       </div>
 
@@ -26,8 +22,22 @@
       <footer class="start-bar" aria-label="Start bar">
         <button id="desktop-start-btn" class="start-bar__start" type="button">Start</button>
         <div class="start-bar__spacer" aria-hidden="true"></div>
-        <div class="start-bar__clock" aria-hidden="true">00:00</div>
+        <time class="start-bar__clock" datetime="" aria-live="polite">—:—</time>
       </footer>
+
+      <div
+        id="desktop-entry-overlay"
+        class="desktop-entry-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="desktop-entry-title"
+        aria-describedby="desktop-entry-hint"
+      >
+        <div class="desktop-entry-overlay__card">
+          <p id="desktop-entry-title" class="desktop-entry-overlay__title">materializing the desktop</p>
+          <p id="desktop-entry-hint" class="desktop-entry-overlay__hint">click space to enter</p>
+        </div>
+      </div>
 
       <div class="hud" aria-hidden="true">
         <div class="hud__title">Material Desktop</div>

@@ -25,6 +25,52 @@ body {
   background: #cfb492;
 }
 
+/* Project windows: translucent tints keyed to the active desktop wallpaper */
+.viewport--desktop.viewport--bg-landscape {
+  --project-surface-a: rgba(118, 178, 218, 0.58);
+  --project-surface-b: rgba(92, 148, 112, 0.52);
+  --project-text: rgba(16, 32, 28, 0.97);
+  --project-heading: rgba(18, 58, 48, 0.98);
+  --project-link: rgba(12, 92, 128, 0.98);
+  --project-link-hover: rgba(8, 64, 92, 1);
+  --project-divider: rgba(72, 128, 108, 0.62);
+  --project-header-bg: rgba(255, 255, 255, 0.78);
+  --project-title-fg: rgba(18, 72, 58, 0.98);
+  --project-display-bg: rgba(255, 255, 255, 0.86);
+  --project-display-border: rgba(88, 155, 188, 0.72);
+  --project-display-rule: rgba(95, 155, 175, 0.58);
+  --project-display-muted: rgba(22, 68, 56, 0.94);
+  --project-summary-fg: rgba(14, 102, 138, 0.98);
+  --project-accent: rgba(22, 118, 152, 0.98);
+  /* Dark saturated chrome derived from the same pastel / glass palette */
+  --project-window-border: color-mix(in srgb, var(--project-heading) 68%, #040a10 32%);
+  --project-window-border-soft: color-mix(in srgb, var(--project-accent) 42%, #0c1818 58%);
+  --project-window-glow: color-mix(in srgb, var(--project-accent) 38%, transparent);
+  --project-window-shadow-deep: color-mix(in srgb, var(--project-link) 22%, #000000 78%);
+}
+
+.viewport--desktop.viewport--bg-ombre {
+  --project-surface-a: rgba(255, 210, 155, 0.56);
+  --project-surface-b: rgba(228, 135, 188, 0.52);
+  --project-text: rgba(38, 22, 32, 0.97);
+  --project-heading: rgba(98, 28, 62, 0.98);
+  --project-link: rgba(148, 40, 96, 0.98);
+  --project-link-hover: rgba(118, 24, 72, 1);
+  --project-divider: rgba(188, 102, 138, 0.65);
+  --project-header-bg: rgba(255, 255, 255, 0.8);
+  --project-title-fg: rgba(92, 32, 64, 0.98);
+  --project-display-bg: rgba(255, 255, 255, 0.88);
+  --project-display-border: rgba(210, 128, 165, 0.72);
+  --project-display-rule: rgba(200, 118, 155, 0.6);
+  --project-display-muted: rgba(72, 36, 52, 0.94);
+  --project-summary-fg: rgba(148, 44, 102, 0.98);
+  --project-accent: rgba(178, 58, 118, 0.98);
+  --project-window-border: color-mix(in srgb, var(--project-heading) 70%, #14020c 30%);
+  --project-window-border-soft: color-mix(in srgb, var(--project-accent) 48%, #1a0814 52%);
+  --project-window-glow: color-mix(in srgb, var(--project-accent) 36%, transparent);
+  --project-window-shadow-deep: color-mix(in srgb, var(--project-link) 24%, #000000 76%);
+}
+
 .material-base {
   position: absolute;
   inset: 0;
@@ -33,6 +79,152 @@ body {
   background-position: center;
   transform: translateZ(0);
 }
+
+/* Landscape wallpaper: slightly zoomed out so more of the image is visible */
+.material-base.material-base--landscape-bg {
+  background-size: 100% auto;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Start menu: Display / wallpaper picker (inside project Start window) */
+.project-start-display {
+  margin: 16px 0 18px;
+  padding: 10px 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--project-display-border, rgba(17, 0, 55, 0.45));
+  background: var(--project-display-bg, rgba(255, 255, 255, 0.95));
+  box-shadow: 0 6px 16px rgba(12, 40, 8, 0.12);
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--project-display-muted, rgba(24, 68, 16, 0.96));
+}
+
+.project-start-display__titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 0 8px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--project-display-rule, rgba(120, 255, 64, 0.35));
+}
+
+.project-start-display__title {
+  font-weight: 650;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--project-title-fg, rgba(30, 100, 22, 0.88));
+}
+
+
+
+.project-start-display__body {
+  padding: 0;
+}
+
+.project-start-display__details {
+  margin: 0;
+}
+
+.project-start-display__summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  color: var(--project-summary-fg, rgba(45, 170, 30, 0.98));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.project-start-display__summary::-webkit-details-marker {
+  display: none;
+}
+
+.project-start-display__fieldset {
+  margin: 10px 0 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.project-start-display__option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--project-display-muted, rgba(24, 68, 16, 0.96));
+}
+
+.project-start-display__option input {
+  accent-color: var(--project-accent, rgba(75, 0, 94, 0.95));
+}
+
+/* Desktop entry splash (full white, like mobile home affordance) */
+.desktop-entry-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 24px;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    opacity 0.38s ease,
+    visibility 0.38s ease;
+}
+
+.desktop-entry-overlay--dismissed {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.desktop-entry-overlay__card {
+  width: min(62%, 320px);
+  text-align: center;
+  pointer-events: none;
+}
+
+.desktop-entry-overlay__title,
+.desktop-entry-overlay__hint {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  color: rgba(20, 20, 20, 0.9);
+}
+
+.desktop-entry-overlay__title {
+  font-size: 15px;
+  line-height: 1.45;
+  letter-spacing: 0.03em;
+  text-transform: lowercase;
+}
+
+.desktop-entry-overlay__hint {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  opacity: 0.86;
+}
+
+
 
 .overlay-canvas {
   position: absolute;
@@ -103,30 +295,32 @@ body {
   z-index: 3;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  background: rgba(24, 18, 14, 0.55);
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(8px);
+  gap: 8px;
+  min-height: 36px;
+  padding: 5px 8px;
+  background: rgba(38, 40, 42, 0.45);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
   pointer-events: auto;
 }
 
 .start-bar__start {
   appearance: none;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 245, 235, 0.92);
-  border-radius: 6px;
-  padding: 8px 12px;
+  border: 0px solid rgba(255, 255, 255, 0.12);
+  background: rgba(43, 34, 34, 0.08);
+  color: rgba(245, 245, 242, 0.94);
+  border-radius: 5px;
+  padding: 4px 10px;
   font: inherit;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 400;
   letter-spacing: 0.02em;
   cursor: pointer;
 }
 
 .start-bar__start:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .start-bar__spacer {
@@ -134,9 +328,11 @@ body {
 }
 
 .start-bar__clock {
-  font-size: 12px;
-  color: rgba(255, 245, 235, 0.78);
-  padding: 0 6px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: rgba(220, 222, 218, 0.88);
+  padding: 0 4px 0 0;
 }
 
 .desktop-app-icon {
@@ -164,8 +360,8 @@ body {
 }
 
 .desktop-app-icon__glyph {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 10px;
   display: grid;
   place-items: center;
@@ -201,11 +397,11 @@ body {
 
 .desktop-window--project-page .desktop-window__frame--content {
   background: rgba(255, 255, 255, 0.52);
-  border: 1px solid rgba(120, 255, 64, 0.9);
+  border: 1px solid var(--project-window-border, rgba(14, 52, 48, 0.92));
   box-shadow:
-    0 0 0 1px rgba(170, 255, 140, 0.35),
-    0 0 18px rgba(120, 255, 64, 0.26),
-    0 18px 34px rgba(10, 20, 8, 0.22);
+    0 0 0 1px var(--project-window-border-soft, rgba(46, 120, 108, 0.45)),
+    0 0 22px var(--project-window-glow, rgba(32, 140, 120, 0.28)),
+    0 20px 38px var(--project-window-shadow-deep, rgba(8, 14, 12, 0.35));
 }
 
 .content-window__header {
@@ -219,8 +415,8 @@ body {
 }
 
 .desktop-window--project-page .content-window__header {
-  background: rgba(255, 255, 255, 0.42);
-  border-bottom: 1px solid rgba(120, 255, 64, 0.92);
+  background: var(--project-header-bg, rgba(255, 255, 255, 0.42));
+  border-bottom: 1px solid var(--project-divider, rgba(120, 255, 64, 0.92));
 }
 
 .content-window__controls {
@@ -238,9 +434,9 @@ body {
 }
 
 .desktop-window--project-page .content-window__control {
-  border-color: rgba(95, 230, 38, 0.95);
+  border-color: var(--project-window-border-soft, rgba(40, 104, 88, 0.85));
   background: rgba(255, 255, 255, 0.74);
-  box-shadow: 0 0 6px rgba(120, 255, 64, 0.25);
+  box-shadow: 0 0 8px var(--project-window-glow, rgba(32, 120, 108, 0.22));
 }
 
 .content-window__title {
@@ -250,7 +446,7 @@ body {
 }
 
 .desktop-window--project-page .content-window__title {
-  color: rgba(38, 128, 22, 0.96);
+  color: var(--project-title-fg, rgba(38, 128, 22, 0.96));
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
   letter-spacing: 0.01em;
@@ -274,13 +470,20 @@ body {
 .content-window__body--project {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
-  color: rgba(24, 68, 16, 0.96);
-  background-color: rgba(255, 255, 255, 0.56);
-  border-top: 1px solid rgba(120, 255, 64, 0.72);
+  color: var(--project-text, rgba(24, 68, 16, 0.96));
+  background-image: none;
+  background-blend-mode: normal;
+  background-size: auto;
+  background: linear-gradient(
+    168deg,
+    var(--project-surface-a, rgba(255, 255, 255, 0.56)),
+    var(--project-surface-b, rgba(255, 255, 255, 0.42))
+  );
+  border-top: 1px solid var(--project-divider, rgba(120, 255, 64, 0.72));
 }
 
 .content-window__body--project h2 {
-  color: rgba(30, 115, 20, 0.96);
+  color: var(--project-heading, rgba(30, 115, 20, 0.96));
   letter-spacing: 0.01em;
   text-transform: lowercase;
 }
@@ -290,18 +493,18 @@ body {
 }
 
 .content-window__body--project a {
-  color: rgba(45, 170, 30, 0.98);
-  text-decoration-color: rgba(45, 170, 30, 0.95);
+  color: var(--project-link, rgba(45, 170, 30, 0.98));
+  text-decoration-color: var(--project-link, rgba(45, 170, 30, 0.95));
 }
 
 .content-window__body--project a:hover {
-  color: rgba(24, 130, 12, 0.98);
+  color: var(--project-link-hover, rgba(24, 130, 12, 0.98));
 }
 
 .project-window__quick-link {
   margin-top: 14px;
   padding-top: 10px;
-  border-top: 1px solid rgba(120, 255, 64, 0.85);
+  border-top: 1px solid var(--project-divider, rgba(120, 255, 64, 0.85));
   font-size: 12px;
 }
 
@@ -444,28 +647,43 @@ body {
   position: absolute;
   left: 0;
   top: 0;
-  transform: translateY(-100%);
-  max-width: 260px;
-  padding: 2px 6px;
-  border-radius: 4px 4px 0 0;
+  transform: translateY(calc(-100% - 3px));
+  /* Shrink to text only (do not stretch to zone size; inline zone sizing must not win). */
+  width: fit-content !important;
+  max-width: min(240px, 92%);
+  height: auto !important;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 3px 7px;
+  border-radius: 6px;
   font-size: 11px;
   font-weight: 750;
-  line-height: 1.2;
+  line-height: 1.25;
   letter-spacing: 0.01em;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #f7f4f0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
   white-space: nowrap;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   z-index: 9999;
 }
 
 .zone-label--click {
-  background: rgba(12, 10, 9, 0.9);
+  background: rgba(14, 12, 11, 0.94);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #f2f0ee;
 }
 
 .zone-label--text {
-  background: rgba(72, 34, 0, 0.9);
+  background: linear-gradient(
+    180deg,
+    rgba(118, 78, 48, 0.96) 0%,
+    rgba(88, 54, 32, 0.98) 100%
+  );
+  border-color: rgba(255, 220, 180, 0.28);
+  color: #fff8f0;
 }
 
 .zone-draft {
@@ -623,7 +841,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #cfb492;
+  background-color: #1a2838;
+  background-image: url("../../assets/desktopbackgrounddigital.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.mobile-preview-chrome {
+  display: none;
 }
 
 .mobile-app {
@@ -638,11 +864,95 @@ body {
 }
 
 @media (min-width: 500px) {
-  .mobile-app {
-    border-radius: 40px;
+  .viewport--mobile {
+    position: relative;
+    background-color: #1a2838;
+    background-image: radial-gradient(
+        circle at center,
+        rgba(0, 220, 255, 0.5) 1.1px,
+        transparent 1.2px
+      ),
+      url("../../assets/desktopbackgrounddigital.jpg");
+    background-size: 16px 16px, cover;
+    background-position: center, center;
+    background-repeat: repeat, no-repeat;
+  }
+
+  .mobile-preview-chrome {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 2;
+    margin: 0;
+    max-width: min(340px, calc(100vw - 36px));
+    padding: 0;
+    text-align: left;
+    pointer-events: auto;
+  }
+
+  .mobile-preview-chrome__label {
+    margin: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.88);
+    text-shadow:
+      0 0 10px rgba(0, 210, 255, 0.45),
+      0 0 22px rgba(0, 200, 255, 0.2);
+  }
+
+  .mobile-preview-chrome__back {
+    display: inline-block;
+    appearance: none;
+    border: 1px solid rgba(0, 180, 255, 0.45);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba(0, 95, 160, 0.95);
+    background: rgba(255, 255, 255, 0.42);
+    text-decoration: none;
+    box-shadow: 0 0 12px rgba(0, 210, 255, 0.22);
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .mobile-preview-chrome__back:hover {
+    background: rgba(255, 255, 255, 0.58);
+    border-color: rgba(0, 200, 255, 0.65);
+    color: rgba(0, 60, 130, 0.98);
+  }
+
+  /* Phone frame: 390×844 proportion. Scoped selector beats base .mobile-app { height:100% }
+     which otherwise stretches the flex child and breaks aspect-ratio. */
+  .viewport--mobile .mobile-app {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    align-self: center;
+    box-sizing: border-box;
+    width: min(280px, 86vw, calc((100dvh - 96px) * 390 / 844));
+    height: auto;
+    max-height: calc(100dvh - 96px);
+    aspect-ratio: 390 / 844;
+    overflow: hidden;
+    border-radius: 36px;
     box-shadow:
-      0 0 0 4px #222,
-      0 20px 60px rgba(0, 0, 0, 0.4);
+      0 0 0 3px #222,
+      0 16px 44px rgba(0, 0, 0, 0.38);
   }
 }
 
@@ -885,5 +1195,246 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.06);
   font: 600 12px/1.45 ui-sans-serif, system-ui, sans-serif;
   opacity: 0.85;
+}
+
+/* Folder icon cluster (img_5510) */
+.desktop-window--folder-icon .desktop-window__image {
+  filter: drop-shadow(0 6px 10px rgba(15, 12, 8, 0.22)) drop-shadow(0 2px 4px rgba(15, 12, 8, 0.12));
+}
+
+
+/* Meta menu (actionId menu) — same chrome + palette as narrative project windows */
+.desktop-window--meta-menu {
+  z-index: 120;
+}
+
+.desktop-window__frame--meta-menu {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--project-window-border, rgba(14, 52, 48, 0.92));
+  background: linear-gradient(
+    168deg,
+    var(--project-surface-a, rgba(255, 255, 255, 0.56)),
+    var(--project-surface-b, rgba(255, 255, 255, 0.42))
+  );
+  box-shadow:
+    0 0 0 1px var(--project-window-border-soft, rgba(46, 120, 108, 0.45)),
+    0 0 22px var(--project-window-glow, rgba(32, 140, 120, 0.28)),
+    0 20px 38px var(--project-window-shadow-deep, rgba(8, 14, 12, 0.35));
+}
+
+.meta-menu__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--project-header-bg, rgba(255, 255, 255, 0.42));
+  border-bottom: 1px solid var(--project-divider, rgba(120, 255, 64, 0.92));
+}
+
+.meta-menu__title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: lowercase;
+  color: var(--project-title-fg, rgba(38, 128, 22, 0.96));
+}
+
+.meta-menu__close {
+  margin: 0;
+  padding: 0 6px;
+  border: 1px solid var(--project-window-border-soft, rgba(40, 104, 88, 0.5));
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--project-title-fg, rgba(38, 128, 22, 0.96));
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 999px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+}
+
+.meta-menu__close:hover {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: var(--project-accent, rgba(22, 118, 152, 0.98));
+}
+
+.meta-menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px 12px;
+}
+
+.meta-menu__item {
+  margin: 0;
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid var(--project-divider, rgba(72, 128, 108, 0.62));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--project-header-bg, rgba(255, 255, 255, 0.78)) 92%, transparent);
+  color: var(--project-text, rgba(24, 68, 16, 0.96));
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.meta-menu__item:hover {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--project-accent, rgba(22, 118, 152, 0.98));
+  box-shadow: 0 0 12px var(--project-window-glow, rgba(32, 140, 120, 0.22));
+}
+
+/* Fortune text on digital paper */
+.desktop-window__frame--paper-fortune {
+  position: relative;
+}
+
+.desktop-paper-fortune {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  text-align: center;
+  font: 700 14px/1.35 ui-serif, Georgia, "Times New Roman", serif;
+  letter-spacing: 0.02em;
+  color: rgba(18, 24, 32, 0.92);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
+.desktop-window--paper-fortune .desktop-window__image {
+  position: relative;
+  z-index: 0;
+}
+
+/* Build project pages use .content-window__body--project + .desktop-window--project-page (narrative parity) */
+
+/* Code / title zone fills */
+.zone-click--codebuild {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zone-click__codebuild-label {
+  font: 700 11px ui-monospace, monospace;
+  color: rgba(40, 200, 120, 0.95);
+  pointer-events: none;
+}
+
+.zone-click--gray-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 6%;
+}
+
+.zone-click__gray-title-text {
+  font: 600 10px ui-sans-serif, system-ui, sans-serif;
+  color: rgba(55, 55, 62, 0.88);
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* User color picker */
+.desktop-color-palette {
+  position: fixed;
+  z-index: 99998;
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(12, 14, 18, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+}
+
+.desktop-color-palette__swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.desktop-color-palette__swatch:hover {
+  transform: scale(1.08);
+  border-color: #fff;
+}
+
+/* User-picked shape overlays */
+.zone-user-shape {
+  position: absolute;
+  z-index: 15;
+  pointer-events: none;
+  box-sizing: border-box;
+  border: 2px solid color-mix(in srgb, var(--user-pick-color, #333) 70%, #000);
+  background: color-mix(in srgb, var(--user-pick-color, #888) 35%, transparent);
+}
+
+.zone-user-shape--circle {
+  border-radius: 50%;
+}
+
+.zone-user-wordart {
+  position: absolute;
+  z-index: 16;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 4px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.zone-user-wordart__text {
+  font: 800 12px/1.2 ui-sans-serif, system-ui, sans-serif;
+  text-align: center;
+  background: linear-gradient(120deg, #0cf, #a0f, #fa0);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.25));
+  word-break: break-word;
+}
+
+.zone-erin-portrait {
+  position: absolute;
+  z-index: 15;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.zone-erin-portrait__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
