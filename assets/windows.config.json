@@ -1,7 +1,7 @@
 {
   "version": 1,
   "meta": {
-    "githubRepoUrl": "https://github.com/",
+    "githubRepoUrl": "https://github.com/erinlivingston/materializing-interfaces",
     "erinPortraitSrc": ""
   },
   "sizing": {
@@ -9,7 +9,7 @@
     "reference": {
       "mode": "cmRelative",
       "baseWindowId": "img_5489",
-      "targetBaseWidthPx": 500
+      "targetBaseWidthPx": 450
     }
   },
   "windows": [
@@ -41,39 +41,7 @@
         "w": 0.078,
         "h": 0.04,
         "actionId": "menu"
-      }], "text": [{
-        "id": "new_rect_zone1",
-        "shape": "rect",
-        "x": 0.038,
-        "y": 0.487,
-        "w": 0.517,
-        "h": 0.149,
-        "actionId": "project.interface_as_theory"
-      }, {
-        "id": "new_rect_zone2",
-        "shape": "rect",
-        "x": 0.04,
-        "y": 0.159,
-        "w": 0.521,
-        "h": 0.112,
-        "actionId": "project.non_linear_navigation"
-      }, {
-        "id": "new_rect_zone3",
-        "shape": "rect",
-        "x": 0.626,
-        "y": 0.888,
-        "w": 0.328,
-        "h": 0.061,
-        "actionId": "project.paper_as_window"
       },{
-        "id": "new_rect_zone4",
-        "shape": "rect",
-        "x": 0.599,
-        "y": 0.233,
-        "w": 0.378,
-        "h": 0.057,
-        "actionId": "replace_action_id"
-      }, {
         "id": "new_rect_zone5",
         "shape": "rect",
         "x": 0.068,
@@ -81,6 +49,114 @@
         "w": 0.018,
         "h": 0.023,
         "actionId": "close"
+      }, {
+        "id": "greencircleright",
+        "shape": "circle",
+        "x": 0.911,
+        "y": 0.398,
+        "r": 0.039,
+        "actionId": "userpickcolor"
+      },{
+        "id": "bluechatcircle",
+        "shape": "circle",
+        "x": 0.638,
+        "y": 0.683,
+        "r": 0.039,
+        "actionId": "userpickcolor"
+      }, {
+        "id": "purplebartopright",
+        "shape": "rect",
+        "x": 0.03,
+        "y": 0.113,
+        "w": 0.266,
+        "h": 0.025,
+        "actionId": "colorchange"
+      }, {
+        "id": "rectinpurplegraph",
+        "shape": "rect",
+        "x": 0.133,
+        "y": 0.275,
+        "w": 0.163,
+        "h": 0.134,
+        "actionId": "projectpage"
+      },{
+        "id": "rectinpurplegraph2",
+        "shape": "rect",
+        "x": 0.408,
+        "y": 0.286,
+        "w": 0.076,
+        "h": 0.115,
+        "actionId": "projectpage"
+      },{
+        "id": "bottomleftrect",
+        "shape": "rect",
+        "x": 0.094,
+        "y": 0.963,
+        "w": 0.016,
+        "h": 0.018,
+        "actionId": "close"
+      },{
+        "id": "bottomleftcircle",
+        "shape": "circle",
+        "x": 0.017,
+        "y": 0.97,
+        "r": 0.004,
+        "actionId": "projectpage"
+      },{
+        "id": "bottomleftcircle2",
+        "shape": "circle",
+        "x": 0.033,
+        "y": 0.971,
+        "r": 0.005,
+        "actionId": "projectpage"
+      },{
+        "id": "bottomleftcircle3",
+        "shape": "circle",
+        "x": 0.051,
+        "y": 0.971,
+        "r": 0.005,
+        "actionId": "projectpage"
+      },{
+        "id": "lightgreenbarleftbottom",
+        "shape": "rect",
+        "x": 0.12,
+        "y": 0.846,
+        "w": 0.416,
+        "h": 0.033,
+        "actionId": "userinput", 
+        "fillsTextZoneID": "lightgreenbarleftbottomtext"
+      } ], "text": [{
+        "id": "new_rect_zone1",
+        "shape": "rect",
+        "x": 0.038,
+        "y": 0.487,
+        "w": 0.517,
+        "h": 0.149,
+        "actionId": ""
+      }, {
+        "id": "new_rect_zone2",
+        "shape": "rect",
+        "x": 0.04,
+        "y": 0.159,
+        "w": 0.521,
+        "h": 0.112,
+        "actionId": ""
+      }, {
+        "id": "new_rect_zone3",
+        "shape": "rect",
+        "x": 0.627,
+        "y": 0.897,
+        "w": 0.294,
+        "h": 0.04,
+        "actionId": ""
+      },{
+        "id": "chatheaderbar",
+        "shape": "rect",
+        "x": 0.599,
+        "y": 0.229,
+        "w": 0.377,
+        "h": 0.052,
+        "actionId": "replace_action_id"
       } ] },
       "actions": {}
     },
@@ -106,6 +182,31 @@
         "w": 0.019,
         "h": 0.141,
         "actionId": "close"
+      }, {
+        "id": "greensticker",
+        "shape": "rect",
+        "x": 0.034,
+        "y": 0.236,
+        "w": 0.107,
+        "h": 0.168,
+        "actionId": "projectpage"
+      },{
+        "id": "greensticker2",
+        "shape": "rect",
+        "x": 0.156,
+        "y": 0.241,
+        "w": 0.105,
+        "h": 0.163,
+        "actionId": "colorchange"
+      }, {
+        "id": "rectnexttogreengreensticker",
+        "shape": "rect",
+        "x": 0.274,
+        "y": 0.238,
+        "w": 0.196,
+        "h": 0.169,
+        "actionId": "userinput",
+        "fillsTextZoneID": "rectnexttogreengreenstickertext"
       } ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
@@ -153,14 +254,14 @@
         "x": 0.036,
         "y": 0.036,
         "r": 0.009,
-        "actionId": "maximize"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
         "x": 0.065,
         "y": 0.036,
         "r": 0.01,
-        "actionId": "minimize"
+        "actionId": "openAbstractFromPool"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
@@ -246,7 +347,7 @@
         "y": 0.035,
         "w": 0.042,
         "h": 0.053,
-        "actionId": "menu"
+        "actionId": "menumatrix"
       },{
         "id": "new_rect_zone2",
         "shape": "rect",
@@ -255,7 +356,22 @@
         "w": 0.555,
         "h": 0.041,
         "actionId": "usergoogle"
-      }], "text": [{
+      },{
+        "id": "redsticker",
+        "shape": "circle",
+        "x": 0.333,
+        "y": 0.377,
+        "r": 0.059,
+        "actionId": "changecolor"
+      },{
+        "id": "yellowsquare",
+        "shape": "rect",
+        "x": 0.686,
+        "y": 0.346,
+        "w": 0.07,
+        "h": 0.09,
+        "actionId": "projectpage"
+      } ], "text": [{
         "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.779,
@@ -318,7 +434,37 @@
         "y": 0.069,
         "r": 0.007,
         "actionId": "openAbstractFromPool"
-      }], "text": [{
+      },{
+        "id": "new_circle_zone4",
+        "shape": "circle",
+        "x": 0.053,
+        "y": 0.069,
+        "r": 0.007,
+        "actionId": "openAbstractFromPool"
+      },{
+        "id": "new_circle_zone5",
+        "shape": "circle",
+        "x": 0.076,
+        "y": 0.07,
+        "r": 0.007,
+        "actionId": "openAbstractFromPool"
+      },{
+        "id": "new_circle_zone6",
+        "shape": "circle",
+        "x": 0.1,
+        "y": 0.071,
+        "r": 0.007,
+        "actionId": "openAbstractFromPool"
+      },{
+        "id": "bottombar",
+        "shape": "rect",
+        "x": 0.074,
+        "y": 0.932,
+        "w": 0.787,
+        "h": 0.038,
+        "actionId": "userinput",
+        "fillsTextZoneID": "bottombar"
+      } ], "text": [{
         "id": "new_rect_zone3",
         "shape": "rect",
         "x": 0.229,
@@ -381,7 +527,7 @@
         "y": 0.022,
         "w": 0.049,
         "h": 0.072,
-        "actionId": "menu"
+        "actionId": "menumatrix"
       },{
         "id": "new_circle_zone1",
         "shape": "circle",
@@ -420,7 +566,70 @@
         "y": 0.571,
         "r": 0.013,
         "actionId": "close"
-      } ], "text": [{
+      },{
+        "id": "bluecircleleft",
+        "shape": "circle",
+        "x": 0.028,
+        "y": 0.366,
+        "r": 0.011,
+        "actionId": "colorchange"
+      },{
+        "id": "bluecircleleft2",
+        "shape": "circle",
+        "x": 0.029,
+        "y": 0.436,
+        "r": 0.013,
+        "actionId": "colorchange"
+      },{
+        "id": "bluecircleleft3",
+        "shape": "circle",
+        "x": 0.025,
+        "y": 0.501,
+        "r": 0.009,
+        "actionId": "colorchange"
+      },{
+        "id": "graypillbottomright",
+        "shape": "rect",
+        "x": 0.723,
+        "y": 0.838,
+        "w": 0.207,
+        "h": 0.047,
+        "actionId": "userinput",
+        "fillsTextZoneID": "graypillbottomright"
+      },{
+        "id": "bottomleftrect",
+        "shape": "rect",
+        "x": 0.018,
+        "y": 0.83,
+        "w": 0.155,
+        "h": 0.148,
+        "actionId": "userinput",
+        "fillsTextZoneID": "bottomleftrect"
+      }, {
+        "id": "yellowcalrect",
+        "shape": "rect",
+        "x": 0.509,
+        "y": 0.446,
+        "w": 0.055,
+        "h": 0.022,
+        "actionId": "projectpage"
+      },{
+        "id": "yellowcalrect2",
+        "shape": "rect",
+        "x": 0.658,
+        "y": 0.333,
+        "w": 0.036,
+        "h": 0.021,
+        "actionId": "projectpage"
+      },{
+        "id": "calbox",
+        "shape": "rect",
+        "x": 0.287,
+        "y": 0.171,
+        "w": 0.063,
+        "h": 0.122,
+        "actionId": "projectpage"
+      }], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.014,
@@ -508,7 +717,55 @@
         "w": 0.134,
         "h": 0.305,
         "actionId": "replace_action_id"
-      }] },
+      },{
+        "id": "bluerecttop",
+        "shape": "rect",
+        "x": 0.534,
+        "y": 0.169,
+        "w": 0.09,
+        "h": 0.02,
+        "actionId": "replace_action_id"
+      },{
+        "id": "greenrect",
+        "shape": "rect",
+        "x": 0.44,
+        "y": 0.192,
+        "w": 0.056,
+        "h": 0.015,
+        "actionId": "replace_action_id"
+      },{
+        "id": "greenrect2",
+        "shape": "rect",
+        "x": 0.439,
+        "y": 0.374,
+        "w": 0.057,
+        "h": 0.015,
+        "actionId": "replace_action_id"
+      },{
+        "id": "greenrect3",
+        "shape": "rect",
+        "x": 0.437,
+        "y": 0.551,
+        "w": 0.061,
+        "h": 0.015,
+        "actionId": "replace_action_id"
+      },{
+        "id": "greenrect4",
+        "shape": "rect",
+        "x": 0.438,
+        "y": 0.725,
+        "w": 0.057,
+        "h": 0.018,
+        "actionId": "replace_action_id"
+      }, {
+        "id": "greenrect5",
+        "shape": "rect",
+        "x": 0.436,
+        "y": 0.887,
+        "w": 0.062,
+        "h": 0.02,
+        "actionId": "replace_action_id"
+      }    ] },
       "actions": {}
     },
     {
@@ -566,6 +823,23 @@
         "x": 0.156,
         "y": 0.16,
         "r": 0.063,
+        "actionId": "projectpage"
+      },{
+        "id": "whitesquare",
+        "shape": "rect",
+        "x": 0.572,
+        "y": 0.436,
+        "w": 0.405,
+        "h": 0.215,
+        "actionId": "userinput",
+        "fillsTextZoneID": "whitesquare"
+      },{
+        "id": "toprightrect",
+        "shape": "rect",
+        "x": 0.383,
+        "y": 0.015,
+        "w": 0.309,
+        "h": 0.017,
         "actionId": "projectpage"
       } ], "text": [{
         "id": "new_rect_zone2",
@@ -669,7 +943,32 @@
         "w": 0.214,
         "h": 0.008,
         "actionId": "close"
-      }], "text": [{
+      }, {
+        "id": "grayrectleftmiddle",
+        "shape": "rect",
+        "x": 0.028,
+        "y": 0.279,
+        "w": 0.22,
+        "h": 0.307,
+        "actionId": "projectpage"
+      }, {
+        "id": "bottomrightrect",
+        "shape": "rect",
+        "x": 0.766,
+        "y": 0.622,
+        "w": 0.22,
+        "h": 0.337,
+        "actionId": "userinput",
+        "fillsTextZoneID": "bottomrightrect"
+      },{
+        "id": "flowchartrect",
+        "shape": "rect",
+        "x": 0.034,
+        "y": 0.587,
+        "w": 0.482,
+        "h": 0.115,
+        "actionId": "projectpage"
+      } ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.347,
@@ -755,7 +1054,24 @@
         "w": 0.149,
         "h": 0.037,
         "actionId": "close"
-      }], "text": [{
+      },{
+        "id": "whiterect",
+        "shape": "rect",
+        "x": 0.676,
+        "y": 0.191,
+        "w": 0.237,
+        "h": 0.447,
+        "actionId": "userinput",
+        "fillsTextZoneID": "whiterect"
+      },{
+        "id": "topbarblue",
+        "shape": "rect",
+        "x": 0.487,
+        "y": 0.011,
+        "w": 0.279,
+        "h": 0.042,
+        "actionId": "colorchange"
+      }  ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.367,
@@ -842,7 +1158,32 @@
         "w": 0.286,
         "h": 0.031,
         "actionId": "colorchange"
-      } ], "text": [{
+      },{
+        "id": "whitesquarebottommiddle",
+        "shape": "rect",
+        "x": 0.416,
+        "y": 0.836,
+        "w": 0.36,
+        "h": 0.053,
+        "actionId": "userinput",
+        "fillsTextZoneID": "whitesquarebottommiddle"
+      },{
+        "id": "grphpaperrectbottom",
+        "shape": "rect",
+        "x": 0.042,
+        "y": 0.908,
+        "w": 0.742,
+        "h": 0.032,
+        "actionId": "projectpage"
+      }, {
+        "id": "redpillleftmiddle",
+        "shape": "rect",
+        "x": 0.08,
+        "y": 0.408,
+        "w": 0.191,
+        "h": 0.023,
+        "actionId": "projectpage"
+      }  ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.067,
@@ -873,6 +1214,14 @@
         "y": 0.02,
         "w": 0.822,
         "h": 0.039,
+        "actionId": "replace_action_id"
+      }, {
+        "id": "pinkbar",
+        "shape": "rect",
+        "x": 0.374,
+        "y": 0.073,
+        "w": 0.493,
+        "h": 0.043,
         "actionId": "replace_action_id"
       }] },
       "actions": {}
@@ -912,7 +1261,8 @@
         "y": 0.041,
         "w": 0.193,
         "h": 0.063,
-        "actionId": "userinput"
+        "actionId": "userinput",
+        "fillsTextZoneID": "greenrecttopleft"
       },{
         "id": "greenbarmiddleleft",
         "shape": "rect",
@@ -936,8 +1286,32 @@
         "y": 0.033,
         "w": 0.18,
         "h": 0.047,
+        "actionId": "colorchange"
+      },{
+        "id": "orangebar",
+        "shape": "rect",
+        "x": 0.838,
+        "y": 0.983,
+        "w": 0.142,
+        "h": 0.017,
         "actionId": "close"
-      } ], "text": [{
+      },{
+        "id": "greenrectmidleft",
+        "shape": "rect",
+        "x": 0.035,
+        "y": 0.571,
+        "w": 0.146,
+        "h": 0.03,
+        "actionId": "projectpage"
+      }, {
+        "id": "bluesqmiddle2",
+        "shape": "rect",
+        "x": 0.584,
+        "y": 0.214,
+        "w": 0.145,
+        "h": 0.187,
+        "actionId": "projectpage"
+      }    ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.216,
@@ -1069,7 +1443,8 @@
         "y": 0.119,
         "w": 0.54,
         "h": 0.03,
-        "actionId": "userinput"
+        "actionId": "userinput",
+        "fillsTextZoneID": "new_rect_zone"
       },{
         "id": "bluelinebottomright",
         "shape": "rect",
@@ -1208,7 +1583,8 @@
         "y": 0.119,
         "w": 0.141,
         "h": 0.048,
-        "actionId": "userinput"
+        "actionId": "userinput",
+        "fillsTextZoneID": "bluemarkerrecttopright"
       },{
         "id": "lightgreenstickerbottomright",
         "shape": "rect",
@@ -1217,7 +1593,15 @@
         "w": 0.058,
         "h": 0.103,
         "actionId": "userpickcolorsquare"
-      }], "text": [{
+      },{
+        "id": "orangerectzonearoundtext",
+        "shape": "rect",
+        "x": 0.704,
+        "y": 0.46,
+        "w": 0.234,
+        "h": 0.27,
+        "actionId": "colorchange"
+      } ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.026,
@@ -1289,7 +1673,39 @@
         "w": 0.141,
         "h": 0.034,
         "actionId": "replace_action_id"
-      }] },
+      },{
+        "id": "whiterecttop",
+        "shape": "rect",
+        "x": 0.609,
+        "y": 0.026,
+        "w": 0.132,
+        "h": 0.041,
+        "actionId": "replace_action_id"
+      },{
+        "id": "bluerecttop",
+        "shape": "rect",
+        "x": 0.731,
+        "y": 0.122,
+        "w": 0.082,
+        "h": 0.043,
+        "actionId": "replace_action_id"
+      },{
+        "id": "bluerecttopleft",
+        "shape": "rect",
+        "x": 0.024,
+        "y": 0.137,
+        "w": 0.076,
+        "h": 0.044,
+        "actionId": "replace_action_id"
+      }, {
+        "id": "bluerecttopleft2",
+        "shape": "rect",
+        "x": 0.127,
+        "y": 0.133,
+        "w": 0.058,
+        "h": 0.045,
+        "actionId": "replace_action_id"
+      }   ] },
       "actions": {}
     },
     {
@@ -1350,7 +1766,80 @@
         "w": 0.143,
         "h": 0.209,
         "actionId": "colorchange"
-      } ], "text": [{
+      }, {
+        "id": "yellowrectmiddle",
+        "shape": "rect",
+        "x": 0.133,
+        "y": 0.46,
+        "w": 0.04,
+        "h": 0.117,
+        "actionId": "projectpage"
+      },{
+        "id": "yellowsqbottom",
+        "shape": "rect",
+        "x": 0.014,
+        "y": 0.866,
+        "w": 0.022,
+        "h": 0.038,
+        "actionId": "projectpage"
+      },{
+        "id": "yellowsqbottom2",
+        "shape": "rect",
+        "x": 0.044,
+        "y": 0.867,
+        "w": 0.023,
+        "h": 0.038,
+        "actionId": "projectpage"
+      },{
+        "id": "whiteboxright",
+        "shape": "rect",
+        "x": 0.789,
+        "y": 0.458,
+        "w": 0.168,
+        "h": 0.097,
+        "actionId": "userinput",
+        "fillsTextZoneID": "whiteboxright"
+      },{
+        "id": "yellowstickersquare",
+        "shape": "rect",
+        "x": 0.452,
+        "y": 0.586,
+        "w": 0.097,
+        "h": 0.139,
+        "actionId": "userpickcolorsquare"
+      },{
+        "id": "yellowtextleft",
+        "shape": "rect",
+        "x": 0.081,
+        "y": 0.265,
+        "w": 0.105,
+        "h": 0.052,
+        "actionId": "projectpage"
+      }, {
+        "id": "yellowtriangle1",
+        "shape": "rect",
+        "x": 0.278,
+        "y": 0.164,
+        "w": 0.028,
+        "h": 0.049,
+        "actionId": "usercheckbox"
+      }, {
+        "id": "yellowtriangle2",
+        "shape": "rect",
+        "x": 0.277,
+        "y": 0.267,
+        "w": 0.031,
+        "h": 0.043,
+        "actionId": "usercheckbox"
+      },{
+        "id": "yellowtriangle3",
+        "shape": "rect",
+        "x": 0.277,
+        "y": 0.36,
+        "w": 0.033,
+        "h": 0.05,
+        "actionId": "usercheckbox"
+      }      ], "text": [{
         "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.243,
@@ -1469,8 +1958,33 @@
         "y": 0.226,
         "w": 0.252,
         "h": 0.205,
-        "actionId": "userinput"
-      }], "text": [{
+        "actionId": "userinput",
+        "fillsTextZoneID": "new_rect_zone1"
+      },{
+        "id": "toprect",
+        "shape": "rect",
+        "x": 0.098,
+        "y": 0.014,
+        "w": 0.2,
+        "h": 0.037,
+        "actionId": "colorchange"
+      },{
+        "id": "greentoplines",
+        "shape": "rect",
+        "x": 0.34,
+        "y": 0.094,
+        "w": 0.618,
+        "h": 0.04,
+        "actionId": "projectpage"
+      },{
+        "id": "greenrecttopright",
+        "shape": "rect",
+        "x": 0.699,
+        "y": 0.017,
+        "w": 0.143,
+        "h": 0.038,
+        "actionId": "projectpage"
+      }   ], "text": [{
         "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.341,
@@ -1555,7 +2069,7 @@
         "x": 0.784,
         "y": 0.963,
         "r": 0.038,
-        "actionId": "openProjectFromPool"
+        "actionId": "close"
       },{
         "id": "new_circle_zone",
         "shape": "circle",
@@ -1579,7 +2093,31 @@
         "w": 0.114,
         "h": 0.095,
         "actionId": "projectpage"
-      }], "text": [{
+      },{
+        "id": "yellowsqbottomleft",
+        "shape": "rect",
+        "x": 0.179,
+        "y": 0.876,
+        "w": 0.124,
+        "h": 0.101,
+        "actionId": "colorchange"
+      },{
+        "id": "pinkrect",
+        "shape": "rect",
+        "x": 0.119,
+        "y": 0.259,
+        "w": 0.361,
+        "h": 0.518,
+        "actionId": "projectpage"
+      }, {
+        "id": "stickerlines",
+        "shape": "rect",
+        "x": 0.019,
+        "y": 0.207,
+        "w": 0.778,
+        "h": 0.042,
+        "actionId": "projectpage"
+      }   ], "text": [{
         "id": "new_rect_zone",
         "shape": "rect",
         "x": 0.022,
@@ -1665,7 +2203,8 @@
         "y": 0.251,
         "w": 0.128,
         "h": 0.184,
-        "actionId": "userinput"
+        "actionId": "userinput",
+        "fillsTextZoneID": "new_rect_zone2"
       },{
         "id": "new_rect_zone3",
         "shape": "rect",
@@ -1673,7 +2212,7 @@
         "y": 0.355,
         "w": 0.128,
         "h": 0.188,
-        "actionId": "projectpage"
+        "actionId": "colorchange"
       },{
         "id": "bottomblueline",
         "shape": "rect",
@@ -1682,7 +2221,32 @@
         "w": 0.697,
         "h": 0.015,
         "actionId": "close"
-      }], "text": [{
+      }, {
+        "id": "yellowlinemidde",
+        "shape": "rect",
+        "x": 0.169,
+        "y": 0.459,
+        "w": 0.641,
+        "h": 0.049,
+        "actionId": "projectpage"
+      },{
+        "id": "cutoutwindow",
+        "shape": "rect",
+        "x": 0.537,
+        "y": 0.578,
+        "w": 0.427,
+        "h": 0.371,
+        "actionId": "projectpage"
+      },{
+        "id": "openrectrighttop",
+        "shape": "rect",
+        "x": 0.817,
+        "y": 0.252,
+        "w": 0.16,
+        "h": 0.301,
+        "actionId": "userinput",
+        "fillsTextZoneID": "openrectrighttop"
+      }  ], "text": [{
         "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.022,
@@ -1730,7 +2294,31 @@
         "w": 0.125,
         "h": 0.183,
         "actionId": "replace_action_id"
-      }] },
+      },{
+        "id": "orangerecttop",
+        "shape": "rect",
+        "x": 0.174,
+        "y": 0.034,
+        "w": 0.175,
+        "h": 0.039,
+        "actionId": "replace_action_id"
+      },{
+        "id": "orangerecttop2",
+        "shape": "rect",
+        "x": 0.39,
+        "y": 0.041,
+        "w": 0.15,
+        "h": 0.042,
+        "actionId": "replace_action_id"
+      }, {
+        "id": "orangerecttop3",
+        "shape": "rect",
+        "x": 0.577,
+        "y": 0.036,
+        "w": 0.157,
+        "h": 0.044,
+        "actionId": "replace_action_id"
+      } ] },
       "actions": {}
     },
     {
@@ -1781,15 +2369,7 @@
       "src": "../assets/AbstractWindows/IMG_5510.png",
       "role": "decorative",
       "sizeCm": { "width": 14.7, "height": 9.5 },
-      "zones": { "click": [{
-        "id": "bluefolder",
-        "shape": "rect",
-        "x": 0.217,
-        "y": 0.045,
-        "w": 0.293,
-        "h": 0.065,
-        "actionId": "userinput"
-      }], "text": [] },
+      "zones": { "click": [], "text": [] },
       "actions": {}
     },
     {
@@ -1823,14 +2403,38 @@
         "h": 0.186,
         "actionId": "userinput"
       },{
-        "id": "new_rect_zone",
+        "id": "bluerectbottomright",
         "shape": "rect",
         "x": 0.926,
         "y": 0.929,
         "w": 0.04,
         "h": 0.057,
-        "actionId": "replace_action_id"
-      }], "text": [{
+        "actionId": "close"
+      },{
+        "id": "graphpaperrectleft",
+        "shape": "rect",
+        "x": 0.013,
+        "y": 0.632,
+        "w": 0.223,
+        "h": 0.128,
+        "actionId": "projectpage"
+      },{
+        "id": "bottomblueline",
+        "shape": "rect",
+        "x": 0.827,
+        "y": 0.962,
+        "w": 0.09,
+        "h": 0.024,
+        "actionId": "projectpage"
+      },{
+        "id": "bluelinebottom",
+        "shape": "rect",
+        "x": 0.267,
+        "y": 0.955,
+        "w": 0.548,
+        "h": 0.03,
+        "actionId": "projectpage"
+      }   ], "text": [{
         "id": "new_rect_zone1",
         "shape": "rect",
         "x": 0.02,

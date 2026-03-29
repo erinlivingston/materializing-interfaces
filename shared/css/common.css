@@ -80,11 +80,12 @@ body {
   transform: translateZ(0);
 }
 
-/* Landscape wallpaper: slightly zoomed out so more of the image is visible */
+/* Landscape: full-bleed cover so the high-res JPEG scales with the viewport (best use of pixel data). */
 .material-base.material-base--landscape-bg {
-  background-size: 100% auto;
+  background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+  image-rendering: auto;
 }
 
 .visually-hidden {
@@ -395,6 +396,14 @@ body {
   overflow: hidden;
 }
 
+/*
+ * Project / “digital” page windows (narrative HTML inside a frame):
+ * Default look = teal/green “landscape OS” knockoff.
+ * When opened FROM an abstract PNG (menu / project link / user input parent), JS adds
+ * .desktop-window--spawn-themed and sets --spawn-* variables sampled from that PNG — see
+ * applySpawnThemeVars() in overlay.js. Only .desktop-window--spawn-start-os should keep the
+ * default greens below (Start menu and anything not tied to an abstract parent).
+ */
 .desktop-window--project-page .desktop-window__frame--content {
   background: rgba(255, 255, 255, 0.52);
   border: 1px solid var(--project-window-border, rgba(14, 52, 48, 0.92));
@@ -440,7 +449,7 @@ body {
 }
 
 .content-window__title {
-  font-size: 13px;
+  font-size: 12px;
   color: rgba(20, 14, 10, 0.75);
   font-weight: 600;
 }
@@ -458,7 +467,7 @@ body {
   max-height: min(70vh, 620px);
   overflow: auto;
   color: rgba(20, 14, 10, 0.85);
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.55;
   background-size: cover;
   background-position: center;
@@ -499,6 +508,69 @@ body {
 
 .content-window__body--project a:hover {
   color: var(--project-link-hover, rgba(24, 130, 12, 0.98));
+}
+
+/* Abstract-sampled theme: maps PNG-derived --spawn-* into the same slots project pages use */
+.desktop-window--project-page.desktop-window--spawn-themed .desktop-window__frame--content {
+  border-color: var(--spawn-border);
+  box-shadow:
+    0 0 0 1px var(--spawn-border-soft),
+    0 0 22px var(--spawn-glow),
+    0 20px 38px var(--spawn-shadow-deep);
+}
+
+.desktop-window--project-page.desktop-window--spawn-themed .content-window__header {
+  background: var(--spawn-header-bg);
+  border-bottom-color: var(--spawn-divider);
+}
+
+.desktop-window--project-page.desktop-window--spawn-themed .content-window__title {
+  color: var(--spawn-title-fg);
+}
+
+.desktop-window--project-page.desktop-window--spawn-themed .content-window__control {
+  border-color: var(--spawn-border-soft);
+  box-shadow: 0 0 8px var(--spawn-glow);
+}
+
+.desktop-window--project-page.desktop-window--spawn-themed .content-window__body--project {
+  color: var(--spawn-text);
+  background: linear-gradient(168deg, var(--spawn-surface-a), var(--spawn-surface-b));
+  border-top-color: var(--spawn-divider);
+}
+
+.desktop-window--project-page.desktop-window--spawn-themed .content-window__body--project h2 {
+  color: var(--spawn-heading);
+}
+
+.desktop-window--project-page.desktop-window--spawn-themed .content-window__body--project a {
+  color: var(--spawn-link);
+  text-decoration-color: var(--spawn-link);
+}
+
+.desktop-window--project-page.desktop-window--spawn-themed .content-window__body--project a:hover {
+  color: var(--spawn-link-hover);
+}
+
+.desktop-window--project-page.desktop-window--spawn-themed .project-window__quick-link {
+  border-top-color: var(--spawn-divider);
+}
+
+/* Start menu only: forces the original green/teal “fake OS” palette (no PNG sampling) */
+.desktop-window--project-page.desktop-window--spawn-start-os {
+  --project-window-border: rgba(14, 52, 48, 0.92);
+  --project-window-border-soft: rgba(46, 120, 108, 0.45);
+  --project-window-glow: rgba(32, 140, 120, 0.28);
+  --project-window-shadow-deep: rgba(8, 14, 12, 0.35);
+  --project-header-bg: rgba(255, 255, 255, 0.42);
+  --project-divider: rgba(120, 255, 64, 0.92);
+  --project-title-fg: rgba(38, 128, 22, 0.96);
+  --project-text: rgba(24, 68, 16, 0.96);
+  --project-heading: rgba(30, 115, 20, 0.96);
+  --project-link: rgba(45, 170, 30, 0.98);
+  --project-link-hover: rgba(24, 130, 12, 0.98);
+  --project-surface-a: rgba(255, 255, 255, 0.56);
+  --project-surface-b: rgba(255, 255, 255, 0.42);
 }
 
 .project-window__quick-link {
@@ -1203,9 +1275,38 @@ body {
 }
 
 
-/* Meta menu (actionId menu) — same chrome + palette as narrative project windows */
+/* Meta menu (actionId menu): uses same variables as project pages; themed from parent PNG when spawned from a zone */
 .desktop-window--meta-menu {
   z-index: 120;
+}
+
+.desktop-window--meta-menu.desktop-window--spawn-themed .desktop-window__frame--meta-menu {
+  border-color: var(--spawn-border);
+  background: linear-gradient(168deg, var(--spawn-surface-a), var(--spawn-surface-b));
+  box-shadow:
+    0 0 0 1px var(--spawn-border-soft),
+    0 0 22px var(--spawn-glow),
+    0 20px 38px var(--spawn-shadow-deep);
+}
+
+.desktop-window--meta-menu.desktop-window--spawn-themed .meta-menu__header {
+  background: var(--spawn-header-bg);
+  border-bottom-color: var(--spawn-divider);
+}
+
+.desktop-window--meta-menu.desktop-window--spawn-themed .meta-menu__title {
+  color: var(--spawn-title-fg);
+}
+
+.desktop-window--meta-menu.desktop-window--spawn-themed .meta-menu__close {
+  border-color: var(--spawn-border-soft);
+  color: var(--spawn-title-fg);
+}
+
+.desktop-window--meta-menu.desktop-window--spawn-themed .meta-menu__item {
+  border-color: var(--spawn-divider);
+  color: var(--spawn-text);
+  background: color-mix(in srgb, var(--spawn-header-bg) 92%, transparent);
 }
 
 .desktop-window__frame--meta-menu {
@@ -1358,6 +1459,45 @@ body {
   max-width: 100%;
 }
 
+.zone-click--poem-filled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 6px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.zone-click__poem-text {
+  pointer-events: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  font: 600 clamp(10px, 2.2cqw, 15px) / 1.18 ui-serif, Georgia, "Times New Roman", serif;
+  color: rgba(18, 34, 52, 0.95);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.66);
+}
+
+.zone-click--checkbox-checked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zone-click__checkbox-mark {
+  pointer-events: none;
+  font-size: clamp(12px, 4.5cqw, 26px);
+  line-height: 1;
+  font-weight: 700;
+  color: rgba(18, 92, 58, 0.96);
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
 /* User color picker */
 .desktop-color-palette {
   position: fixed;
@@ -1384,6 +1524,197 @@ body {
 .desktop-color-palette__swatch:hover {
   transform: scale(1.08);
   border-color: #fff;
+}
+
+/*
+ * User-input poem picker (userinput zones):
+ * — Chips: .user-input-modal__choice; tint: .user-input-modal--themed (--spawn-* from parent PNG)
+ * — The picker sits in .user-input-local-overlay (only over that abstract window, no full-screen blur)
+ */
+.user-input-local-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  background: rgba(14, 16, 20, 0.09);
+  border-radius: 4px;
+  pointer-events: auto;
+}
+
+/* Legacy full-screen backdrop (unused by current userinput flow) */
+.user-input-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: rgba(12, 14, 18, 0.45);
+  backdrop-filter: blur(5px);
+}
+
+.user-input-modal-backdrop--align-top {
+  display: block;
+  padding: 0;
+}
+
+.user-input-modal {
+  width: min(420px, 100%);
+  max-height: min(78vh, 560px);
+  overflow: auto;
+  padding: 16px 16px 14px;
+  border-radius: 14px;
+  background: rgba(255, 251, 246, 0.97);
+  border: 1px solid rgba(20, 14, 10, 0.14);
+  box-shadow:
+    0 24px 48px rgba(8, 10, 14, 0.35),
+    0 4px 12px rgba(8, 10, 14, 0.12);
+}
+
+.user-input-modal--themed {
+  border-color: var(--spawn-border, rgba(20, 14, 10, 0.14));
+  background: linear-gradient(168deg, var(--spawn-surface-a, rgba(255, 251, 246, 0.97)), var(--spawn-surface-b, rgba(255, 248, 240, 0.95)));
+  box-shadow:
+    0 24px 48px var(--spawn-shadow-deep, rgba(8, 10, 14, 0.35)),
+    0 0 0 1px var(--spawn-border-soft, transparent);
+}
+
+.user-input-modal--themed .user-input-modal__title {
+  color: var(--spawn-title-fg, rgba(18, 28, 42, 0.95));
+}
+
+.user-input-modal--themed .user-input-modal__hint,
+.user-input-modal--themed .user-input-modal__preview {
+  color: var(--spawn-text, rgba(18, 28, 42, 0.72));
+}
+
+.user-input-modal__title {
+  margin: 0 0 6px;
+  font: 600 15px/1.35 ui-sans-serif, system-ui, sans-serif;
+  color: rgba(18, 28, 42, 0.95);
+}
+
+.user-input-modal__hint {
+  margin: 0 0 10px;
+  font: 400 12px/1.45 ui-sans-serif, system-ui, sans-serif;
+  color: rgba(18, 28, 42, 0.62);
+}
+
+.user-input-modal__preview {
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font: 600 12px/1.4 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  color: rgba(24, 68, 16, 0.92);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px dashed rgba(46, 120, 108, 0.35);
+  min-height: 2.5em;
+}
+
+.user-input-modal__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.user-input-modal__actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.user-input-modal__choice {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(46, 120, 108, 0.45);
+  background: rgba(255, 255, 255, 0.88);
+  color: rgba(24, 68, 16, 0.94);
+  font: 600 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.user-input-modal__choice--selected {
+  border-color: rgba(22, 118, 152, 0.95);
+  background: rgba(220, 245, 255, 0.95);
+  box-shadow: 0 0 0 1px rgba(22, 118, 152, 0.35);
+}
+
+.user-input-modal--themed .user-input-modal__choice {
+  border-color: var(--spawn-border-soft, rgba(46, 120, 108, 0.45));
+  color: var(--spawn-text, rgba(24, 68, 16, 0.94));
+}
+
+.user-input-modal--themed .user-input-modal__choice--selected {
+  border-color: var(--spawn-border, rgba(22, 118, 152, 0.95));
+  background: color-mix(in srgb, var(--spawn-header-bg, #fff) 88%, transparent);
+}
+
+.user-input-modal__choice:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(22, 118, 152, 0.85);
+  box-shadow: 0 0 12px rgba(32, 140, 120, 0.2);
+}
+
+.user-input-modal__secondary,
+.user-input-modal__done {
+  flex: 1;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font: 600 13px ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
+  border: 1px solid rgba(20, 14, 10, 0.14);
+  background: rgba(255, 255, 255, 0.85);
+  color: rgba(20, 14, 10, 0.8);
+}
+
+.user-input-modal__done {
+  background: rgba(46, 120, 108, 0.18);
+  border-color: rgba(46, 120, 108, 0.55);
+  color: rgba(18, 72, 52, 0.95);
+}
+
+.user-input-modal__done:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.user-input-modal__cancel {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(20, 14, 10, 0.12);
+  background: rgba(24, 18, 14, 0.06);
+  font: 600 13px ui-sans-serif, system-ui, sans-serif;
+  color: rgba(20, 14, 10, 0.75);
+  cursor: pointer;
+}
+
+.user-input-modal__cancel:hover {
+  background: rgba(24, 18, 14, 0.1);
+}
+
+/* Poem line written into .zone-text areas after userinput “Done” */
+.zone-text__poem-line {
+  margin: 0;
+  font: 600 clamp(10px, 1.5cqw, 13px) / 1.35 ui-serif, Georgia, "Times New Roman", serif;
+  color: rgba(28, 32, 38, 0.92);
 }
 
 /* User-picked shape overlays */
@@ -1413,7 +1744,7 @@ body {
 }
 
 .zone-user-wordart__text {
-  font: 800 12px/1.2 ui-sans-serif, system-ui, sans-serif;
+  font: 800 10px/1.2 ui-sans-serif, system-ui, sans-serif;
   text-align: center;
   background: linear-gradient(120deg, #0cf, #a0f, #fa0);
   background-clip: text;

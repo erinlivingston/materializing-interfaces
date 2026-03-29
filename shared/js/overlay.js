@@ -3,8 +3,8 @@ const placeholder = document.querySelector(".material-placeholder");
 const isDesktopView = document.documentElement.dataset.view === "desktop";
 const DESKTOP_BG_STORAGE_KEY = "materialDesktopBgChoice";
 const DESKTOP_BACKGROUNDS = {
-  landscape: "../assets/landscapepastel.png",
-  ombre: "../assets/ombrepastel.png",
+  landscape: "../assets/backgrounds/landscapepastelhighres2.jpg",
+  ombre: "../assets/backgrounds/ombrehighrespastel1.jpg",
 };
 const windowLayer = document.getElementById("window-layer");
 const urlParams = new URLSearchParams(window.location.search);
@@ -48,12 +48,22 @@ const META_MENU_FORTUNES = {
   ],
 };
 
+/* More entries = more clicks to cycle the full loop. First slot stays “no extra filter”. */
 const COLOR_FILTER_STEPS = [
   "",
-  "hue-rotate(42deg) saturate(1.15) contrast(1.05)",
+  "hue-rotate(28deg) saturate(1.12) contrast(1.04)",
+  "hue-rotate(55deg) saturate(1.14) contrast(1.04)",
+  "hue-rotate(90deg) saturate(1.15) contrast(1.03)",
+  "hue-rotate(130deg) saturate(1.18) contrast(1.03)",
   "hue-rotate(160deg) saturate(1.2) contrast(1.02)",
+  "hue-rotate(200deg) saturate(1.12) contrast(1.03)",
+  "hue-rotate(240deg) saturate(1.14) contrast(1.03)",
   "hue-rotate(280deg) saturate(1.1) brightness(1.03)",
+  "hue-rotate(310deg) saturate(1.12) contrast(1.02)",
+  "hue-rotate(340deg) saturate(1.1) contrast(1.04)",
+  "sepia(0.28) contrast(1.06) hue-rotate(18deg) saturate(1.08)",
   "sepia(0.35) contrast(1.08) hue-rotate(-12deg)",
+  "hue-rotate(180deg) saturate(0.95) brightness(0.98)",
 ];
 
 const USER_PICK_PALETTE = [
@@ -346,6 +356,7 @@ function getActionDef(windowDef, actionId) {
     userpickcolor: { type: "window.userPickColor" },
     userpickcolorsquare: { type: "window.userPickColorSquare" },
     userinput: { type: "window.userInputPrompt" },
+    usercheckbox: { type: "window.toggleUserCheckbox" },
     erinportrait: { type: "window.erinPortraitStub" },
     openAbstractFromPool: {
       type: "window.spawnFromPoolNonDuplicate",
@@ -434,7 +445,14 @@ function runAction(def, ctx) {
       spawnDigitalPaperWindow();
       break;
     case "window.openProjectPage":
-      spawnProjectPageWindow(def.pageId);
+      spawnProjectPageWindow(def.pageId, {
+        sourceAbstractWindow: ctx?.container?.classList?.contains("desktop-window")
+          ? ctx.container
+          : null,
+        useStartMenuTheme:
+          ctx?.windowDef?.id === "start" || !ctx?.container?.classList?.contains?.("desktop-window"),
+        themeRefWindowId: null,
+      });
       break;
     case "window.spawnCodeEditorInfo":
       spawnWindowByIdNonDuplicate(configJson, "img_5491");
@@ -453,10 +471,16 @@ function runAction(def, ctx) {
       break;
     }
     case "window.showMetaMenu":
-      showMetaMenuWindow();
+      showMetaMenuWindow(ctx);
       break;
     case "window.openBuildProjectPage":
-      void spawnBuildProjectPageWindow(def.pageId || "build_project");
+      void spawnBuildProjectPageWindow(def.pageId || "build_project", {
+        sourceAbstractWindow: ctx?.container?.classList?.contains("desktop-window")
+          ? ctx.container
+          : null,
+        useStartMenuTheme: !ctx?.container?.classList?.contains?.("desktop-window"),
+        themeRefWindowId: null,
+      });
       break;
     case "window.codebuildZone":
       runCodebuildOnZone(ctx);
@@ -477,7 +501,10 @@ function runAction(def, ctx) {
       openUserColorPicker(ctx, "square");
       break;
     case "window.userInputPrompt":
-      runUserInputPrompt(ctx);
+      void runUserInputPrompt(ctx);
+      break;
+    case "window.toggleUserCheckbox":
+      runUserCheckboxToggle(ctx);
       break;
     case "window.erinPortraitStub":
       runErinPortraitStub(ctx);
@@ -536,7 +563,14 @@ function populateRuntimeZones(zonesLayer, windowDef, configJson, container) {
       const raw = zone.actionId;
       const actionId = raw && raw !== "replace_action_id" ? raw : inferredActionId;
       const def = getActionDef(windowDef, actionId);
-      runAction(def, { container, windowDef, configJson, zone, zoneElement: el });
+      runAction(def, {
+        container,
+        windowDef,
+        configJson,
+        zone,
+        zoneElement: el,
+        clickZoneIndex: index,
+      });
     });
     zonesLayer.appendChild(el);
 
@@ -664,6 +698,184 @@ function positionWindowAnywhere(winWidth, winHeight) {
   };
 }
 
+/*
+ * Theme helpers: read pixels from the abstract window’s .desktop-window__image, average RGB,
+ * then set --spawn-border, --spawn-surface-*, etc. on menus / project pages / user-input panels.
+ * Tweaks: edit the rgba math in sampleThemeFromAbstractWindow() for stronger/softer borders.
+ * Start-menu-only green palette: .desktop-window--spawn-start-os in CSS (not sampled).
+ */
+/**
+ * Samples average color from an abstract window’s PNG (same-origin) to theme spawned UI.
+ * Sets CSS custom properties --spawn-* on `targetEl` (see `.desktop-window--spawn-themed` in common.css).
+ */
+function sampleThemeFromAbstractWindow(sourceWindowEl) {
+  const img = sourceWindowEl?.querySelector?.(".desktop-window__image");
+  if (!img || !img.naturalWidth) return null;
+  try {
+    const c = document.createElement("canvas");
+    const sw = 48;
+    const sh = 48;
+    c.width = sw;
+    c.height = sh;
+    const ctx = c.getContext("2d");
+    if (!ctx) return null;
+    ctx.drawImage(img, 0, 0, sw, sh);
+    const data = ctx.getImageData(0, 0, sw, sh).data;
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    let n = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      const a = data[i + 3];
+      if (a < 10) continue;
+      r += data[i];
+      g += data[i + 1];
+      b += data[i + 2];
+      n += 1;
+    }
+    if (!n) return null;
+    r = Math.round(r / n);
+    g = Math.round(g / n);
+    b = Math.round(b / n);
+    return {
+      spawnBorder: `rgba(${clamp(r - 35, 0, 255)}, ${clamp(g - 28, 0, 255)}, ${clamp(b - 22, 0, 255)}, 0.88)`,
+      spawnBorderSoft: `rgba(${r}, ${g}, ${b}, 0.45)`,
+      spawnGlow: `rgba(${r}, ${g}, ${b}, 0.28)`,
+      spawnHeaderBg: `rgba(${Math.min(255, r + 50)}, ${Math.min(255, g + 44)}, ${Math.min(255, b + 38)}, 0.52)`,
+      spawnTitleFg: `rgba(${clamp(r - 55, 0, 255)}, ${clamp(g - 50, 0, 255)}, ${clamp(b - 45, 0, 255)}, 0.96)`,
+      spawnDivider: `rgba(${r}, ${g}, ${b}, 0.55)`,
+      spawnText: `rgba(${clamp(r - 35, 0, 255)}, ${clamp(g - 32, 0, 255)}, ${clamp(b - 30, 0, 255)}, 0.94)`,
+      spawnHeading: `rgba(${clamp(r - 48, 0, 255)}, ${clamp(g - 44, 0, 255)}, ${clamp(b - 40, 0, 255)}, 0.96)`,
+      spawnLink: `rgba(${clamp(r - 15, 0, 255)}, ${clamp(g - 12, 0, 255)}, ${clamp(b - 8, 0, 255)}, 0.96)`,
+      spawnLinkHover: `rgba(${clamp(r - 35, 0, 255)}, ${clamp(g - 32, 0, 255)}, ${clamp(b - 28, 0, 255)}, 0.98)`,
+      spawnSurfaceA: `rgba(${Math.min(255, r + 55)}, ${Math.min(255, g + 48)}, ${Math.min(255, b + 42)}, 0.58)`,
+      spawnSurfaceB: `rgba(${Math.min(255, r + 32)}, ${Math.min(255, g + 28)}, ${Math.min(255, b + 24)}, 0.44)`,
+      spawnShadowDeep: `rgba(${Math.max(0, r - 80)}, ${Math.max(0, g - 78)}, ${Math.max(0, b - 76)}, 0.35)`,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function setSpawnThemeVarsOnElement(targetEl, t) {
+  if (!targetEl?.style || !t) return;
+  Object.entries(t).forEach(([k, v]) => {
+    const name = `--${k.replace(/([A-Z])/g, "-$1").toLowerCase()}`;
+    targetEl.style.setProperty(name, v);
+  });
+}
+
+function applySpawnThemeVars(targetEl, sourceWindowEl) {
+  if (!targetEl) return;
+  const th = sampleThemeFromAbstractWindow(sourceWindowEl);
+  if (!th) {
+    targetEl.classList.remove("desktop-window--spawn-themed");
+    return;
+  }
+  targetEl.classList.add("desktop-window--spawn-themed");
+  targetEl.classList.remove("desktop-window--spawn-start-os");
+  setSpawnThemeVarsOnElement(targetEl, th);
+}
+
+function clearSpawnThemeVars(targetEl) {
+  if (!targetEl?.style) return;
+  [
+    "--spawn-border",
+    "--spawn-border-soft",
+    "--spawn-glow",
+    "--spawn-header-bg",
+    "--spawn-title-fg",
+    "--spawn-divider",
+    "--spawn-text",
+    "--spawn-heading",
+    "--spawn-link",
+    "--spawn-link-hover",
+    "--spawn-surface-a",
+    "--spawn-surface-b",
+    "--spawn-shadow-deep",
+  ].forEach((k) => targetEl.style.removeProperty(k));
+}
+
+function applyStartMenuSpawnTheme(targetEl) {
+  if (!targetEl) return;
+  targetEl.classList.add("desktop-window--spawn-start-os");
+  targetEl.classList.remove("desktop-window--spawn-themed");
+  clearSpawnThemeVars(targetEl);
+}
+
+function applyUserInputModalTheme(panel, sourceWindowEl) {
+  if (!panel) return;
+  const th = sampleThemeFromAbstractWindow(sourceWindowEl);
+  panel.classList.toggle("user-input-modal--themed", Boolean(th));
+  if (!th) {
+    clearSpawnThemeVars(panel);
+    return;
+  }
+  setSpawnThemeVarsOnElement(panel, th);
+}
+
+function positionFloatingNearZone(floatingEl, zoneElement, estimatedHeight) {
+  const rect = zoneElement?.getBoundingClientRect();
+  const w = floatingEl.offsetWidth || Number.parseInt(floatingEl.style.width, 10) || 260;
+  const h = estimatedHeight || floatingEl.offsetHeight || 200;
+  if (!rect || rect.width <= 0) {
+    const pos = positionWindowAnywhere(w, h);
+    floatingEl.style.left = `${pos.left}px`;
+    floatingEl.style.top = `${pos.top}px`;
+    return;
+  }
+  let left = rect.right + 10;
+  let top = rect.top;
+  if (left + w > window.innerWidth - 12) {
+    left = rect.left - w - 10;
+  }
+  left = clamp(left, 12, Math.max(12, window.innerWidth - w - 12));
+  top = clamp(top, 12, Math.max(12, window.innerHeight - h - 12));
+  if (top + h > window.innerHeight - 12) {
+    top = Math.max(12, window.innerHeight - h - 12);
+  }
+  floatingEl.style.left = `${left}px`;
+  floatingEl.style.top = `${top}px`;
+}
+
+function positionFloatingNearWindow(floatingEl, sourceWindowEl) {
+  const rect = sourceWindowEl?.getBoundingClientRect();
+  const w = floatingEl.offsetWidth || 400;
+  const h = floatingEl.offsetHeight || 420;
+  if (!rect || rect.width <= 0) {
+    const pos = positionWindowAnywhere(w, h);
+    floatingEl.style.left = `${pos.left}px`;
+    floatingEl.style.top = `${pos.top}px`;
+    return;
+  }
+  let left = rect.right + 12;
+  let top = rect.top;
+  if (left + w > window.innerWidth - 12) {
+    left = rect.left - w - 12;
+  }
+  left = clamp(left, 12, Math.max(12, window.innerWidth - w - 12));
+  top = clamp(top, 12, Math.max(12, window.innerHeight - h - 12));
+  if (top + h > window.innerHeight - 12) {
+    top = Math.max(12, window.innerHeight - h - 12);
+  }
+  floatingEl.style.left = `${left}px`;
+  floatingEl.style.top = `${top}px`;
+}
+
+function resolveThemeAbstractEl(options) {
+  if (options?.themeRefWindowId && windowLayer) {
+    const el = windowLayer.querySelector(
+      `:scope > .desktop-window[data-window-id="${CSS.escape(options.themeRefWindowId)}"]`,
+    );
+    if (el?.querySelector?.(".desktop-window__image")) return el;
+  }
+  const src = options?.sourceAbstractWindow;
+  if (src?.classList?.contains("desktop-window") && src.querySelector?.(".desktop-window__image")) {
+    return src;
+  }
+  return null;
+}
+
 function createWindowElement(configJson, windowDef, left, top, options = {}) {
   const width =
     options.widthPx != null ? Number(options.widthPx) : getScaledWidthPx(configJson, windowDef);
@@ -711,7 +923,8 @@ function createWindowElement(configJson, windowDef, left, top, options = {}) {
     if (
       target.closest?.(".zone-click") ||
       target.closest?.(".zone-text") ||
-      target.closest?.(".zone-draft")
+      target.closest?.(".zone-draft") ||
+      target.closest?.(".user-input-local-overlay")
     ) {
       return;
     }
@@ -728,6 +941,15 @@ function createWindowElement(configJson, windowDef, left, top, options = {}) {
 
   frame.append(image, zonesLayer);
   container.append(frame);
+
+  if (container.classList.contains("desktop-window--folder-icon")) {
+    container.addEventListener("dblclick", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      container.remove();
+    });
+  }
+
   return container;
 }
 
@@ -947,16 +1169,38 @@ function collectVisibleTextZones() {
 
 async function refreshHistoryInTextZones() {
   if (!windowLayer || !isDesktopView) return;
-  const zones = collectVisibleTextZones();
+  const zones = collectVisibleTextZones().filter((z) => !z.dataset.userPoem);
   try {
-    const { loadHistoryPoetryLines, fillTextZonesWithHistory } = await import(
-      "./browserHistoryPoetry.js"
-    );
+    const { loadHistoryPoetryLines, fillTextZonesWithHistory } = await import("./browserHistoryPoetry.js");
     const lines = await loadHistoryPoetryLines();
     fillTextZonesWithHistory(zones, lines);
   } catch (err) {
     console.error(err);
   }
+}
+
+/**
+ * Which .zone-text to fill for userinput: Nth entry in zones.click → Nth .zone-text in this window
+ * (same order as in JSON / DOM). Uses clickZoneIndex from the click handler — not fillsTextZoneID.
+ */
+function findTargetTextZoneElForClickZone(zonesLayer, windowDef, clickZoneDef, clickZoneIndex) {
+  if (!zonesLayer || !windowDef) return null;
+  const textArr = Array.isArray(windowDef.zones?.text) ? windowDef.zones.text : [];
+  if (!textArr.length) return null;
+
+  const textEls = zonesLayer.querySelectorAll(".zone-text");
+  if (!textEls.length) return null;
+
+  let ti = 0;
+  if (typeof clickZoneIndex === "number" && clickZoneIndex >= 0) {
+    ti = Math.min(clickZoneIndex, textArr.length - 1, textEls.length - 1);
+  } else if (clickZoneDef?.id != null) {
+    const clickArr = Array.isArray(windowDef.zones?.click) ? windowDef.zones.click : [];
+    const ci = clickArr.findIndex((z) => String(z.id) === String(clickZoneDef.id));
+    ti = ci >= 0 ? Math.min(ci, textArr.length - 1, textEls.length - 1) : 0;
+  }
+
+  return textEls[ti] || textEls[0] || null;
 }
 
 function clearWindows() {
@@ -1014,11 +1258,17 @@ function spawnWindow(configJson, windowDef) {
   void refreshHistoryInTextZones();
 }
 
+/*
+ * Folder icon cluster (decorative img_5510 copies): each icon is offset from an “anchor” point.
+ * — jitterX / jitterY (randomInt ranges): how far each icon may sit from the anchor (spread vs. tight).
+ * — baseW / wpx clamp: typical icon width in pixels (bigger = bolder folders).
+ * — spawnFolderIconCluster: nA/nB = how many icons per cluster; anchorLeft* / anchorRight* = rough placement on screen.
+ */
 function spawnFolderIconsAroundAnchor(configJson, def, ar, anchorL, anchorT, n, stampKey) {
   const baseW = clamp(randomInt(56, 88), 50, Math.min(108, Math.round(window.innerWidth * 0.13)));
   for (let i = 0; i < n; i += 1) {
-    const jitterX = randomInt(-100, 140);
-    const jitterY = randomInt(-85, 125);
+    const jitterX = randomInt(-165, 210);
+    const jitterY = randomInt(-140, 195);
     const wpx = clamp(baseW + randomInt(-10, 12), 46, Math.min(118, Math.round(window.innerWidth * 0.15)));
     const fakeHeight = Math.round(wpx * ar);
     const left = clamp(anchorL + jitterX, 12, window.innerWidth - wpx - 12);
@@ -1146,13 +1396,22 @@ function spawnDigitalPaperFortuneWindow(questionKey) {
   windowLayer.appendChild(container);
 }
 
-function showMetaMenuWindow() {
+function showMetaMenuWindow(ctx) {
   if (!windowLayer) return;
   const container = document.createElement("article");
   container.className = "desktop-window desktop-window--meta-menu";
   container.dataset.windowId = `meta_menu_${Date.now()}`;
   container.style.width = `${clamp(Math.round(window.innerWidth * 0.28), 220, 320)}px`;
   bringToFront(container);
+
+  const sourceWin = ctx?.container?.classList?.contains("desktop-window")
+    ? ctx.container
+    : null;
+  if (sourceWin?.querySelector?.(".desktop-window__image")) {
+    applySpawnThemeVars(container, sourceWin);
+  } else {
+    applyStartMenuSpawnTheme(container);
+  }
 
   const frame = document.createElement("div");
   frame.className = "desktop-window__frame desktop-window__frame--meta-menu";
@@ -1203,16 +1462,41 @@ function showMetaMenuWindow() {
     startWindowDrag(event, container);
   });
 
-  const pos = positionWindowAnywhere(
-    Number.parseInt(container.style.width, 10) || 240,
-    160,
-  );
-  container.style.left = `${pos.left}px`;
-  container.style.top = `${pos.top}px`;
   windowLayer.appendChild(container);
+
+  const zoneEl = ctx?.zoneElement;
+  requestAnimationFrame(() => {
+    const estH = container.offsetHeight || 200;
+    if (sourceWin && zoneEl) {
+      positionFloatingNearZone(container, zoneEl, estH);
+    } else {
+      const pos = positionWindowAnywhere(
+        Number.parseInt(container.style.width, 10) || 240,
+        estH,
+      );
+      container.style.left = `${pos.left}px`;
+      container.style.top = `${pos.top}px`;
+    }
+  });
 }
 
-async function spawnBuildProjectPageWindow(pageId) {
+function applyProjectPageSpawnTheme(container, options = {}) {
+  if (options.useStartMenuTheme) {
+    applyStartMenuSpawnTheme(container);
+    container.dataset.themeRefWindowId = "";
+    return;
+  }
+  const abstractEl = resolveThemeAbstractEl(options);
+  if (abstractEl) {
+    applySpawnThemeVars(container, abstractEl);
+    container.dataset.themeRefWindowId = abstractEl.dataset.windowId || "";
+  } else {
+    applyStartMenuSpawnTheme(container);
+    container.dataset.themeRefWindowId = "";
+  }
+}
+
+async function spawnBuildProjectPageWindow(pageId, options = {}) {
   if (!windowLayer) return;
   const { getBuildProjectPageById } = await import("./projectPages.js");
   const page = getBuildProjectPageById(pageId);
@@ -1232,6 +1516,8 @@ async function spawnBuildProjectPageWindow(pageId) {
   container.dataset.buildProjectPageId = pageId;
   container.style.width = `${clamp(Math.round(window.innerWidth * 0.38), 320, 640)}px`;
   bringToFront(container);
+
+  applyProjectPageSpawnTheme(container, options);
 
   const frame = document.createElement("div");
   frame.className = "desktop-window__frame desktop-window__frame--content";
@@ -1267,7 +1553,11 @@ async function spawnBuildProjectPageWindow(pageId) {
     event.preventDefault();
     const next = link.dataset.buildLink;
     if (!next) return;
-    void spawnBuildProjectPageWindow(next);
+    void spawnBuildProjectPageWindow(next, {
+      themeRefWindowId: container.dataset.themeRefWindowId || null,
+      useStartMenuTheme: container.classList.contains("desktop-window--spawn-start-os"),
+      sourceAbstractWindow: null,
+    });
   });
 
   frame.append(header, body);
@@ -1286,11 +1576,19 @@ async function spawnBuildProjectPageWindow(pageId) {
     startWindowDrag(event, container);
   });
 
-  const rect = { w: Number.parseInt(container.style.width, 10) || 420, h: 420 };
-  const pos = positionWindowAnywhere(rect.w, rect.h);
-  container.style.left = `${pos.left}px`;
-  container.style.top = `${pos.top}px`;
+  const sourceAbstract = resolveThemeAbstractEl(options);
   windowLayer.appendChild(container);
+  requestAnimationFrame(() => {
+    const estH = container.offsetHeight || 420;
+    if (sourceAbstract) {
+      positionFloatingNearWindow(container, sourceAbstract);
+    } else {
+      const rect = { w: Number.parseInt(container.style.width, 10) || 420, h: estH };
+      const pos = positionWindowAnywhere(rect.w, rect.h);
+      container.style.left = `${pos.left}px`;
+      container.style.top = `${pos.top}px`;
+    }
+  });
 }
 
 function runCodebuildOnZone(ctx) {
@@ -1312,6 +1610,25 @@ function runGrayCodeTitleStub(ctx) {
   }
 }
 
+function runUserCheckboxToggle(ctx) {
+  const el = ctx.zoneElement;
+  if (!el || !el.classList.contains("zone-click")) return;
+  const existing = el.querySelector(".zone-click__checkbox-mark");
+  if (existing) {
+    existing.remove();
+    el.classList.remove("zone-click--checkbox-checked");
+    el.setAttribute("aria-pressed", "false");
+    return;
+  }
+  el.classList.add("zone-click--checkbox-checked");
+  const mark = document.createElement("span");
+  mark.className = "zone-click__checkbox-mark";
+  mark.setAttribute("aria-hidden", "true");
+  mark.textContent = "✓";
+  el.appendChild(mark);
+  el.setAttribute("aria-pressed", "true");
+}
+
 const WINDOW_IMG_BASE_FILTER =
   "drop-shadow(0 14px 22px rgba(15, 12, 8, 0.3)) drop-shadow(0 3px 6px rgba(15, 12, 8, 0.18))";
 
@@ -1321,7 +1638,8 @@ function cycleWindowColorFilter(ctx) {
   const img = container.querySelector(".desktop-window__image");
   if (!img) return;
   let step = Number(container.dataset.colorFilterStep);
-  if (!Number.isFinite(step)) step = -1;
+  /* Unset means "neutral" (same as step 0: no extra filter). First click must advance to a visible filter. */
+  if (!Number.isFinite(step)) step = 0;
   step = (step + 1) % COLOR_FILTER_STEPS.length;
   container.dataset.colorFilterStep = String(step);
   const f = COLOR_FILTER_STEPS[step];
@@ -1436,27 +1754,175 @@ function applyUserPickShapeToZone(zonesLayer, zone, windowDef, color, shapeMode)
   zonesLayer.appendChild(overlay);
 }
 
-function runUserInputPrompt(ctx) {
+let activeUserInputCleanup = null;
+
+function dismissUserInputModal() {
+  if (typeof activeUserInputCleanup === "function") {
+    activeUserInputCleanup();
+    activeUserInputCleanup = null;
+  }
+}
+
+async function runUserInputPrompt(ctx) {
   const container = ctx.container;
   const zone = ctx.zone;
   const windowDef = ctx.windowDef;
-  if (!container || !zone || !windowDef) return;
-  const zonesLayer = container.querySelector(".window-zones");
-  if (!zonesLayer) return;
-  const text = window.prompt("Text for this zone:", "");
-  if (text == null || !String(text).trim()) return;
-  const widthOverHeight = getWidthOverHeight(windowDef);
-  const layer = document.createElement("div");
-  layer.className = "zone-user-wordart";
-  positionZoneElement(layer, zone, widthOverHeight);
-  if (normalizeZoneShape(zone) === "circle") {
-    layer.style.borderRadius = "50%";
+  const zonesLayer = container?.querySelector?.(".window-zones");
+  if (!container || !zone || !windowDef || !zonesLayer) return;
+
+  dismissUserInputModal();
+  bringToFront(container);
+
+  let words;
+  try {
+    const { loadHistoryPoetryLines, pickHistoryWordChoices } = await import("./browserHistoryPoetry.js");
+    const lines = await loadHistoryPoetryLines();
+    const rawWords = pickHistoryWordChoices(lines, 64);
+    words = [];
+    for (let i = 0; i < rawWords.length - 1; i += 2) {
+      words.push(`${rawWords[i]} ${rawWords[i + 1]}`);
+    }
+    words = words.slice(0, 24);
+  } catch {
+    words = ["material desktop", "browser history", "open window", "past tabs", "scroll feed"];
   }
-  const inner = document.createElement("div");
-  inner.className = "zone-user-wordart__text";
-  inner.textContent = text.trim();
-  layer.appendChild(inner);
-  zonesLayer.appendChild(layer);
+
+  const selectedWords = await new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.className = "user-input-local-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", "Compose a line from history words");
+
+    const panel = document.createElement("div");
+    panel.className = "user-input-modal";
+
+    const title = document.createElement("p");
+    title.className = "user-input-modal__title";
+    title.textContent = "Tap words to build a line";
+
+    const hint = document.createElement("p");
+    hint.className = "user-input-modal__hint";
+    hint.textContent =
+      "Pick several two-word phrases, then Done. The poem is written directly into the exact zone you clicked.";
+
+    const preview = document.createElement("p");
+    preview.className = "user-input-modal__preview";
+    preview.setAttribute("aria-live", "polite");
+    preview.textContent = "—";
+
+    const grid = document.createElement("div");
+    grid.className = "user-input-modal__grid";
+
+    const row = document.createElement("div");
+    row.className = "user-input-modal__actions";
+
+    const clearBtn = document.createElement("button");
+    clearBtn.type = "button";
+    clearBtn.className = "user-input-modal__secondary";
+    clearBtn.textContent = "Clear";
+
+    const doneBtn = document.createElement("button");
+    doneBtn.type = "button";
+    doneBtn.className = "user-input-modal__done";
+    doneBtn.textContent = "Done";
+    doneBtn.disabled = true;
+
+    const cancel = document.createElement("button");
+    cancel.type = "button";
+    cancel.className = "user-input-modal__cancel";
+    cancel.textContent = "Cancel";
+
+    const picked = [];
+
+    const syncPreview = () => {
+      const line = picked.join(" ");
+      preview.textContent = line || "—";
+      doneBtn.disabled = picked.length < 2;
+    };
+
+    words.forEach((w) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "user-input-modal__choice";
+      btn.textContent = w;
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const i = picked.indexOf(w);
+        if (i >= 0) {
+          picked.splice(i, 1);
+          btn.classList.remove("user-input-modal__choice--selected");
+        } else {
+          picked.push(w);
+          btn.classList.add("user-input-modal__choice--selected");
+        }
+        syncPreview();
+      });
+      grid.appendChild(btn);
+    });
+
+    clearBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      picked.length = 0;
+      grid.querySelectorAll(".user-input-modal__choice--selected").forEach((b) =>
+        b.classList.remove("user-input-modal__choice--selected"),
+      );
+      syncPreview();
+    });
+
+    const finish = (value) => {
+      dismissUserInputModal();
+      resolve(value);
+    };
+
+    doneBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (picked.length < 2) return;
+      finish([...picked]);
+    });
+
+    cancel.addEventListener("click", (e) => {
+      e.stopPropagation();
+      finish(null);
+    });
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) finish(null);
+    });
+    panel.addEventListener("click", (e) => e.stopPropagation());
+
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        finish(null);
+      }
+    };
+
+    row.append(clearBtn, doneBtn);
+    panel.append(title, hint, preview, grid, row, cancel);
+    overlay.appendChild(panel);
+    container.appendChild(overlay);
+    applyUserInputModalTheme(panel, container);
+    document.addEventListener("keydown", onKey, true);
+
+    activeUserInputCleanup = () => {
+      document.removeEventListener("keydown", onKey, true);
+      overlay.remove();
+    };
+  });
+
+  if (!selectedWords || selectedWords.length < 2) return;
+
+  const targetZoneButton = ctx.zoneElement;
+  if (!targetZoneButton || !targetZoneButton.classList.contains("zone-click")) return;
+  targetZoneButton.classList.add("zone-click--poem-filled");
+  targetZoneButton.setAttribute("aria-label", "User poem zone");
+  const existing = targetZoneButton.querySelector(".zone-click__poem-text");
+  if (existing) existing.remove();
+  const poem = document.createElement("span");
+  poem.className = "zone-click__poem-text";
+  poem.textContent = selectedWords.join(" ");
+  targetZoneButton.appendChild(poem);
 }
 
 function runErinPortraitStub(ctx) {
@@ -1537,7 +2003,7 @@ function spawnDigitalPaperWindow() {
   windowLayer.appendChild(container);
 }
 
-async function spawnProjectPageWindow(pageId) {
+async function spawnProjectPageWindow(pageId, options = {}) {
   if (!windowLayer) return;
   const { getProjectPageById } = await import("./projectPages.js");
   const page = getProjectPageById(pageId);
@@ -1554,6 +2020,8 @@ async function spawnProjectPageWindow(pageId) {
   container.dataset.projectPageId = pageId;
   container.style.width = `${clamp(Math.round(window.innerWidth * 0.38), 320, 640)}px`;
   bringToFront(container);
+
+  applyProjectPageSpawnTheme(container, options);
 
   const frame = document.createElement("div");
   frame.className = "desktop-window__frame desktop-window__frame--content";
@@ -1592,7 +2060,11 @@ async function spawnProjectPageWindow(pageId) {
     event.preventDefault();
     const next = link.dataset.projectLink;
     if (!next) return;
-    void spawnProjectPageWindow(next);
+    void spawnProjectPageWindow(next, {
+      themeRefWindowId: container.dataset.themeRefWindowId || null,
+      useStartMenuTheme: container.classList.contains("desktop-window--spawn-start-os"),
+      sourceAbstractWindow: null,
+    });
   });
 
   frame.append(header, body);
@@ -1611,11 +2083,19 @@ async function spawnProjectPageWindow(pageId) {
     startWindowDrag(event, container);
   });
 
-  const rect = { w: Number.parseInt(container.style.width, 10) || 420, h: 420 };
-  const pos = positionWindowAnywhere(rect.w, rect.h);
-  container.style.left = `${pos.left}px`;
-  container.style.top = `${pos.top}px`;
+  const sourceAbstract = resolveThemeAbstractEl(options);
   windowLayer.appendChild(container);
+  requestAnimationFrame(() => {
+    const estH = container.offsetHeight || 420;
+    if (sourceAbstract) {
+      positionFloatingNearWindow(container, sourceAbstract);
+    } else {
+      const rect = { w: Number.parseInt(container.style.width, 10) || 420, h: estH };
+      const pos = positionWindowAnywhere(rect.w, rect.h);
+      container.style.left = `${pos.left}px`;
+      container.style.top = `${pos.top}px`;
+    }
+  });
 }
 
 function spawnDebugWindowByIndex(configJson, index) {

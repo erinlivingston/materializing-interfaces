@@ -220,3 +220,106 @@ export function fillTextZonesWithHistory(zoneElements, lines) {
     }
   }
 }
+
+/**
+ * Distributes user-picked words across visible PNG text zones (same chunking idea as history fill).
+ * @param {Element[]} zoneElements
+ * @param {string[]} words — tokens (e.g. from a space-joined poem)
+ */
+export function fillTextZonesWithPoem(zoneElements, words) {
+  zoneElements.forEach((z) => {
+    z.replaceChildren();
+  });
+  if (!zoneElements.length || !words.length) return;
+
+  const z = zoneElements.length;
+  const n = words.length;
+  for (let j = 0; j < z; j += 1) {
+    const start = Math.floor((j * n) / z);
+    const end = Math.floor(((j + 1) * n) / z);
+    const slice = words.slice(start, end);
+    if (!slice.length) continue;
+    const p = document.createElement("p");
+    p.className = "zone-text__poem-line";
+    p.textContent = slice.join(" ");
+    zoneElements[j].appendChild(p);
+  }
+}
+
+const HISTORY_WORD_STOP = new Set([
+  "the",
+  "and",
+  "for",
+  "with",
+  "from",
+  "your",
+  "this",
+  "that",
+  "are",
+  "was",
+  "has",
+  "have",
+  "had",
+  "but",
+  "not",
+  "you",
+  "all",
+  "can",
+  "our",
+  "out",
+  "any",
+  "may",
+  "one",
+  "get",
+  "new",
+  "com",
+  "org",
+  "www",
+  "http",
+  "https",
+]);
+
+/**
+ * Distinct tokens from history titles for constrained pickers (desktop zone actions).
+ * @param {HistoryPoetryLine[]} lines
+ * @param {number} [count]
+ * @returns {string[]}
+ */
+export function pickHistoryWordChoices(lines, count = 18) {
+  const fallback = [
+    "material",
+    "desktop",
+    "history",
+    "browser",
+    "window",
+    "memory",
+    "link",
+    "tab",
+    "scroll",
+    "feed",
+  ];
+  if (!Array.isArray(lines) || !lines.length) {
+    return fallback;
+  }
+  const seen = new Set();
+  const pool = [];
+  for (const line of lines) {
+    const title = String(line.title || "");
+    const normalized = title.replace(/[-_|/]+/g, " ").replace(/[^\w\s']/g, " ");
+    for (const raw of normalized.split(/\s+/)) {
+      const w = raw.toLowerCase().replace(/^'+|'+$/g, "");
+      if (w.length < 3 || HISTORY_WORD_STOP.has(w) || seen.has(w)) continue;
+      seen.add(w);
+      pool.push(raw.length >= 3 ? raw : w);
+      if (pool.length > 220) break;
+    }
+    if (pool.length > 220) break;
+  }
+  for (let i = pool.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const n = Math.max(1, Math.min(count, 24));
+  const out = pool.slice(0, n);
+  return out.length ? out : fallback;
+}
