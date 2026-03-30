@@ -348,6 +348,7 @@ function getActionDef(windowDef, actionId) {
     spawn_tab: { type: "window.spawnRandom" },
     openProjectFromPool: { type: "window.openProjectFromPool" },
     menu: { type: "window.showMetaMenu" },
+    menumatrix: { type: "window.showMenuMatrix" },
     projectpage: { type: "window.openBuildProjectPage", pageId: "build_project" },
     codebuild: { type: "window.codebuildZone" },
     graycodetitlebox: { type: "window.grayCodeTitleStub" },
@@ -472,6 +473,9 @@ function runAction(def, ctx) {
     }
     case "window.showMetaMenu":
       showMetaMenuWindow(ctx);
+      break;
+    case "window.showMenuMatrix":
+      showMenuMatrixWindow(ctx, def);
       break;
     case "window.openBuildProjectPage":
       void spawnBuildProjectPageWindow(def.pageId || "build_project", {
@@ -739,18 +743,18 @@ function sampleThemeFromAbstractWindow(sourceWindowEl) {
     b = Math.round(b / n);
     return {
       spawnBorder: `rgba(${clamp(r - 35, 0, 255)}, ${clamp(g - 28, 0, 255)}, ${clamp(b - 22, 0, 255)}, 0.88)`,
-      spawnBorderSoft: `rgba(${r}, ${g}, ${b}, 0.45)`,
-      spawnGlow: `rgba(${r}, ${g}, ${b}, 0.28)`,
-      spawnHeaderBg: `rgba(${Math.min(255, r + 50)}, ${Math.min(255, g + 44)}, ${Math.min(255, b + 38)}, 0.52)`,
-      spawnTitleFg: `rgba(${clamp(r - 55, 0, 255)}, ${clamp(g - 50, 0, 255)}, ${clamp(b - 45, 0, 255)}, 0.96)`,
+      spawnBorderSoft: `rgba(${r}, ${g}, ${b}, 0.5)`,
+      spawnGlow: `rgba(${r}, ${g}, ${b}, 0.1)`,
+      spawnHeaderBg: `rgba(${Math.min(255, r + 50)}, ${Math.min(255, g + 44)}, ${Math.min(255, b + 38)}, 0.9)`,
+      spawnTitleFg: `rgba(${clamp(r - 55, 0, 255)}, ${clamp(g - 50, 0, 255)}, ${clamp(b - 45, 0, 255)}, 0.98)`,
       spawnDivider: `rgba(${r}, ${g}, ${b}, 0.55)`,
-      spawnText: `rgba(${clamp(r - 35, 0, 255)}, ${clamp(g - 32, 0, 255)}, ${clamp(b - 30, 0, 255)}, 0.94)`,
-      spawnHeading: `rgba(${clamp(r - 48, 0, 255)}, ${clamp(g - 44, 0, 255)}, ${clamp(b - 40, 0, 255)}, 0.96)`,
-      spawnLink: `rgba(${clamp(r - 15, 0, 255)}, ${clamp(g - 12, 0, 255)}, ${clamp(b - 8, 0, 255)}, 0.96)`,
-      spawnLinkHover: `rgba(${clamp(r - 35, 0, 255)}, ${clamp(g - 32, 0, 255)}, ${clamp(b - 28, 0, 255)}, 0.98)`,
-      spawnSurfaceA: `rgba(${Math.min(255, r + 55)}, ${Math.min(255, g + 48)}, ${Math.min(255, b + 42)}, 0.58)`,
-      spawnSurfaceB: `rgba(${Math.min(255, r + 32)}, ${Math.min(255, g + 28)}, ${Math.min(255, b + 24)}, 0.44)`,
-      spawnShadowDeep: `rgba(${Math.max(0, r - 80)}, ${Math.max(0, g - 78)}, ${Math.max(0, b - 76)}, 0.35)`,
+      spawnText: `rgba(${clamp(r - 38, 0, 255)}, ${clamp(g - 35, 0, 255)}, ${clamp(b - 32, 0, 255)}, 0.97)`,
+      spawnHeading: `rgba(${clamp(r - 48, 0, 255)}, ${clamp(g - 44, 0, 255)}, ${clamp(b - 40, 0, 255)}, 0.98)`,
+      spawnLink: `rgba(${clamp(r - 15, 0, 255)}, ${clamp(g - 12, 0, 255)}, ${clamp(b - 8, 0, 255)}, 0.97)`,
+      spawnLinkHover: `rgba(${clamp(r - 35, 0, 255)}, ${clamp(g - 32, 0, 255)}, ${clamp(b - 28, 0, 255)}, 0.99)`,
+      spawnSurfaceA: `rgba(${Math.min(255, r + 55)}, ${Math.min(255, g + 48)}, ${Math.min(255, b + 42)}, 0.92)`,
+      spawnSurfaceB: `rgba(${Math.min(255, r + 32)}, ${Math.min(255, g + 28)}, ${Math.min(255, b + 24)}, 0.86)`,
+      spawnShadowDeep: `rgba(${Math.max(0, r - 80)}, ${Math.max(0, g - 78)}, ${Math.max(0, b - 76)}, 0.22)`,
     };
   } catch {
     return null;
@@ -1401,7 +1405,7 @@ function showMetaMenuWindow(ctx) {
   const container = document.createElement("article");
   container.className = "desktop-window desktop-window--meta-menu";
   container.dataset.windowId = `meta_menu_${Date.now()}`;
-  container.style.width = `${clamp(Math.round(window.innerWidth * 0.28), 220, 320)}px`;
+  container.style.width = `${clamp(Math.round(window.innerWidth * 0.26), 200, 300)}px`;
   bringToFront(container);
 
   const sourceWin = ctx?.container?.classList?.contains("desktop-window")
@@ -1480,6 +1484,174 @@ function showMetaMenuWindow(ctx) {
   });
 }
 
+const MENU_MATRIX_DEFAULT_COLS = 3;
+const MENU_MATRIX_DEFAULT_ROWS = 4;
+
+/** Default Flaticon UIcons class strings (requires all.css on desktop). Override via `icons` in JSON. */
+const MENU_MATRIX_DEFAULT_ICON_CLASSES = [
+  "fi fi-rr-picture",
+  "fi fi-sr-star",
+  "fi fi-sr-settings",
+  "fi fi-rr-home",
+  "fi fi-rr-apps",
+  "fi fi-rr-user",
+  "fi fi-rr-heart",
+  "fi fi-rr-search",
+  "fi fi-rr-bell",
+  "fi fi-rr-envelope",
+  "fi fi-rr-calendar",
+  "fi fi-rr-camera",
+];
+
+function normalizeMenuMatrixIconEntry(raw, index) {
+  if (raw == null || raw === "") {
+    return { mode: "empty", label: `Slot ${index + 1}`, actionId: null };
+  }
+  if (typeof raw === "string") {
+    const s = raw.trim();
+    if (!s) return { mode: "empty", label: `Slot ${index + 1}`, actionId: null };
+    const looksLikePath =
+      s.startsWith("/") || s.startsWith(".") || s.includes("/") || /\.(svg|png|webp)(\?|$)/i.test(s);
+    if (looksLikePath) {
+      return { mode: "img", src: s, label: `Item ${index + 1}`, actionId: null };
+    }
+    return { mode: "icon", className: s, label: `Item ${index + 1}`, actionId: null };
+  }
+  if (typeof raw === "object") {
+    const src = raw.src != null ? String(raw.src).trim() : "";
+    const className = String(raw.class || raw.className || "").trim();
+    const label = raw.label != null ? String(raw.label) : `Item ${index + 1}`;
+    const actionId = raw.actionId != null ? String(raw.actionId) : null;
+    if (src) return { mode: "img", src, label, actionId };
+    if (className) return { mode: "icon", className, label, actionId };
+    return { mode: "empty", label, actionId };
+  }
+  return { mode: "empty", label: `Slot ${index + 1}`, actionId: null };
+}
+
+function showMenuMatrixWindow(ctx, def = {}) {
+  if (!windowLayer) return;
+
+  const cols = clamp(Number(def.columns) || MENU_MATRIX_DEFAULT_COLS, 2, 8);
+  const rows = clamp(Number(def.rows) || MENU_MATRIX_DEFAULT_ROWS, 2, 12);
+  const totalCells = cols * rows;
+  const titleText = def.title != null ? String(def.title) : "Menu";
+  const rawIcons = Array.isArray(def.icons) && def.icons.length ? def.icons : MENU_MATRIX_DEFAULT_ICON_CLASSES;
+
+  const parentCtx = ctx || {};
+  const parentWindowDef = parentCtx.windowDef || {};
+
+  const container = document.createElement("article");
+  container.className = "desktop-window desktop-window--menu-matrix";
+  container.dataset.windowId = `menu_matrix_${Date.now()}`;
+  const matrixWidth = clamp(Math.round(window.innerWidth * 0.3), 220, 400);
+  container.style.width = `${matrixWidth}px`;
+  bringToFront(container);
+
+  const sourceWin = parentCtx.container?.classList?.contains("desktop-window")
+    ? parentCtx.container
+    : null;
+  if (sourceWin?.querySelector?.(".desktop-window__image")) {
+    applySpawnThemeVars(container, sourceWin);
+  } else {
+    applyStartMenuSpawnTheme(container);
+  }
+
+  const frame = document.createElement("div");
+  frame.className = "desktop-window__frame desktop-window__frame--menu-matrix";
+
+  const header = document.createElement("div");
+  header.className = "menu-matrix__header";
+  const title = document.createElement("span");
+  title.className = "menu-matrix__title";
+  title.textContent = titleText;
+  const closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.className = "menu-matrix__close";
+  closeBtn.setAttribute("aria-label", "Close menu");
+  closeBtn.textContent = "×";
+  closeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    container.remove();
+  });
+  header.append(title, closeBtn);
+
+  const grid = document.createElement("div");
+  grid.className = "menu-matrix__grid";
+  grid.style.setProperty("--menu-matrix-cols", String(cols));
+  grid.style.setProperty("--menu-matrix-rows", String(rows));
+
+  for (let i = 0; i < totalCells; i += 1) {
+    const raw = rawIcons[i % rawIcons.length];
+    const entry = normalizeMenuMatrixIconEntry(raw, i);
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "menu-matrix__cell";
+    btn.setAttribute("aria-label", entry.label);
+    if (entry.actionId) btn.classList.add("menu-matrix__cell--actionable");
+
+    if (entry.mode === "icon" && entry.className) {
+      const icon = document.createElement("i");
+      icon.className = entry.className;
+      icon.setAttribute("aria-hidden", "true");
+      btn.appendChild(icon);
+    } else if (entry.mode === "img" && entry.src) {
+      const img = document.createElement("img");
+      img.className = "menu-matrix__cell-img";
+      img.src = entry.src;
+      img.alt = "";
+      btn.appendChild(img);
+    } else {
+      const ph = document.createElement("span");
+      ph.className = "menu-matrix__cell-placeholder";
+      ph.setAttribute("aria-hidden", "true");
+      btn.appendChild(ph);
+    }
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!entry.actionId) return;
+      const actionDef = getActionDef(parentWindowDef, entry.actionId);
+      if (actionDef) {
+        runAction(actionDef, {
+          ...parentCtx,
+          container: parentCtx.container || container,
+          configJson: parentCtx.configJson || lastConfigJson,
+        });
+      }
+    });
+
+    grid.appendChild(btn);
+  }
+
+  frame.append(header, grid);
+  container.appendChild(frame);
+
+  container.addEventListener("pointerdown", (event) => {
+    bringToFront(container);
+    if (event.button !== 0) return;
+    if (event.target.closest("button")) return;
+    startWindowDrag(event, container);
+  });
+
+  windowLayer.appendChild(container);
+
+  const zoneEl = parentCtx.zoneElement;
+  requestAnimationFrame(() => {
+    const estH = container.offsetHeight || 320;
+    if (sourceWin && zoneEl) {
+      positionFloatingNearZone(container, zoneEl, estH);
+    } else {
+      const pos = positionWindowAnywhere(
+        Number.parseInt(container.style.width, 10) || matrixWidth,
+        estH,
+      );
+      container.style.left = `${pos.left}px`;
+      container.style.top = `${pos.top}px`;
+    }
+  });
+}
+
 function applyProjectPageSpawnTheme(container, options = {}) {
   if (options.useStartMenuTheme) {
     applyStartMenuSpawnTheme(container);
@@ -1514,7 +1686,7 @@ async function spawnBuildProjectPageWindow(pageId, options = {}) {
     "desktop-window desktop-window--content desktop-window--project-page desktop-window--build-project";
   container.dataset.windowId = `build_project_${pageId}`;
   container.dataset.buildProjectPageId = pageId;
-  container.style.width = `${clamp(Math.round(window.innerWidth * 0.38), 320, 640)}px`;
+  container.style.width = `${clamp(Math.round(window.innerWidth * 0.36), 300, 560)}px`;
   bringToFront(container);
 
   applyProjectPageSpawnTheme(container, options);
@@ -2018,7 +2190,7 @@ async function spawnProjectPageWindow(pageId, options = {}) {
   container.className = "desktop-window desktop-window--content desktop-window--project-page";
   container.dataset.windowId = `project_${pageId}`;
   container.dataset.projectPageId = pageId;
-  container.style.width = `${clamp(Math.round(window.innerWidth * 0.38), 320, 640)}px`;
+  container.style.width = `${clamp(Math.round(window.innerWidth * 0.36), 300, 560)}px`;
   bringToFront(container);
 
   applyProjectPageSpawnTheme(container, options);

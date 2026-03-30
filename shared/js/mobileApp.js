@@ -7,8 +7,6 @@ import { initProject, destroyProject } from "./projectScreen.js";
 const SCREENS = ["home", "feed", "stories", "project"];
 let currentScreen = null;
 let screenEls = {};
-let swipeStartY = 0;
-let swipeStartX = 0;
 
 function getScreenEl(name) {
   return screenEls[name] || null;
@@ -49,17 +47,6 @@ export function goBack() {
   }
 }
 
-function handleSwipeBack(e) {
-  if (currentScreen === "home") return;
-  const touches = e.changedTouches;
-  if (!touches || !touches.length) return;
-  const dy = swipeStartY - touches[0].clientY;
-  const dx = Math.abs(touches[0].clientX - swipeStartX);
-  if (dy > 80 && dy > dx) {
-    navigateTo("home");
-  }
-}
-
 function getInitialScreen() {
   const fromHash = window.location.hash.replace("#", "").trim().toLowerCase();
   if (SCREENS.includes(fromHash)) return fromHash;
@@ -82,17 +69,6 @@ async function init() {
     stories: document.getElementById("screen-stories"),
     project: document.getElementById("screen-project"),
   };
-
-  const app = document.getElementById("mobile-app");
-  if (app) {
-    app.addEventListener("touchstart", (e) => {
-      if (e.touches.length === 1) {
-        swipeStartY = e.touches[0].clientY;
-        swipeStartX = e.touches[0].clientX;
-      }
-    }, { passive: true });
-    app.addEventListener("touchend", handleSwipeBack, { passive: true });
-  }
 
   navigateTo(getInitialScreen());
 }

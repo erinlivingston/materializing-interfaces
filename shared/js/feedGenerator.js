@@ -83,6 +83,10 @@ let touchVelocity = 0;
 let lastTouchY = 0;
 let lastTouchTime = 0;
 
+/** True while the first riso batch runs so the render loop does not double-spawn. */
+let feedBootstrapping = false;
+let feedLoadingHintEl = null;
+
 let paperImg = null;
 let paperPattern = null;
 let marksCanvas = null;
@@ -94,13 +98,34 @@ let lastMarkY = 0;
 
 // Tweak knobs
 const PAPER_PATTERN_SCALE = 0.10; // smaller => finer texture
-const MARK_R_MIN = 6;
-const MARK_R_MAX = 10;
-const MARK_ALPHA_MIN = 0.2;
-const MARK_ALPHA_MAX = 0.3;
-//line thickness
-const MARK_LINE_MIN = 6;
-const MARK_LINE_MAX = 10;
+
+/** Pinned release for stable URLs — see https://github.com/hfg-gmuend/openmoji */
+const OPENMOJI_RELEASE = "16.0.0";
+const OPENMOJI_SVG_BASE = `https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji@${OPENMOJI_RELEASE}/color/svg/`;
+
+/**
+ * Curated OpenMoji hex filenames (no .svg). `00A9` is used in place of `00A49`
+ * (invalid / 404 on the library). License: CC BY-SA 4.0 — attribution on project screen.
+ */
+const TOUCH_OPENMOJI_HEX_IDS = [
+  "2755",
+  "1F4B2",
+  "3030",
+  "00AE",
+  "00A9",
+  "2122",
+  "1F195",
+  "1F197",
+  "1F436",
+  "1F99D",
+  "1FAB1",
+  "1FAD0",
+  "E183",
+  "E1D8",
+];
+
+/** @type {HTMLImageElement[]} */
+let openmojiTouchImages = [];
 
 function rand(min, max) {
   return min + Math.random() * (max - min);
@@ -130,47 +155,83 @@ function ensureMarksLayer() {
   marksCtx = marksCanvas.getContext("2d", { willReadFrequently: false });
 }
 
-function stampMark(x, y, strength = 1) {
+function preloadOpenmojiTouchImages() {
+  openmojiTouchImages = [];
+  const loads = TOUCH_OPENMOJI_HEX_IDS.map(
+    (hex) =>
+      new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = () => resolve(null);
+        img.src = `${OPENMOJI_SVG_BASE}${hex}.svg`;
+      })
+  );
+  return Promise.all(loads).then((results) => {
+    openmojiTouchImages = results.filter((img) => img && img.naturalWidth > 0);
+  });
+}
+
+function pickRandomOpenmojiImage() {
+  if (!openmojiTouchImages.length) return null;
+  return openmojiTouchImages[Math.floor(Math.random() * openmojiTouchImages.length)];
+}
+
+/** Fallback when SVGs fail to load (offline / CORS). */
+function stampFallbackSmudge(x, y, strength = 1) {
   if (!marksCtx) return;
-
-  const r = rand(MARK_R_MIN, MARK_R_MAX) * strength;
-  const rot = rand(0, Math.PI * 2);
-
+  const r = rand(8, 16) * strength;
   marksCtx.save();
   marksCtx.translate(x, y);
-  marksCtx.rotate(rot);
+  marksCtx.rotate(rand(0, Math.PI * 2));
   marksCtx.globalCompositeOperation = "multiply";
-  marksCtx.globalAlpha = rand(MARK_ALPHA_MIN, MARK_ALPHA_MAX) * strength;
-
+  marksCtx.globalAlpha = rand(0.18, 0.32) * strength;
   const grad = marksCtx.createRadialGradient(0, 0, 0, 0, 0, r);
-  grad.addColorStop(0, "rgba(40,30,20,0.95)");
-  grad.addColorStop(0.22, "rgba(60,45,30,0.55)");
-  grad.addColorStop(0.5, "rgba(80,60,40,0.12)");
+  grad.addColorStop(0, "rgba(40,30,20,0.75)");
   grad.addColorStop(1, "rgba(0,0,0,0)");
   marksCtx.fillStyle = grad;
   marksCtx.beginPath();
-  marksCtx.ellipse(0, 0, r * rand(0.75, 1.25), r * rand(0.6, 1.1), 0, 0, Math.PI * 2);
+  marksCtx.ellipse(0, 0, r, r * rand(0.75, 1.1), 0, 0, Math.PI * 2);
   marksCtx.fill();
   marksCtx.restore();
 }
 
-function strokeMark(x1, y1, x2, y2, strength = 1) {
+function stampOpenmoji(x, y, strength = 1) {
   if (!marksCtx) return;
-  const w = rand(MARK_LINE_MIN, MARK_LINE_MAX) * strength;
+  const img = pickRandomOpenmojiImage();
+  if (!img) {
+    stampFallbackSmudge(x, y, strength);
+    return;
+  }
+
+  const s = rand(36, 72) * Math.min(1.35, strength);
+  const aspect = img.naturalHeight > 0 ? img.naturalWidth / img.naturalHeight : 1;
+  const w = aspect >= 1 ? s : s * aspect;
+  const h = aspect >= 1 ? s / aspect : s;
 
   marksCtx.save();
+  marksCtx.translate(x, y);
+  marksCtx.rotate(rand(0, Math.PI * 2));
   marksCtx.globalCompositeOperation = "multiply";
-  marksCtx.globalAlpha = rand(MARK_ALPHA_MIN, MARK_ALPHA_MAX) * strength;
-  marksCtx.lineCap = "round";
-  marksCtx.lineJoin = "round";
-  marksCtx.lineWidth = w;
-  marksCtx.strokeStyle = "rgba(55,40,25,0.9)";
-
-  marksCtx.beginPath();
-  marksCtx.moveTo(x1, y1);
-  marksCtx.lineTo(x2, y2);
-  marksCtx.stroke();
+  marksCtx.globalAlpha = rand(0.38, 0.62) * Math.min(1.15, strength);
+  marksCtx.drawImage(img, -w / 2, -h / 2, w, h);
   marksCtx.restore();
+}
+
+function strokeOpenmojiAlong(x1, y1, x2, y2, strength = 1) {
+  if (!marksCtx) return;
+  const dist = Math.hypot(x2 - x1, y2 - y1);
+  const step = rand(22, 38);
+  if (dist < 0.5) {
+    stampOpenmoji(x1, y1, strength);
+    return;
+  }
+  for (let t = 0; t <= dist; t += step) {
+    const u = t / dist;
+    const x = x1 + (x2 - x1) * u;
+    const y = y1 + (y2 - y1) * u;
+    stampOpenmoji(x, y, strength * rand(0.85, 1.08));
+  }
 }
 
 function onPointerDown(e) {
@@ -183,7 +244,7 @@ function onPointerDown(e) {
   lastMarkX = x;
   lastMarkY = y;
   lastMarkT = performance.now();
-  stampMark(x, y, 1);
+  stampOpenmoji(x, y, 1);
 }
 
 function onPointerMove(e) {
@@ -195,7 +256,7 @@ function onPointerMove(e) {
   const dist = Math.hypot(x - lastMarkX, y - lastMarkY);
   if (now - lastMarkT > 40 || dist > 18) {
     const strength = Math.min(1.5, Math.max(0.7, dist / 18));
-    strokeMark(lastMarkX, lastMarkY, x, y, strength);
+    strokeOpenmojiAlong(lastMarkX, lastMarkY, x, y, strength);
     lastMarkX = x;
     lastMarkY = y;
     lastMarkT = now;
@@ -564,7 +625,7 @@ function render() {
   drawStoryCircles();
 
   const frontier = scrollY + vh + buffer;
-  if (lastSpawnY < frontier && !loading) {
+  if (lastSpawnY < frontier && !loading && !feedBootstrapping) {
     spawnFragments(12);
   }
 
@@ -735,13 +796,36 @@ export async function initFeed(el) {
   canvas.addEventListener("pointerup", onPointerUp);
   canvas.addEventListener("pointercancel", onPointerUp);
 
-  await loadStoryCircles();
-  await spawnFragments(15);
+  feedBootstrapping = true;
+
+  const loadingHint = document.createElement("p");
+  loadingHint.className = "feed-loading-hint";
+  loadingHint.setAttribute("role", "status");
+  loadingHint.setAttribute("aria-live", "polite");
+  loadingHint.textContent = "Materializing the feed…";
+  container.appendChild(loadingHint);
+  feedLoadingHintEl = loadingHint;
 
   animId = requestAnimationFrame(render);
+
+  try {
+    await Promise.all([
+      preloadOpenmojiTouchImages(),
+      loadStoryCircles(),
+      spawnFragments(15),
+    ]);
+  } finally {
+    feedBootstrapping = false;
+    if (feedLoadingHintEl) {
+      feedLoadingHintEl.remove();
+      feedLoadingHintEl = null;
+    }
+  }
 }
 
 export function destroyFeed() {
+  feedBootstrapping = false;
+  feedLoadingHintEl = null;
   if (animId) {
     cancelAnimationFrame(animId);
     animId = null;
@@ -785,4 +869,5 @@ export function destroyFeed() {
   marksCanvas = null;
   marksCtx = null;
   drawing = false;
+  openmojiTouchImages = [];
 }

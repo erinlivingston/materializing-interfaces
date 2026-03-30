@@ -23,7 +23,15 @@ export function initProject(el) {
       </p>
       <p class="project-screen__p">
         The endless feed is generative: ad crops are separated into riso-like inks and layered
-        over a paper surface. Touch/click leaves marks that accumulate like drawing on glass.
+        over a paper surface. Mouse or stylus drag leaves a trail of small
+        <a href="https://openmoji.org/" rel="noopener noreferrer" target="_blank">OpenMoji</a>
+        stamps (curated set); they accumulate on a fixed layer like stickers on glass.
+      </p>
+      <p class="project-screen__attribution">
+        Emoji graphics:
+        <a href="https://openmoji.org/" rel="noopener noreferrer" target="_blank">OpenMoji</a>
+        — open-source emoji project (HfG Schwäbisch Gmünd). License:
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener noreferrer" target="_blank">CC&nbsp;BY-SA&nbsp;4.0</a>.
       </p>
       <div class="project-screen__hint">
         Tip: Use “Export PNG” on the feed when a pattern feels right.

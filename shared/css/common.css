@@ -27,14 +27,14 @@ body {
 
 /* Project windows: translucent tints keyed to the active desktop wallpaper */
 .viewport--desktop.viewport--bg-landscape {
-  --project-surface-a: rgba(118, 178, 218, 0.58);
-  --project-surface-b: rgba(92, 148, 112, 0.52);
+  --project-surface-a: rgba(210, 232, 248, 0.94);
+  --project-surface-b: rgba(218, 238, 228, 0.92);
   --project-text: rgba(16, 32, 28, 0.97);
   --project-heading: rgba(18, 58, 48, 0.98);
   --project-link: rgba(12, 92, 128, 0.98);
   --project-link-hover: rgba(8, 64, 92, 1);
   --project-divider: rgba(72, 128, 108, 0.62);
-  --project-header-bg: rgba(255, 255, 255, 0.78);
+  --project-header-bg: rgba(255, 255, 255, 0.9);
   --project-title-fg: rgba(18, 72, 58, 0.98);
   --project-display-bg: rgba(255, 255, 255, 0.86);
   --project-display-border: rgba(88, 155, 188, 0.72);
@@ -45,19 +45,19 @@ body {
   /* Dark saturated chrome derived from the same pastel / glass palette */
   --project-window-border: color-mix(in srgb, var(--project-heading) 68%, #040a10 32%);
   --project-window-border-soft: color-mix(in srgb, var(--project-accent) 42%, #0c1818 58%);
-  --project-window-glow: color-mix(in srgb, var(--project-accent) 38%, transparent);
-  --project-window-shadow-deep: color-mix(in srgb, var(--project-link) 22%, #000000 78%);
+  --project-window-glow: color-mix(in srgb, var(--project-accent) 18%, transparent);
+  --project-window-shadow-deep: color-mix(in srgb, var(--project-link) 18%, #000000 82%);
 }
 
 .viewport--desktop.viewport--bg-ombre {
-  --project-surface-a: rgba(255, 210, 155, 0.56);
-  --project-surface-b: rgba(228, 135, 188, 0.52);
+  --project-surface-a: rgba(255, 236, 228, 0.94);
+  --project-surface-b: rgba(252, 224, 238, 0.92);
   --project-text: rgba(38, 22, 32, 0.97);
   --project-heading: rgba(98, 28, 62, 0.98);
   --project-link: rgba(148, 40, 96, 0.98);
   --project-link-hover: rgba(118, 24, 72, 1);
   --project-divider: rgba(188, 102, 138, 0.65);
-  --project-header-bg: rgba(255, 255, 255, 0.8);
+  --project-header-bg: rgba(255, 255, 255, 0.9);
   --project-title-fg: rgba(92, 32, 64, 0.98);
   --project-display-bg: rgba(255, 255, 255, 0.88);
   --project-display-border: rgba(210, 128, 165, 0.72);
@@ -67,8 +67,8 @@ body {
   --project-accent: rgba(178, 58, 118, 0.98);
   --project-window-border: color-mix(in srgb, var(--project-heading) 70%, #14020c 30%);
   --project-window-border-soft: color-mix(in srgb, var(--project-accent) 48%, #1a0814 52%);
-  --project-window-glow: color-mix(in srgb, var(--project-accent) 36%, transparent);
-  --project-window-shadow-deep: color-mix(in srgb, var(--project-link) 24%, #000000 76%);
+  --project-window-glow: color-mix(in srgb, var(--project-accent) 18%, transparent);
+  --project-window-shadow-deep: color-mix(in srgb, var(--project-link) 18%, #000000 82%);
 }
 
 .material-base {
@@ -102,12 +102,12 @@ body {
 
 /* Start menu: Display / wallpaper picker (inside project Start window) */
 .project-start-display {
-  margin: 16px 0 18px;
-  padding: 10px 10px 12px;
-  border-radius: 10px;
+  margin: 10px 0 12px;
+  padding: 8px 8px 10px;
+  border-radius: 9px;
   border: 1px solid var(--project-display-border, rgba(17, 0, 55, 0.45));
-  background: var(--project-display-bg, rgba(255, 255, 255, 0.95));
-  box-shadow: 0 6px 16px rgba(12, 40, 8, 0.12);
+  background: var(--project-display-bg, rgba(255, 255, 255, 0.97));
+  box-shadow: 0 4px 12px rgba(12, 40, 8, 0.08);
   font-size: 13px;
   line-height: 1.35;
   color: var(--project-display-muted, rgba(24, 68, 16, 0.96));
@@ -387,12 +387,12 @@ body {
 }
 
 .desktop-window--content .desktop-window__frame--content {
-  background: rgba(255, 251, 246, 0.9);
+  background: rgba(255, 251, 246, 0.96);
   border-radius: 10px;
-  border: 1px solid rgba(20, 14, 10, 0.12);
+  border: 1px solid rgba(20, 14, 10, 0.1);
   box-shadow:
-    0 18px 34px rgba(15, 12, 8, 0.22),
-    0 4px 10px rgba(15, 12, 8, 0.14);
+    0 10px 26px rgba(15, 12, 8, 0.14),
+    0 2px 8px rgba(15, 12, 8, 0.08);
   overflow: hidden;
 }
 
@@ -405,22 +405,21 @@ body {
  * default greens below (Start menu and anything not tied to an abstract parent).
  */
 .desktop-window--project-page .desktop-window__frame--content {
-  background: rgba(255, 255, 255, 0.52);
-  border: 1px solid var(--project-window-border, rgba(14, 52, 48, 0.92));
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--project-window-border, rgba(14, 52, 48, 0.85));
   box-shadow:
-    0 0 0 1px var(--project-window-border-soft, rgba(46, 120, 108, 0.45)),
-    0 0 22px var(--project-window-glow, rgba(32, 140, 120, 0.28)),
-    0 20px 38px var(--project-window-shadow-deep, rgba(8, 14, 12, 0.35));
+    0 0 0 1px var(--project-window-border-soft, rgba(46, 120, 108, 0.35)),
+    0 10px 28px var(--project-window-shadow-deep, rgba(8, 14, 12, 0.2));
 }
 
 .content-window__header {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  background: rgba(24, 18, 14, 0.08);
-  border-bottom: 1px solid rgba(20, 14, 10, 0.1);
+  gap: 8px;
+  padding: 6px 8px;
+  background: rgba(24, 18, 14, 0.06);
+  border-bottom: 1px solid rgba(20, 14, 10, 0.09);
 }
 
 .desktop-window--project-page .content-window__header {
@@ -443,9 +442,9 @@ body {
 }
 
 .desktop-window--project-page .content-window__control {
-  border-color: var(--project-window-border-soft, rgba(40, 104, 88, 0.85));
-  background: rgba(255, 255, 255, 0.74);
-  box-shadow: 0 0 8px var(--project-window-glow, rgba(32, 120, 108, 0.22));
+  border-color: var(--project-window-border-soft, rgba(40, 104, 88, 0.65));
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: none;
 }
 
 .content-window__title {
@@ -463,16 +462,16 @@ body {
 }
 
 .content-window__body {
-  padding: 14px 14px 18px;
+  padding: 8px 10px 10px;
   max-height: min(70vh, 620px);
   overflow: auto;
-  color: rgba(20, 14, 10, 0.85);
+  color: rgba(20, 14, 10, 0.88);
   font-size: 12px;
-  line-height: 1.55;
+  line-height: 1.5;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: rgba(255, 251, 246, 0.92);
+  background-color: rgba(255, 251, 246, 0.96);
   background-blend-mode: soft-light;
 }
 
@@ -485,8 +484,8 @@ body {
   background-size: auto;
   background: linear-gradient(
     168deg,
-    var(--project-surface-a, rgba(255, 255, 255, 0.56)),
-    var(--project-surface-b, rgba(255, 255, 255, 0.42))
+    var(--project-surface-a, rgba(255, 255, 255, 0.92)),
+    var(--project-surface-b, rgba(255, 255, 255, 0.88))
   );
   border-top: 1px solid var(--project-divider, rgba(120, 255, 64, 0.72));
 }
@@ -515,8 +514,7 @@ body {
   border-color: var(--spawn-border);
   box-shadow:
     0 0 0 1px var(--spawn-border-soft),
-    0 0 22px var(--spawn-glow),
-    0 20px 38px var(--spawn-shadow-deep);
+    0 10px 26px var(--spawn-shadow-deep);
 }
 
 .desktop-window--project-page.desktop-window--spawn-themed .content-window__header {
@@ -530,7 +528,7 @@ body {
 
 .desktop-window--project-page.desktop-window--spawn-themed .content-window__control {
   border-color: var(--spawn-border-soft);
-  box-shadow: 0 0 8px var(--spawn-glow);
+  box-shadow: none;
 }
 
 .desktop-window--project-page.desktop-window--spawn-themed .content-window__body--project {
@@ -558,35 +556,35 @@ body {
 
 /* Start menu only: forces the original green/teal “fake OS” palette (no PNG sampling) */
 .desktop-window--project-page.desktop-window--spawn-start-os {
-  --project-window-border: rgba(14, 52, 48, 0.92);
-  --project-window-border-soft: rgba(46, 120, 108, 0.45);
-  --project-window-glow: rgba(32, 140, 120, 0.28);
-  --project-window-shadow-deep: rgba(8, 14, 12, 0.35);
-  --project-header-bg: rgba(255, 255, 255, 0.42);
+  --project-window-border: rgba(14, 52, 48, 0.85);
+  --project-window-border-soft: rgba(46, 120, 108, 0.38);
+  --project-window-glow: rgba(32, 140, 120, 0.12);
+  --project-window-shadow-deep: rgba(8, 14, 12, 0.22);
+  --project-header-bg: rgba(255, 255, 255, 0.88);
   --project-divider: rgba(120, 255, 64, 0.92);
   --project-title-fg: rgba(38, 128, 22, 0.96);
   --project-text: rgba(24, 68, 16, 0.96);
   --project-heading: rgba(30, 115, 20, 0.96);
   --project-link: rgba(45, 170, 30, 0.98);
   --project-link-hover: rgba(24, 130, 12, 0.98);
-  --project-surface-a: rgba(255, 255, 255, 0.56);
-  --project-surface-b: rgba(255, 255, 255, 0.42);
+  --project-surface-a: rgba(252, 255, 252, 0.94);
+  --project-surface-b: rgba(244, 252, 248, 0.92);
 }
 
 .project-window__quick-link {
-  margin-top: 14px;
-  padding-top: 10px;
+  margin-top: 8px;
+  padding-top: 8px;
   border-top: 1px solid var(--project-divider, rgba(120, 255, 64, 0.85));
   font-size: 12px;
 }
 
 .content-window__body h2 {
-  margin: 0 0 8px;
-  font-size: 18px;
+  margin: 0 0 6px;
+  font-size: 17px;
 }
 
 .content-window__body p {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
 }
 
 .content-window__body a {
@@ -1155,6 +1153,23 @@ body {
   background: #f3efe3;
 }
 
+.feed-loading-hint {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  margin: 0;
+  max-width: 88%;
+  text-align: center;
+  font: 400 13px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  color: rgba(30, 22, 16, 0.52);
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  pointer-events: none;
+}
+
 .feed-canvas {
   display: block;
   width: 100%;
@@ -1259,6 +1274,17 @@ body {
   opacity: 0.9;
 }
 
+.project-screen__p a,
+.project-screen__attribution a {
+  color: rgba(12, 92, 128, 0.96);
+}
+
+.project-screen__attribution {
+  margin: 0 0 12px;
+  font: 400 11px/1.45 ui-sans-serif, system-ui, sans-serif;
+  opacity: 0.72;
+}
+
 .project-screen__hint {
   margin-top: 14px;
   padding: 10px 12px;
@@ -1285,8 +1311,7 @@ body {
   background: linear-gradient(168deg, var(--spawn-surface-a), var(--spawn-surface-b));
   box-shadow:
     0 0 0 1px var(--spawn-border-soft),
-    0 0 22px var(--spawn-glow),
-    0 20px 38px var(--spawn-shadow-deep);
+    0 10px 26px var(--spawn-shadow-deep);
 }
 
 .desktop-window--meta-menu.desktop-window--spawn-themed .meta-menu__header {
@@ -1306,7 +1331,7 @@ body {
 .desktop-window--meta-menu.desktop-window--spawn-themed .meta-menu__item {
   border-color: var(--spawn-divider);
   color: var(--spawn-text);
-  background: color-mix(in srgb, var(--spawn-header-bg) 92%, transparent);
+  background: color-mix(in srgb, var(--spawn-header-bg) 96%, white);
 }
 
 .desktop-window__frame--meta-menu {
@@ -1314,24 +1339,23 @@ body {
   flex-direction: column;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid var(--project-window-border, rgba(14, 52, 48, 0.92));
+  border: 1px solid var(--project-window-border, rgba(14, 52, 48, 0.85));
   background: linear-gradient(
     168deg,
-    var(--project-surface-a, rgba(255, 255, 255, 0.56)),
-    var(--project-surface-b, rgba(255, 255, 255, 0.42))
+    var(--project-surface-a, rgba(255, 255, 255, 0.92)),
+    var(--project-surface-b, rgba(255, 255, 255, 0.88))
   );
   box-shadow:
-    0 0 0 1px var(--project-window-border-soft, rgba(46, 120, 108, 0.45)),
-    0 0 22px var(--project-window-glow, rgba(32, 140, 120, 0.28)),
-    0 20px 38px var(--project-window-shadow-deep, rgba(8, 14, 12, 0.35));
+    0 0 0 1px var(--project-window-border-soft, rgba(46, 120, 108, 0.35)),
+    0 10px 28px var(--project-window-shadow-deep, rgba(8, 14, 12, 0.2));
 }
 
 .meta-menu__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 12px;
-  background: var(--project-header-bg, rgba(255, 255, 255, 0.42));
+  padding: 6px 8px;
+  background: var(--project-header-bg, rgba(255, 255, 255, 0.9));
   border-bottom: 1px solid var(--project-divider, rgba(120, 255, 64, 0.92));
 }
 
@@ -1369,13 +1393,13 @@ body {
 .meta-menu__list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 10px 12px 12px;
+  gap: 5px;
+  padding: 7px 8px 8px;
 }
 
 .meta-menu__item {
   margin: 0;
-  padding: 10px 12px;
+  padding: 7px 9px;
   text-align: left;
   border: 1px solid var(--project-divider, rgba(72, 128, 108, 0.62));
   border-radius: 8px;
@@ -1395,9 +1419,164 @@ body {
 }
 
 .meta-menu__item:hover {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.96);
   border-color: var(--project-accent, rgba(22, 118, 152, 0.98));
-  box-shadow: 0 0 12px var(--project-window-glow, rgba(32, 140, 120, 0.22));
+  box-shadow: 0 1px 6px var(--project-window-glow, rgba(32, 140, 120, 0.12));
+}
+
+/* Menu matrix (actionId menumatrix): icon grid; Flaticon UIcons via desktop/index.html */
+.desktop-window--menu-matrix {
+  z-index: 120;
+}
+
+.desktop-window--menu-matrix.desktop-window--spawn-themed .desktop-window__frame--menu-matrix {
+  border-color: var(--spawn-border);
+  background: linear-gradient(168deg, var(--spawn-surface-a), var(--spawn-surface-b));
+  box-shadow:
+    0 0 0 1px var(--spawn-border-soft),
+    0 10px 26px var(--spawn-shadow-deep);
+}
+
+.desktop-window--menu-matrix.desktop-window--spawn-themed .menu-matrix__header {
+  background: var(--spawn-header-bg);
+  border-bottom-color: var(--spawn-divider);
+}
+
+.desktop-window--menu-matrix.desktop-window--spawn-themed .menu-matrix__title {
+  color: var(--spawn-title-fg);
+}
+
+.desktop-window--menu-matrix.desktop-window--spawn-themed .menu-matrix__close {
+  border-color: var(--spawn-border-soft);
+  color: var(--spawn-title-fg);
+}
+
+.desktop-window--menu-matrix.desktop-window--spawn-themed .menu-matrix__cell {
+  border-color: var(--spawn-divider);
+  color: var(--spawn-text);
+  background: color-mix(in srgb, var(--spawn-header-bg) 88%, transparent);
+}
+
+.desktop-window--menu-matrix.desktop-window--spawn-themed .menu-matrix__cell:hover {
+  border-color: var(--spawn-border);
+  background: color-mix(in srgb, var(--spawn-surface-a) 70%, transparent);
+}
+
+.desktop-window__frame--menu-matrix {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--project-window-border, rgba(14, 52, 48, 0.85));
+  background: linear-gradient(
+    168deg,
+    var(--project-surface-a, rgba(255, 255, 255, 0.92)),
+    var(--project-surface-b, rgba(255, 255, 255, 0.88))
+  );
+  box-shadow:
+    0 0 0 1px var(--project-window-border-soft, rgba(46, 120, 108, 0.35)),
+    0 10px 28px var(--project-window-shadow-deep, rgba(8, 14, 12, 0.2));
+}
+
+.menu-matrix__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  flex-shrink: 0;
+  background: var(--project-header-bg, rgba(255, 255, 255, 0.9));
+  border-bottom: 1px solid var(--project-divider, rgba(120, 255, 64, 0.92));
+}
+
+.menu-matrix__title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: lowercase;
+  color: var(--project-title-fg, rgba(38, 128, 22, 0.96));
+}
+
+.menu-matrix__close {
+  margin: 0;
+  padding: 0 6px;
+  border: 1px solid var(--project-window-border-soft, rgba(40, 104, 88, 0.5));
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--project-title-fg, rgba(38, 128, 22, 0.96));
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 999px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+}
+
+.menu-matrix__close:hover {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: var(--project-accent, rgba(22, 118, 152, 0.98));
+}
+
+.menu-matrix__grid {
+  --menu-matrix-cols: 3;
+  --menu-matrix-rows: 4;
+  display: grid;
+  grid-template-columns: repeat(var(--menu-matrix-cols), minmax(0, 1fr));
+  grid-auto-rows: minmax(40px, 1fr);
+  gap: 6px;
+  padding: 8px;
+  min-height: min(42vh, calc(var(--menu-matrix-rows) * 44px + (var(--menu-matrix-rows) - 1) * 6px + 16px));
+}
+
+.menu-matrix__cell {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  min-height: 40px;
+  border: 1px solid var(--project-divider, rgba(72, 128, 108, 0.45));
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--project-header-bg, rgba(255, 255, 255, 0.9)) 94%, transparent);
+  color: var(--project-text, rgba(24, 68, 16, 0.96));
+  cursor: default;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.menu-matrix__cell--actionable {
+  cursor: pointer;
+}
+
+.menu-matrix__cell .fi {
+  font-size: 1.35rem;
+  line-height: 1;
+  display: block;
+}
+
+.menu-matrix__cell-img {
+  width: 70%;
+  height: 70%;
+  max-width: 28px;
+  max-height: 28px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.menu-matrix__cell-placeholder {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--project-divider, rgba(72, 128, 108, 0.62)) 55%, transparent);
+  opacity: 0.5;
+}
+
+.menu-matrix__cell:hover {
+  border-color: var(--project-accent, rgba(22, 118, 152, 0.98));
+  box-shadow: 0 1px 5px var(--project-window-glow, rgba(32, 140, 120, 0.1));
 }
 
 /* Fortune text on digital paper */
@@ -1538,9 +1717,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 6px;
   box-sizing: border-box;
-  background: rgba(14, 16, 20, 0.09);
+  background: rgba(14, 16, 20, 0.06);
   border-radius: 4px;
   pointer-events: auto;
 }
@@ -1567,20 +1746,24 @@ body {
   width: min(420px, 100%);
   max-height: min(78vh, 560px);
   overflow: auto;
-  padding: 16px 16px 14px;
-  border-radius: 14px;
-  background: rgba(255, 251, 246, 0.97);
-  border: 1px solid rgba(20, 14, 10, 0.14);
+  padding: 10px 11px 10px;
+  border-radius: 12px;
+  background: rgba(255, 251, 246, 0.98);
+  border: 1px solid rgba(20, 14, 10, 0.11);
   box-shadow:
-    0 24px 48px rgba(8, 10, 14, 0.35),
-    0 4px 12px rgba(8, 10, 14, 0.12);
+    0 12px 32px rgba(8, 10, 14, 0.18),
+    0 2px 10px rgba(8, 10, 14, 0.08);
 }
 
 .user-input-modal--themed {
   border-color: var(--spawn-border, rgba(20, 14, 10, 0.14));
-  background: linear-gradient(168deg, var(--spawn-surface-a, rgba(255, 251, 246, 0.97)), var(--spawn-surface-b, rgba(255, 248, 240, 0.95)));
+  background: linear-gradient(
+    168deg,
+    var(--spawn-surface-a, rgba(255, 252, 248, 0.96)),
+    var(--spawn-surface-b, rgba(255, 250, 245, 0.94))
+  );
   box-shadow:
-    0 24px 48px var(--spawn-shadow-deep, rgba(8, 10, 14, 0.35)),
+    0 12px 30px var(--spawn-shadow-deep, rgba(8, 10, 14, 0.2)),
     0 0 0 1px var(--spawn-border-soft, transparent);
 }
 
@@ -1590,7 +1773,7 @@ body {
 
 .user-input-modal--themed .user-input-modal__hint,
 .user-input-modal--themed .user-input-modal__preview {
-  color: var(--spawn-text, rgba(18, 28, 42, 0.72));
+  color: var(--spawn-text, rgba(18, 28, 42, 0.88));
 }
 
 .user-input-modal__title {
@@ -1606,14 +1789,14 @@ body {
 }
 
 .user-input-modal__preview {
-  margin: 0 0 12px;
-  padding: 8px 10px;
-  border-radius: 8px;
+  margin: 0 0 10px;
+  padding: 6px 8px;
+  border-radius: 7px;
   font: 600 12px/1.4 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
-  color: rgba(24, 68, 16, 0.92);
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px dashed rgba(46, 120, 108, 0.35);
+  color: rgba(24, 68, 16, 0.94);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px dashed rgba(46, 120, 108, 0.32);
   min-height: 2.5em;
 }
 
@@ -1723,8 +1906,8 @@ body {
   z-index: 15;
   pointer-events: none;
   box-sizing: border-box;
-  border: 2px solid color-mix(in srgb, var(--user-pick-color, #333) 70%, #000);
-  background: color-mix(in srgb, var(--user-pick-color, #888) 35%, transparent);
+  border: 2px solid color-mix(in srgb, var(--user-pick-color, #333) 75%, #000);
+  background: var(--user-pick-color, #888);
 }
 
 .zone-user-shape--circle {
