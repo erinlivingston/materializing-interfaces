@@ -39,6 +39,8 @@ There is no shared runtime between desktop and mobile beyond CSS and some asset 
 
 ## Desktop: how windows spawn
 
+On first paint, a **glass entry** layer (inset frosted panel with backdrop blur, circular avatar placeholder, and a pill “click to enter” control) sits over the loaded desktop. Abstract windows sit below that panel (for backdrop blur); **folder icons** (`img_5510`) spawn into a dedicated layer above the glass, then **move into** the main window layer when you dismiss so stacking matches the rest of the session. **Any** pointer or keyboard input dismisses the entry layer.
+
 1. **Startup** (`spawnInitialDesktopWindows`): After `windows.config.json` loads, the desktop spawns **three** random **interactive** abstract windows (excluding the large code-editor window id used elsewhere). It then spawns a **decorative cluster** of folder icons (`img_5510`) in two loose groups on the left and right of the viewport.
 
 2. **Zone actions**: Clicks on zones run actions defined in JSON or **builtins** in `overlay.js` (e.g. `openAbstractFromPool`, `spawnRandom`, `spawnDigitalPaper`, `openProjectPage`, `menu`, `close`, color cycling, user input stubs). Pool-based spawns track **`openWindowIds`** so the same abstract id is not duplicated; if the pool is exhausted or a random “spill” fires, the system may spawn a **digital paper** window instead.

@@ -49,7 +49,8 @@ export function nyDayPhase(hour) {
  *   timeLabel: string,
  *   date: Date,
  *   url: string,
- *   transition: string
+ *   transition: string,
+ *   visitCount: number
  * }} HistoryPoetryLine
  */
 
@@ -78,6 +79,14 @@ export async function loadHistoryPoetryLines(opts = {}) {
     (a, b) => visitTimeToMs(a.visitTime) - visitTimeToMs(b.visitTime),
   );
 
+  // Count every raw occurrence of each title across the full dataset
+  // before consecutive deduplication — this is the frequency signal.
+  const titleCounts = new Map();
+  for (const row of sorted) {
+    const t = (row.title || "").trim() || "(no title)";
+    titleCounts.set(t, (titleCounts.get(t) || 0) + 1);
+  }
+
   /** @type {HistoryPoetryLine[]} */
   const lines = [];
   let lastTitle = null;
@@ -98,6 +107,7 @@ export async function loadHistoryPoetryLines(opts = {}) {
       date,
       url: String(row.url || ""),
       transition: String(row.transition || ""),
+      visitCount: titleCounts.get(title) || 1,
     });
   }
 
@@ -116,15 +126,20 @@ export function createHistoryLineElement(line, showTime = false) {
   p.dataset.hourNy = String(line.hour);
   p.dataset.dateNy = line.dateNy;
   p.dataset.phase = line.phase;
-  const profile = classifyLineProfile(line);
-  p.classList.add(`history-line--font-${profile.font}`);
-  if (profile.transition === "typed") {
-    p.classList.add("history-line--typed");
+
+  const font = classifyLineFont(line);
+  p.classList.add(`history-line--font-${font}`);
+
+  // Marck Script (writing) is fixed-weight — vary size instead.
+  if (font === "writing") {
+    p.style.setProperty("--history-size", visitCountToSize(line.visitCount));
+  } else {
+    p.style.setProperty("--history-weight", visitCountToWeight(line.visitCount));
   }
 
   const span = document.createElement("span");
   span.className = "history-line__title";
-  appendStyledTitle(span, line.title, profile);
+  appendColoredTitle(span, line.title);
 
   if (showTime) {
     const timeEl = document.createElement("time");
@@ -138,63 +153,120 @@ export function createHistoryLineElement(line, showTime = false) {
   return p;
 }
 
-function classifyLineProfile(line) {
-  const title = String(line.title || "").toLowerCase();
-  const url = String(line.url || "").toLowerCase();
-  const combined = `${title} ${url}`;
-  const transition = String(line.transition || "").toLowerCase();
-  if (containsAny(combined, ["github", "stackoverflow", "code", "api", "localhost", "127.0.0.1", "docs"])) {
-    return { font: "code", transition };
-  }
-  if (containsAny(combined, ["google", "search", "bing", "duckduckgo", "wikipedia"])) {
-    return { font: "search", transition };
-  }
-  if (containsAny(combined, ["youtube", "spotify", "netflix", "soundcloud", "music", "video"])) {
-    return { font: "media", transition };
-  }
-  if (containsAny(combined, ["shop", "cart", "checkout", "amazon", "etsy", "ebay"])) {
-    return { font: "commerce", transition };
-  }
-  if (containsAny(combined, ["mail", "inbox", "calendar", "notion", "docs.google", "substack", "wordpress"])) {
-    return { font: "writing", transition };
-  }
-  return { font: "default", transition };
+/** Maps raw visit count to a font-weight tier (log-ish scale for skewed data). */
+function visitCountToWeight(count) {
+  if (count >= 10) return 700;
+  if (count >= 5) return 600;
+  if (count >= 3) return 500;
+  if (count >= 2) return 400;
+  return 300;
 }
 
-function containsAny(text, terms) {
-  return terms.some((term) => text.includes(term));
+/** Maps raw visit count to a font-size tier for Marck Script (weight-only font). */
+function visitCountToSize(count) {
+  if (count >= 10) return "1.12em";
+  if (count >= 5) return "1.05em";
+  if (count >= 3) return "1.0em";
+  if (count >= 2) return "0.95em";
+  return "0.88em";
 }
 
-function appendStyledTitle(container, title, profile) {
-  const words = String(title || "").split(/(\s+)/);
-  for (const part of words) {
+const INTENT_SHOPPING = new Set([
+  "sale", "sales", "price", "prices", "off", "buy", "cart", "free",
+  "deal", "deals", "discount", "discounts", "shipping", "order", "orders",
+  "clearance", "shop", "checkout", "coupon", "coupons", "promo",
+]);
+
+const INTENT_RESEARCH = new Set([
+  "how", "guide", "tutorial", "tutorials", "what", "explained",
+  "review", "reviews", "best", "learn", "tips", "tip", "beginner",
+  "beginners", "intro", "introduction", "overview", "vs", "comparison",
+  "getting", "started",
+]);
+
+const INTENT_ADMIN = new Set([
+  "login", "signin", "account", "accounts", "settings", "password",
+  "passwords", "secure", "security", "banking", "credit", "payment",
+  "payments", "bill", "billing", "statement", "manage", "management",
+  "dashboard", "forgot", "reset", "verify", "verification",
+]);
+
+const INTENT_LOCATION = new Set([
+  "apartment", "apartments", "bedroom", "bedrooms", "bath", "baths",
+  "bathroom", "bathrooms", "sqft", "rent", "rental", "rentals",
+  "lease", "condo", "condos", "studio", "studios", "unit", "units",
+  "furnished", "listing", "listings", "beds", "bed",
+]);
+
+function intentColorClass(word) {
+  const w = word.toLowerCase().replace(/[^\w]/g, "");
+  if (INTENT_SHOPPING.has(w)) return "shopping";
+  if (INTENT_RESEARCH.has(w)) return "research";
+  if (INTENT_ADMIN.has(w)) return "admin";
+  if (INTENT_LOCATION.has(w)) return "location";
+  return null;
+}
+
+function appendColoredTitle(container, title) {
+  const parts = String(title || "").split(/(\s+)/);
+  for (const part of parts) {
     if (!part.trim()) {
       container.append(part);
       continue;
     }
-    const token = document.createElement("span");
-    token.textContent = part;
-    const lower = part.toLowerCase().replace(/[^\w.-]/g, "");
-    if (isEmphasisKeyword(lower, profile.font)) {
-      token.className = "history-line__word history-line__word--emphasis";
-    } else if (isAccentKeyword(lower)) {
-      token.className = "history-line__word history-line__word--accent";
+    const cls = intentColorClass(part);
+    if (cls) {
+      const token = document.createElement("span");
+      token.className = `history-line__word history-line__word--${cls}`;
+      token.textContent = part;
+      container.appendChild(token);
+    } else {
+      container.append(part);
     }
-    container.appendChild(token);
   }
 }
 
-function isEmphasisKeyword(word, fontProfile) {
-  if (!word) return false;
-  if (["error", "urgent", "warning", "breaking", "live"].includes(word)) return true;
-  if (fontProfile === "code" && ["api", "json", "js", "css", "html", "github"].includes(word)) return true;
-  if (fontProfile === "search" && ["search", "results", "google"].includes(word)) return true;
-  return false;
+function classifyLineFont(line) {
+  const combined = `${String(line.title || "").toLowerCase()} ${String(line.url || "").toLowerCase()}`;
+
+  // Writing is checked first so mail.google / docs.google / drive.google
+  // are caught before the broader google → search rule fires.
+  if (containsAny(combined, [
+    "mail.google", "drive.google", "docs.google", "calendar.google",
+    "notion.so", "notion.site",
+    "mail", "inbox", "substack", "wordpress", "outlook", "sharepoint",
+  ])) {
+    return "writing";
+  }
+
+  if (containsAny(combined, [
+    "github", "stackoverflow", "p5js", "localhost", "127.0.0.1",
+    "bootstrap", "thecodingtrain", "codingtrain",
+    "rgbcolorpicker", "htmlcolorcodes", "rgb.to",
+  ])) {
+    return "code";
+  }
+
+  if (containsAny(combined, [
+    "shop", "cart", "checkout", "amazon", "etsy", "ebay",
+    "trulia", "athome.com", "chewy", "wayfair", "cvs.com",
+    "rugsusa", "rugs.com", "overstock", "barclaycard", "palladiumboots",
+    "airbnb", "shoprite", "bedbathandbeyond",
+  ])) {
+    return "commerce";
+  }
+
+  if (containsAny(combined, [
+    "google", "search", "bing", "duckduckgo", "wikipedia",
+  ])) {
+    return "search";
+  }
+
+  return "default";
 }
 
-function isAccentKeyword(word) {
-  if (!word) return false;
-  return ["open", "update", "new", "guide", "tutorial", "video", "music"].includes(word);
+function containsAny(text, terms) {
+  return terms.some((term) => text.includes(term));
 }
 
 /**
@@ -319,7 +391,7 @@ export function pickHistoryWordChoices(lines, count = 18) {
     const j = Math.floor(Math.random() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  const n = Math.max(1, Math.min(count, 24));
+  const n = Math.max(1, Math.min(count, 72));
   const out = pool.slice(0, n);
   return out.length ? out : fallback;
 }

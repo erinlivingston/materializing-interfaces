@@ -6,12 +6,50 @@ const DESKTOP_BACKGROUNDS = {
   landscape: "../assets/backgrounds/landscapepastelhighres2.jpg",
   ombre: "../assets/backgrounds/ombrehighrespastel1.jpg",
 };
+
+const PROFILE_PHOTO_STORAGE_KEY = "materialDesktopProfilePhoto";
+const PROFILE_PHOTO_DEFAULT_SRC =
+  "../assets/iconphotos/png/sara-cervera-BULkOCPQnmU-unsplash.png";
+const PROFILE_PHOTOS_MAP = {
+  "sara-cervera":
+    "../assets/iconphotos/png/sara-cervera-BULkOCPQnmU-unsplash.png",
+  "stephanie-leblanc":
+    "../assets/iconphotos/png/stephanie-leblanc-JLMEZxBcXCU-unsplash.png",
+  "kara-eads":
+    "../assets/iconphotos/png/kara-eads-zcVArTF8Frs-unsplash.png",
+  "filipe-cantador":
+    "../assets/iconphotos/png/filipe-cantador-yuHbUrnOHe4-unsplash.png",
+  didssph:
+    "../assets/iconphotos/png/didssph-9uGrN7nYsEY-unsplash.png",
+  "david-clode":
+    "../assets/iconphotos/png/david-clode-iLwQIbWxv-s-unsplash.png",
+};
+
+function readProfilePhotoSrc() {
+  try {
+    const id = localStorage.getItem(PROFILE_PHOTO_STORAGE_KEY);
+    return (id && PROFILE_PHOTOS_MAP[id]) || PROFILE_PHOTO_DEFAULT_SRC;
+  } catch {
+    return PROFILE_PHOTO_DEFAULT_SRC;
+  }
+}
+
+function applyProfilePhotoToAvatars() {
+  const src = readProfilePhotoSrc();
+  document.querySelectorAll(".profile-avatar-img").forEach((img) => {
+    img.src = src;
+  });
+}
 const windowLayer = document.getElementById("window-layer");
+const folderLayer = document.getElementById("window-layer-folders");
 const urlParams = new URLSearchParams(window.location.search);
 const DEBUG_ENABLED = urlParams.get("debugZones") === "1";
 const SHOW_ZONES = urlParams.get("showZones") === "1";
 const CONFIG_PATH = "../assets/windows.config.json";
+const ESSAYS_PATH = "../assets/essays.json";
 const DEBUG_VIEW_SCALE = 1.65;
+
+const MAX_OPEN_WINDOWS = 25;
 
 let topZIndex = 10;
 let windowsConfig = [];
@@ -20,6 +58,11 @@ let selectedWindowElement = null;
 let debugCursor = 0;
 let paperSources = [];
 let openWindowIds = new Set();
+let _entryOverlayHandlers = null;
+let _idleHintTimer = null;
+let essaysData = null;
+let _poolsTracesIndex = 0;
+let _poolsWindowsIndex = 0;
 
 const FOLDER_ICON_WINDOW_ID = "img_5510";
 const DEFAULT_PROJECT_POOL_IDS = ["img_5505", "img_5506", "img_5507", "img_5511"];
@@ -177,22 +220,110 @@ function initDesktopClock() {
   window.setInterval(tick, 1000);
 }
 
+function reparentFolderIconsToWindowLayer() {
+  if (!windowLayer || !folderLayer) return;
+  folderLayer.querySelectorAll(":scope > .desktop-window--folder-icon").forEach((el) => {
+    windowLayer.appendChild(el);
+  });
+}
+
+function getStartHintEl() {
+  let el = document.getElementById("desktop-start-hint");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "desktop-start-hint";
+    el.className = "start-hint";
+    el.setAttribute("aria-live", "polite");
+    el.innerHTML = 'click <strong>Start</strong> to read about this project';
+    document.getElementById("desktop-viewport")?.appendChild(el);
+  }
+  return el;
+}
+
+function cancelStartHint() {
+  clearTimeout(_idleHintTimer);
+  _idleHintTimer = null;
+  const el = document.getElementById("desktop-start-hint");
+  if (el) el.classList.remove("start-hint--visible");
+}
+
+function scheduleStartHint() {
+  cancelStartHint();
+  _idleHintTimer = setTimeout(() => {
+    const el = getStartHintEl();
+    el.classList.add("start-hint--visible");
+  }, 45000);
+}
+
 function initDesktopEntryOverlay() {
   const overlay = document.getElementById("desktop-entry-overlay");
+  const viewport = document.getElementById("desktop-viewport");
+  const passwordInput = document.getElementById("desktop-entry-submit");
   if (!overlay) return;
+
+  /* Clean up any document listeners from a previous invocation (e.g. chaos reset). */
+  if (_entryOverlayHandlers) {
+    document.removeEventListener("keydown", _entryOverlayHandlers.onKeyDown, true);
+    document.removeEventListener("pointerdown", _entryOverlayHandlers.onPointerDownCapture, true);
+    _entryOverlayHandlers = null;
+  }
+
   const dismiss = () => {
     if (overlay.classList.contains("desktop-entry-overlay--dismissed")) return;
     overlay.classList.add("desktop-entry-overlay--dismissed");
     overlay.setAttribute("aria-hidden", "true");
-    document.removeEventListener("keydown", onKeyDown);
+    viewport?.classList.remove("viewport--entry-active");
+    reparentFolderIconsToWindowLayer();
+    if (_entryOverlayHandlers) {
+      document.removeEventListener("keydown", _entryOverlayHandlers.onKeyDown, true);
+      document.removeEventListener("pointerdown", _entryOverlayHandlers.onPointerDownCapture, true);
+      _entryOverlayHandlers = null;
+    }
+    scheduleStartHint();
   };
+
   function onKeyDown(e) {
-    if (e.code !== "Space") return;
-    e.preventDefault();
+    /* Let the password field capture keystrokes; dismiss fires via the input event */
+    if (passwordInput && document.activeElement === passwordInput) return;
+    if (e.code === "Space") e.preventDefault();
     dismiss();
   }
-  overlay.addEventListener("click", dismiss);
-  document.addEventListener("keydown", onKeyDown);
+
+  function onPointerDownCapture(e) {
+    if (overlay.classList.contains("desktop-entry-overlay--dismissed")) return;
+    /* Clicking the password field just focuses it — don't dismiss yet */
+    if (passwordInput && (e.target === passwordInput)) return;
+    dismiss();
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  _entryOverlayHandlers = { onKeyDown, onPointerDownCapture };
+
+  /* Fake password: auto-dismiss 780 ms after reaching 4+ chars, or immediately on Enter */
+  if (passwordInput) {
+    let dismissTimer = null;
+    passwordInput.addEventListener("input", () => {
+      clearTimeout(dismissTimer);
+      if (passwordInput.value.length >= 4) {
+        dismissTimer = setTimeout(dismiss, 780);
+      }
+    });
+    passwordInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && passwordInput.value.length >= 1) {
+        clearTimeout(dismissTimer);
+        dismiss();
+      }
+    });
+  }
+
+  viewport?.classList.add("viewport--entry-active");
+  document.addEventListener("keydown", onKeyDown, true);
+  document.addEventListener("pointerdown", onPointerDownCapture, true);
+
+  requestAnimationFrame(() => {
+    passwordInput?.focus({ preventScroll: true });
+  });
 }
 
 function loadBaseBackground() {
@@ -229,6 +360,28 @@ async function loadWindowsConfig() {
   }
   const json = await response.json();
   return json;
+}
+
+async function loadEssaysData() {
+  try {
+    const res = await fetch(ESSAYS_PATH, { cache: "no-store" });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+function getPoolsTraces() {
+  return essaysData?.pools?.traces?.items || [];
+}
+
+function getPoolsWindows() {
+  return essaysData?.pools?.windows?.items || [];
+}
+
+function getGoogleNote() {
+  return essaysData?.pools?.google?.items?.[0] || null;
 }
 
 function getWindowById(id) {
@@ -477,24 +630,54 @@ function runAction(def, ctx) {
     case "window.showMenuMatrix":
       showMenuMatrixWindow(ctx, def);
       break;
-    case "window.openBuildProjectPage":
-      void spawnBuildProjectPageWindow(def.pageId || "build_project", {
-        sourceAbstractWindow: ctx?.container?.classList?.contains("desktop-window")
-          ? ctx.container
-          : null,
-        useStartMenuTheme: !ctx?.container?.classList?.contains?.("desktop-window"),
-        themeRefWindowId: null,
-      });
+    case "window.openBuildProjectPage": {
+      const windows = getPoolsWindows();
+      if (windows.length) {
+        const winItem = windows[_poolsWindowsIndex % windows.length];
+        _poolsWindowsIndex += 1;
+        spawnEssayTextWindow(
+          essaysData?.pools?.windows?.title || "abstract windows",
+          winItem.text,
+          {
+            sourceAbstractWindow: ctx?.container?.classList?.contains("desktop-window")
+              ? ctx.container
+              : null,
+            useStartMenuTheme: !ctx?.container?.classList?.contains?.("desktop-window"),
+            themeRefWindowId: null,
+          }
+        );
+      } else {
+        void spawnBuildProjectPageWindow(def.pageId || "build_project", {
+          sourceAbstractWindow: ctx?.container?.classList?.contains("desktop-window")
+            ? ctx.container
+            : null,
+          useStartMenuTheme: !ctx?.container?.classList?.contains?.("desktop-window"),
+          themeRefWindowId: null,
+        });
+      }
       break;
+    }
     case "window.codebuildZone":
       runCodebuildOnZone(ctx);
       break;
     case "window.grayCodeTitleStub":
       runGrayCodeTitleStub(ctx);
       break;
-    case "window.openUserGoogleStub":
-      window.open("https://www.google.com/", "_blank", "noopener,noreferrer");
+    case "window.openUserGoogleStub": {
+      const googleNote = getGoogleNote();
+      if (googleNote) {
+        spawnEssayTextWindow(
+          essaysData?.pools?.google?.title || "search",
+          googleNote.text,
+          {
+            sourceAbstractWindow: ctx?.container?.classList?.contains("desktop-window")
+              ? ctx.container
+              : null,
+          }
+        );
+      }
       break;
+    }
     case "window.cycleWindowColorFilter":
       cycleWindowColorFilter(ctx);
       break;
@@ -591,12 +774,39 @@ function populateRuntimeZones(zonesLayer, windowDef, configJson, container) {
     const textZones = Array.isArray(zones.text) ? zones.text : [];
     textZones.forEach((zone, index) => {
       const el = document.createElement("div");
-      el.className = "zone-text";
+      el.className = "zone-text zone-text--traces-clickable";
       el.dataset.zoneId = zone.id || `text_${index}`;
+      el.tabIndex = 0;
+      el.setAttribute("role", "button");
+      el.setAttribute("aria-label", "Show browser trace");
       positionZoneElement(el, zone, widthOverHeight);
       if (normalizeZoneShape(zone) === "circle") {
         el.style.borderRadius = "50%";
       }
+
+      const fireTraces = (event) => {
+        event.stopPropagation();
+        const traces = getPoolsTraces();
+        if (!traces.length) return;
+        const item = traces[_poolsTracesIndex % traces.length];
+        _poolsTracesIndex += 1;
+        spawnEssayTextWindow(
+          essaysData?.pools?.traces?.title || "browser traces to poetry",
+          item.text,
+          {
+            sourceAbstractWindow: container,
+          }
+        );
+      };
+
+      el.addEventListener("click", fireTraces);
+      el.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          fireTraces(e);
+        }
+      });
+
       zonesLayer.appendChild(el);
 
       if (showLabels) {
@@ -1165,9 +1375,13 @@ function collectVisibleTextZones() {
   if (!windowLayer) return [];
   /** @type {Element[]} */
   const zones = [];
-  windowLayer.querySelectorAll(":scope > .desktop-window").forEach((win) => {
-    win.querySelectorAll(".zone-text").forEach((z) => zones.push(z));
-  });
+  const collectFromLayer = (layer) => {
+    layer.querySelectorAll(":scope > .desktop-window").forEach((win) => {
+      win.querySelectorAll(".zone-text").forEach((z) => zones.push(z));
+    });
+  };
+  collectFromLayer(windowLayer);
+  if (folderLayer) collectFromLayer(folderLayer);
   return zones;
 }
 
@@ -1207,9 +1421,35 @@ function findTargetTextZoneElForClickZone(zonesLayer, windowDef, clickZoneDef, c
   return textEls[ti] || textEls[0] || null;
 }
 
+function countManagedWindows() {
+  if (!windowLayer) return 0;
+  return windowLayer.querySelectorAll(".desktop-window:not(.desktop-window--folder-icon)").length;
+}
+
+function showEntryOverlay({ keepWindows = false } = {}) {
+  if (!keepWindows) {
+    clearWindows();
+    if (lastConfigJson) spawnFolderIconCluster(lastConfigJson);
+  }
+
+  const overlay = document.getElementById("desktop-entry-overlay");
+  const viewport = document.getElementById("desktop-viewport");
+  const passwordInput = document.getElementById("desktop-entry-submit");
+
+  if (overlay) {
+    overlay.classList.remove("desktop-entry-overlay--dismissed");
+    overlay.removeAttribute("aria-hidden");
+  }
+  if (passwordInput) passwordInput.value = "";
+  viewport?.classList.add("viewport--entry-active");
+
+  initDesktopEntryOverlay();
+}
+
 function clearWindows() {
   if (!windowLayer) return;
   windowLayer.innerHTML = "";
+  if (folderLayer) folderLayer.innerHTML = "";
   selectedWindowElement = null;
   openWindowIds = new Set();
 }
@@ -1217,6 +1457,10 @@ function clearWindows() {
 function spawnWindow(configJson, windowDef) {
   if (!windowLayer) return;
   if (!windowDef?.id) return;
+  if (!debugState.enabled && countManagedWindows() >= MAX_OPEN_WINDOWS) {
+    showEntryOverlay();
+    return;
+  }
   const aspectRatio = getWindowAspectRatio(windowDef);
   let tempWidth = getScaledWidthPx(configJson, windowDef);
 
@@ -1269,21 +1513,40 @@ function spawnWindow(configJson, windowDef) {
  * — spawnFolderIconCluster: nA/nB = how many icons per cluster; anchorLeft* / anchorRight* = rough placement on screen.
  */
 function spawnFolderIconsAroundAnchor(configJson, def, ar, anchorL, anchorT, n, stampKey) {
+  const layer = folderLayer || windowLayer;
+  if (!layer) return;
   const baseW = clamp(randomInt(56, 88), 50, Math.min(108, Math.round(window.innerWidth * 0.13)));
-  for (let i = 0; i < n; i += 1) {
+
+  /* Keep folders away from the entry-overlay avatar circle (centered ~46% down the viewport) */
+  const avatarCX = window.innerWidth / 2;
+  const avatarCY = window.innerHeight * 0.46;
+  const avatarSafeR = Math.max(160, Math.round(Math.min(window.innerWidth, window.innerHeight) * 0.18));
+
+  let spawned = 0;
+  let attempts = 0;
+  const maxAttempts = n * 5;
+  while (spawned < n && attempts < maxAttempts) {
+    attempts += 1;
     const jitterX = randomInt(-165, 210);
     const jitterY = randomInt(-140, 195);
     const wpx = clamp(baseW + randomInt(-10, 12), 46, Math.min(118, Math.round(window.innerWidth * 0.15)));
     const fakeHeight = Math.round(wpx * ar);
     const left = clamp(anchorL + jitterX, 12, window.innerWidth - wpx - 12);
     const top = clamp(anchorT + jitterY, 12, window.innerHeight - fakeHeight - 12);
-    const instanceId = `${FOLDER_ICON_WINDOW_ID}_cluster_${stampKey}_${i}`;
+
+    /* Skip if this icon's center is too close to the avatar */
+    const iconCX = left + wpx / 2;
+    const iconCY = top + fakeHeight / 2;
+    if (Math.hypot(iconCX - avatarCX, iconCY - avatarCY) < avatarSafeR) continue;
+
+    const instanceId = `${FOLDER_ICON_WINDOW_ID}_cluster_${stampKey}_${spawned}`;
     const el = createWindowElement(configJson, def, left, top, {
       instanceId,
       widthPx: wpx,
       extraClass: "desktop-window--folder-icon",
     });
-    windowLayer.appendChild(el);
+    layer.appendChild(el);
+    spawned += 1;
   }
 }
 
@@ -1308,8 +1571,9 @@ function spawnFolderIconCluster(configJson) {
 }
 
 function getOpenWindowElementById(id) {
-  if (!windowLayer || !id) return null;
-  return windowLayer.querySelector(`:scope > .desktop-window[data-window-id="${CSS.escape(id)}"]`);
+  if (!id) return null;
+  const sel = `:scope > .desktop-window[data-window-id="${CSS.escape(id)}"]`;
+  return windowLayer?.querySelector(sel) || folderLayer?.querySelector(sel) || null;
 }
 
 function spawnWindowByIdNonDuplicate(configJson, id) {
@@ -1740,7 +2004,7 @@ async function spawnBuildProjectPageWindow(pageId, options = {}) {
     if (event.button !== 0) return;
     if (
       event.target.closest?.(
-        "button, a, summary, input, label, select, textarea, .project-start-display",
+        "button, a, summary, input, label, select, textarea, .project-start-display, .material-start-menu",
       )
     ) {
       return;
@@ -1935,6 +2199,83 @@ function dismissUserInputModal() {
   }
 }
 
+/** Deduped function words / glue for poem picker; ~14 random picks per session (see runUserInputPrompt). */
+const USER_INPUT_STRUCTURE_WORD_POOL = [...new Set(
+  `the a an this that these those my your his her their its our some any no every all both each few many more most much either neither of in to for with on at from by about as into like through after over between out against during without before under around among and but or nor yet so although because since unless until when while whereas if though whether than do does did have has had can could may might must shall should will would`.split(
+    /\s+/,
+  ),
+)].filter(Boolean);
+
+const USER_INPUT_STRUCTURE_PICK_COUNT = 35;
+
+function pickRandomWordSubset(pool, count) {
+  const copy = [...pool];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = randomInt(0, i);
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy.slice(0, Math.min(count, copy.length));
+}
+
+/** Returns cleanup to remove pointer listeners. */
+function wireUserInputModalDrag(panel, dragHandle) {
+  let drag = null;
+  const onDown = (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    const r = panel.getBoundingClientRect();
+    drag = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      origLeft: r.left,
+      origTop: r.top,
+      w: r.width,
+      h: r.height,
+    };
+    try {
+      dragHandle.setPointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+    dragHandle.style.cursor = "grabbing";
+  };
+  const onMove = (e) => {
+    if (!drag || e.pointerId !== drag.pointerId) return;
+    let left = drag.origLeft + (e.clientX - drag.startX);
+    let top = drag.origTop + (e.clientY - drag.startY);
+    const margin = 20;
+    const maxL = window.innerWidth - margin;
+    const minL = margin - drag.w;
+    const maxT = window.innerHeight - margin;
+    const minT = margin - drag.h;
+    left = clamp(left, minL, maxL);
+    top = clamp(top, minT, maxT);
+    panel.style.left = `${Math.round(left)}px`;
+    panel.style.top = `${Math.round(top)}px`;
+  };
+  const onUp = (e) => {
+    if (!drag || e.pointerId !== drag.pointerId) return;
+    try {
+      dragHandle.releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+    dragHandle.style.cursor = "";
+    drag = null;
+  };
+  dragHandle.addEventListener("pointerdown", onDown);
+  dragHandle.addEventListener("pointermove", onMove);
+  dragHandle.addEventListener("pointerup", onUp);
+  dragHandle.addEventListener("pointercancel", onUp);
+  return () => {
+    dragHandle.removeEventListener("pointerdown", onDown);
+    dragHandle.removeEventListener("pointermove", onMove);
+    dragHandle.removeEventListener("pointerup", onUp);
+    dragHandle.removeEventListener("pointercancel", onUp);
+  };
+}
+
 async function runUserInputPrompt(ctx) {
   const container = ctx.container;
   const zone = ctx.zone;
@@ -1945,44 +2286,55 @@ async function runUserInputPrompt(ctx) {
   dismissUserInputModal();
   bringToFront(container);
 
+  const MAX_POEM_WORDS = 15;
   let words;
   try {
     const { loadHistoryPoetryLines, pickHistoryWordChoices } = await import("./browserHistoryPoetry.js");
     const lines = await loadHistoryPoetryLines();
-    const rawWords = pickHistoryWordChoices(lines, 64);
-    words = [];
-    for (let i = 0; i < rawWords.length - 1; i += 2) {
-      words.push(`${rawWords[i]} ${rawWords[i + 1]}`);
-    }
-    words = words.slice(0, 24);
+    words = pickHistoryWordChoices(lines, 56);
   } catch {
-    words = ["material desktop", "browser history", "open window", "past tabs", "scroll feed"];
+    words = ["material", "desktop", "history", "browser", "window", "memory", "tab", "scroll", "feed", "link"];
   }
+
+  const structureWords = pickRandomWordSubset(USER_INPUT_STRUCTURE_WORD_POOL, USER_INPUT_STRUCTURE_PICK_COUNT);
+  const structureLc = new Set(structureWords.map((w) => w.toLowerCase()));
+  const historyWords = words.filter((w) => !structureLc.has(String(w).toLowerCase()));
 
   const selectedWords = await new Promise((resolve) => {
     const overlay = document.createElement("div");
     overlay.className = "user-input-local-overlay";
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
-    overlay.setAttribute("aria-label", "Compose a line from history words");
+    overlay.setAttribute("aria-label", "Compose a line from history and glue words");
 
     const panel = document.createElement("div");
     panel.className = "user-input-modal";
 
+    const dragHandle = document.createElement("div");
+    dragHandle.className = "user-input-modal__drag-handle";
+    dragHandle.setAttribute("role", "group");
+    dragHandle.setAttribute(
+      "aria-label",
+      "Drag to move this window",
+    );
+    dragHandle.innerHTML =
+      '<span class="user-input-modal__drag-grip" aria-hidden="true">⋮⋮</span><span class="user-input-modal__drag-label">Drag to move</span>';
+
     const title = document.createElement("p");
     title.className = "user-input-modal__title";
-    title.textContent = "Tap words to build a line";
+    title.textContent = "Use these word traces from the browser to create a line";
 
     const hint = document.createElement("p");
     hint.className = "user-input-modal__hint";
-    hint.textContent =
-      "Pick several two-word phrases, then Done. The poem is written directly into the exact zone you clicked.";
+    hint.textContent = `Select 1–${MAX_POEM_WORDS} words, then Done.`;
 
     const preview = document.createElement("p");
     preview.className = "user-input-modal__preview";
     preview.setAttribute("aria-live", "polite");
     preview.textContent = "—";
 
+    const gridScroll = document.createElement("div");
+    gridScroll.className = "user-input-modal__grid-scroll";
     const grid = document.createElement("div");
     grid.className = "user-input-modal__grid";
 
@@ -2010,13 +2362,14 @@ async function runUserInputPrompt(ctx) {
     const syncPreview = () => {
       const line = picked.join(" ");
       preview.textContent = line || "—";
-      doneBtn.disabled = picked.length < 2;
+      const n = picked.length;
+      doneBtn.disabled = n < 1 || n > MAX_POEM_WORDS;
     };
 
-    words.forEach((w) => {
+    function appendWordChip(w, extraClass) {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "user-input-modal__choice";
+      btn.className = `user-input-modal__choice${extraClass ? ` ${extraClass}` : ""}`;
       btn.textContent = w;
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -2024,14 +2377,32 @@ async function runUserInputPrompt(ctx) {
         if (i >= 0) {
           picked.splice(i, 1);
           btn.classList.remove("user-input-modal__choice--selected");
-        } else {
+        } else if (picked.length < MAX_POEM_WORDS) {
           picked.push(w);
           btn.classList.add("user-input-modal__choice--selected");
         }
         syncPreview();
       });
       grid.appendChild(btn);
-    });
+    }
+
+    /* Interleave glue words and history words so connective tissue appears throughout */
+    const allChips = [];
+    const glueCopy = [...structureWords];
+    const histCopy = [...historyWords];
+    let gi = 0;
+    let hi = 0;
+    while (gi < glueCopy.length || hi < histCopy.length) {
+      if (gi < glueCopy.length && (hi === 0 || hi % 2 === 0 || hi >= histCopy.length)) {
+        allChips.push({ w: glueCopy[gi++], isHistory: false });
+      }
+      if (hi < histCopy.length) {
+        allChips.push({ w: histCopy[hi++], isHistory: true });
+      }
+    }
+    allChips.forEach(({ w, isHistory }) =>
+      appendWordChip(w, isHistory ? "user-input-modal__choice--history" : ""),
+    );
 
     clearBtn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -2049,7 +2420,7 @@ async function runUserInputPrompt(ctx) {
 
     doneBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      if (picked.length < 2) return;
+      if (picked.length < 1 || picked.length > MAX_POEM_WORDS) return;
       finish([...picked]);
     });
 
@@ -2071,19 +2442,38 @@ async function runUserInputPrompt(ctx) {
     };
 
     row.append(clearBtn, doneBtn);
-    panel.append(title, hint, preview, grid, row, cancel);
+    gridScroll.appendChild(grid);
+    panel.append(dragHandle, title, hint, preview, gridScroll, row, cancel);
     overlay.appendChild(panel);
-    container.appendChild(overlay);
+    /* Mount on body + fixed overlay (see .user-input-local-overlay): in-window absolute + inset:0 caps height to the abstract PNG window, so min-height on the modal never gains visible space. */
+    document.body.appendChild(overlay);
     applyUserInputModalTheme(panel, container);
     document.addEventListener("keydown", onKey, true);
 
+    const positionPanelCentered = () => {
+      const rect = panel.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+      panel.style.position = "fixed";
+      panel.style.left = `${Math.round(clamp((window.innerWidth - w) / 2, 8, window.innerWidth - w - 8))}px`;
+      panel.style.top = `${Math.round(clamp((window.innerHeight - h) / 2, 8, window.innerHeight - h - 8))}px`;
+      panel.style.margin = "0";
+      panel.style.zIndex = "1";
+    };
+    requestAnimationFrame(() => {
+      requestAnimationFrame(positionPanelCentered);
+    });
+
+    const removeDragListeners = wireUserInputModalDrag(panel, dragHandle);
+
     activeUserInputCleanup = () => {
       document.removeEventListener("keydown", onKey, true);
+      removeDragListeners();
       overlay.remove();
     };
   });
 
-  if (!selectedWords || selectedWords.length < 2) return;
+  if (!selectedWords || selectedWords.length < 1 || selectedWords.length > MAX_POEM_WORDS) return;
 
   const targetZoneButton = ctx.zoneElement;
   if (!targetZoneButton || !targetZoneButton.classList.contains("zone-click")) return;
@@ -2140,6 +2530,10 @@ function initPaperSources() {
 
 function spawnDigitalPaperWindow() {
   if (!windowLayer || !paperSources.length) return;
+  if (!debugState.enabled && countManagedWindows() >= MAX_OPEN_WINDOWS) {
+    showEntryOverlay();
+    return;
+  }
   const src = paperSources[randomInt(0, paperSources.length - 1)];
   const container = document.createElement("article");
   container.className = "desktop-window desktop-window--paper";
@@ -2175,22 +2569,23 @@ function spawnDigitalPaperWindow() {
   windowLayer.appendChild(container);
 }
 
-async function spawnProjectPageWindow(pageId, options = {}) {
+/**
+ * Spawn a draggable content window displaying a title and body text from essays.json pools.
+ * Used for pools.traces, pools.windows, and pools.google sections.
+ */
+function spawnEssayTextWindow(title, text, options = {}) {
   if (!windowLayer) return;
-  const { getProjectPageById } = await import("./projectPages.js");
-  const page = getProjectPageById(pageId);
-  if (!page) return;
-  const existing = windowLayer.querySelector(`:scope > .desktop-window[data-project-page-id="${CSS.escape(pageId)}"]`);
-  if (existing) {
-    bringToFront(existing);
+  if (!debugState.enabled && countManagedWindows() >= MAX_OPEN_WINDOWS) {
+    showEntryOverlay();
     return;
   }
 
   const container = document.createElement("article");
   container.className = "desktop-window desktop-window--content desktop-window--project-page";
-  container.dataset.windowId = `project_${pageId}`;
-  container.dataset.projectPageId = pageId;
-  container.style.width = `${clamp(Math.round(window.innerWidth * 0.36), 300, 560)}px`;
+  container.dataset.windowId = `essay_pool_${Date.now()}_${Math.random().toString(16).slice(2, 6)}`;
+
+  const width = clamp(Math.round(window.innerWidth * 0.36), 300, 520);
+  container.style.width = `${width}px`;
   bringToFront(container);
 
   applyProjectPageSpawnTheme(container, options);
@@ -2207,7 +2602,7 @@ async function spawnProjectPageWindow(pageId, options = {}) {
     </div>
     <div class="content-window__title"></div>
   `;
-  header.querySelector(".content-window__title").textContent = page.title || "Project";
+  header.querySelector(".content-window__title").textContent = title || "note";
   header.addEventListener("click", (event) => {
     const btn = event.target.closest?.("button[data-action-id]");
     if (!btn) return;
@@ -2218,15 +2613,101 @@ async function spawnProjectPageWindow(pageId, options = {}) {
 
   const body = document.createElement("div");
   body.className = "content-window__body content-window__body--project";
+  (text || "").split(/\n\n+/).forEach((para) => {
+    const p = document.createElement("p");
+    p.className = "material-sm-essay-p";
+    p.textContent = para.trim();
+    body.appendChild(p);
+  });
+
+  frame.append(header, body);
+  container.appendChild(frame);
+
+  container.addEventListener("pointerdown", (event) => {
+    bringToFront(container);
+    if (event.button !== 0) return;
+    if (event.target.closest?.("button, a, summary, input, label, select, textarea, .content-window__body")) return;
+    startWindowDrag(event, container);
+  });
+
+  windowLayer.appendChild(container);
+  requestAnimationFrame(() => {
+    const predictedH = container.offsetHeight || 280;
+    const pos = positionWindowAnywhere(width, predictedH);
+    container.style.left = `${pos.left}px`;
+    container.style.top = `${pos.top}px`;
+  });
+}
+
+async function spawnProjectPageWindow(pageId, options = {}) {
+  if (!windowLayer) return;
+  const projectMod = await import("./projectPages.js");
+  const page = projectMod.getProjectPageById(pageId);
+  if (!page) return;
+  const existing = windowLayer.querySelector(`:scope > .desktop-window[data-project-page-id="${CSS.escape(pageId)}"]`);
+  if (existing) {
+    bringToFront(existing);
+    return;
+  }
+
+  if (!debugState.enabled && countManagedWindows() >= MAX_OPEN_WINDOWS) {
+    showEntryOverlay();
+    return;
+  }
+
+  const container = document.createElement("article");
+  container.className = "desktop-window desktop-window--content desktop-window--project-page";
+  container.dataset.windowId = `project_${pageId}`;
+  container.dataset.projectPageId = pageId;
+  const startMenuWidth = clamp(Math.round(window.innerWidth * 0.46), 480, 620);
+  const defaultPageWidth = clamp(Math.round(window.innerWidth * 0.36), 300, 560);
+  container.style.width = `${pageId === "start" ? startMenuWidth : defaultPageWidth}px`;
+  bringToFront(container);
+
+  applyProjectPageSpawnTheme(container, options);
+
+  const frame = document.createElement("div");
+  frame.className = "desktop-window__frame desktop-window__frame--content";
+
+  const header = document.createElement("div");
+  header.className = "content-window__header";
+  if (pageId !== "start") {
+    header.innerHTML = `
+      <div class="content-window__controls" aria-hidden="true">
+        <button type="button" class="content-window__control" data-action-id="closeSelf" tabindex="-1" aria-label="Close"></button>
+        <button type="button" class="content-window__control" data-action-id="minimizeSelf" tabindex="-1" aria-label="Minimize"></button>
+      </div>
+      <div class="content-window__title"></div>
+    `;
+    header.querySelector(".content-window__title").textContent = page.title || "Project";
+    header.addEventListener("click", (event) => {
+      const btn = event.target.closest?.("button[data-action-id]");
+      if (!btn) return;
+      const actionId = btn.dataset.actionId;
+      const def = getActionDef({ actions: {} }, actionId);
+      runAction(def, { container, windowDef: { id: container.dataset.windowId }, configJson: lastConfigJson });
+    });
+  }
+
+  const body = document.createElement("div");
+  body.className = "content-window__body content-window__body--project";
   body.innerHTML = page.html;
   if (pageId === "start") {
     syncDesktopBgRadiosFromStorage();
+    projectMod.initMaterialStartMenu(body);
   }
-  const quickNav = document.createElement("p");
-  quickNav.className = "project-window__quick-link";
-  quickNav.innerHTML = `<a href="../mobile/index.html#feed" target="_blank" rel="noopener noreferrer">Open mobile feed</a>`;
-  body.appendChild(quickNav);
+  if (pageId !== "start") {
+    const quickNav = document.createElement("p");
+    quickNav.className = "project-window__quick-link";
+    quickNav.innerHTML = `<a href="../mobile/index.html#feed" target="_blank" rel="noopener noreferrer">Open mobile feed</a>`;
+    body.appendChild(quickNav);
+  }
   body.addEventListener("click", (event) => {
+    if (event.target.closest?.("[data-start-menu-log-off]")) {
+      event.preventDefault();
+      showEntryOverlay({ keepWindows: true });
+      return;
+    }
     const link = event.target.closest?.("a[data-project-link]");
     if (!link) return;
     event.preventDefault();
@@ -2239,7 +2720,33 @@ async function spawnProjectPageWindow(pageId, options = {}) {
     });
   });
 
-  frame.append(header, body);
+  if (pageId === "start") {
+    /* No frame header for the start menu — .material-sm-header acts as the close bar */
+    frame.append(body);
+    const smHeader = body.querySelector(".material-sm-header");
+    if (smHeader) {
+      let downX = 0;
+      let downY = 0;
+      smHeader.addEventListener("pointerdown", (e) => {
+        /* Stop bubbling so the container's drag handler never fires on the header. */
+        e.stopPropagation();
+        downX = e.clientX;
+        downY = e.clientY;
+      });
+      smHeader.addEventListener("pointerup", (e) => {
+        e.stopPropagation();
+        if (Math.hypot(e.clientX - downX, e.clientY - downY) < 6) {
+          runAction(getActionDef({ actions: {} }, "closeSelf"), {
+            container,
+            windowDef: { id: container.dataset.windowId },
+            configJson: lastConfigJson,
+          });
+        }
+      });
+    }
+  } else {
+    frame.append(header, body);
+  }
   container.appendChild(frame);
 
   container.addEventListener("pointerdown", (event) => {
@@ -2247,7 +2754,7 @@ async function spawnProjectPageWindow(pageId, options = {}) {
     if (event.button !== 0) return;
     if (
       event.target.closest?.(
-        "button, a, summary, input, label, select, textarea, .project-start-display",
+        "button, a, summary, input, label, select, textarea, .project-start-display, .material-sm-body",
       )
     ) {
       return;
@@ -2259,7 +2766,21 @@ async function spawnProjectPageWindow(pageId, options = {}) {
   windowLayer.appendChild(container);
   requestAnimationFrame(() => {
     const estH = container.offsetHeight || 420;
-    if (sourceAbstract) {
+    if (pageId === "start") {
+      /* Anchor bottom-left above the Start button.
+         Set an explicit height so the flex chain has a definite anchor —
+         without this, flex: 1 children collapse to 0 (flex-basis: 0 with no parent height). */
+      const startBarEl = document.querySelector(".start-bar");
+      const startBarH = startBarEl ? startBarEl.offsetHeight : 36;
+      const margin = 6;
+      const availableH = window.innerHeight - startBarH - margin * 2;
+      const targetH = Math.min(560, availableH);
+      container.style.height = `${targetH}px`;
+      const left = margin;
+      const top = Math.max(margin, window.innerHeight - startBarH - targetH - margin);
+      container.style.left = `${left}px`;
+      container.style.top = `${top}px`;
+    } else if (sourceAbstract) {
       positionFloatingNearWindow(container, sourceAbstract);
     } else {
       const rect = { w: Number.parseInt(container.style.width, 10) || 420, h: estH };
@@ -2301,6 +2822,8 @@ async function init() {
   loadBaseBackground();
   if (!isDesktopView) return;
   initDesktopClock();
+  applyProfilePhotoToAvatars();
+  document.addEventListener("profilePhotoChange", applyProfilePhotoToAvatars);
   initDesktopEntryOverlay();
   if (SHOW_ZONES) {
     document.querySelector(".viewport")?.classList.add("viewport--show-zones");
@@ -2310,7 +2833,10 @@ async function init() {
   }
   initPaperSources();
   try {
-    const configJson = await loadWindowsConfig();
+    const [configJson] = await Promise.all([
+      loadWindowsConfig(),
+      loadEssaysData().then((data) => { essaysData = data; }),
+    ]);
     lastConfigJson = configJson;
     windowsConfig = Array.isArray(configJson?.windows) ? configJson.windows : [];
     spawnInitialDesktopWindows(configJson);
@@ -2320,6 +2846,7 @@ async function init() {
     const startBtn = document.getElementById("desktop-start-btn");
     if (startBtn) {
       startBtn.addEventListener("click", () => {
+        cancelStartHint();
         const def = getActionDef({ actions: {} }, "openStart");
         runAction(def, { container: startBtn, windowDef: { id: "start" }, configJson });
       });

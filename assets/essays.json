@@ -1,0 +1,85 @@
+{
+  "essays": [
+    {
+      "id": "desktop",
+      "title": "the desktop",
+      "excerpt": "Welcome to the material data desktop. A virtual art object-based world that subverts what we know of the personal computing interface, and asks the user to consider the interaction and the traces they leave in the browser and on the machine.",
+      "full": "Welcome to the material data desktop. A virtual art object-based world that subverts what we know of the personal computing interface, and asks the user to consider the interaction and the traces they leave in the browser and on the machine.\n\nThe desktop is made to feel a clean, efficient, neutral space. Its conventions are so defining, they've become habitual, a visual language we speak without thinking. Here, those conventions are altered to encourage investigation, transformation, and most of all, silliness in the ways user interface (UI) defines us. Going for the muscle-memory close button opens another window. Clusters of blue folders vanish when clicked to open, menus pose existential questions instead of offering options.\n\nEvery interaction with the interface is a small negotiation between the user and a system built, and re-built, before they arrived. This project asks you to slow down inside that negotiation. What could it mean to retrofit an interface with materiality? To re-negotiate its terms of use, and gain back senses we forfeit to the machine. These objects, the desktop, the browser, and the window, are already becoming artifacts. This is an invitation to notice what they assume, extract, and quietly decide on your behalf, before they disappear into the next version of themselves."
+    },
+    {
+      "id": "input-output",
+      "title": "input & output",
+      "excerpt": "Personal computing interfaces reflect inner consciousness and serve as intimate organizational pillars. We ask much of the browser. Input and output, user and machine.",
+      "full": "Personal computing interfaces reflect inner consciousness and serve as intimate organizational pillars. We ask much of the browser. Input and output, user and machine. Our inquiries feel at times unique, others cheeky, but for those scraping and collecting them, our inputs fund the data economy. As D'Ignazio and Klein describe in Data Feminism, \"trivial actions are collected for profit, tiny actions combined with other actions to generate targeted advertisements.\" More importantly, data feminism is an approach that understands data as part of the problem and the solution.\n\nThe power is in classification. As Gitelman writes in Raw Data is an Oxymoron, \"Power within aggregation is relational, data depends on hierarchy and imagining is always a classification that once in place is notoriously difficult to discern and analyze.\" Our inputs are valuable because they can be sorted, individual uniqueness is smoothed and ignored in the name of this aggregation.\n\nData science names this the black box, a system of outputs you can observe, inputs you can trace, but interior logic that remains opaque. The value in collecting this information lies in the ability to predict, to feed the next browser, the next search, the next window. This is where extraction occurs, quietly, automatically, and at scale."
+    },
+    {
+      "id": "user",
+      "title": "the user",
+      "excerpt": "Personal computing has always been sold to us as a site of identity. This is the core of technocentric utopianism, the idea users can transcend in the digital space, and that the interface liberates.",
+      "full": "Personal computing has always been sold to us as a site of identity. This is the core of technocentric utopianism, the idea users can transcend in the digital space, and that the interface liberates. Work and leisure convene around the same screen. The desktop organizes labor and desire in the same gestures.\n\n\"Cognitariat\" describes contemporary knowledge workers whose intellectual output powers the digital economy. Autonomy quietly diminishes while \"productivity\" metrics climb. The desktop is the site of this labor: a place where thinking is organized, produced, and extracted. Karl Marx wrote about the alienation of the worker from the products of their labor. This alienation only continues as web spaces evolve. Working from home, surveilled by your company during the day, then mined for your personal leisure data in supposed off hours.\n\nUser interactions aggregated at the scale of exabytes is enough to let prediction capabilities equal our total consumption. You are anticipated before you arrive on the desktop and in the browser. The blurriness of user output-input with the machine, at nearly 24 hours a day, produces many things. But especially amnesia. Why was I here again? Menu designs on the material desktop mirror this tone using existential response instead of mindless content."
+    },
+    {
+      "id": "feed",
+      "title": "the feed",
+      "excerpt": "The feed replaced the page. Infinite scroll was a design decision that became a condition — the collapse of consumer and producer made invisible.",
+      "full": "The feed replaced the page. Infinite scroll was a design decision that became a condition — the collapse of consumer and producer made invisible, stitched into a gesture as natural as breathing.\n\nOne screen experience is always followed by another. We are nudged through a number of different UI experiences: getting the computer to do the serious things, like paying a bill, and grabbing the feed — on mobile or another tab — to take a break from the thing you worked so hard on.\n\nWe don't go to the feed for anything in particular, and the feed gives us amnesia, which we carry back to the browser. Why was I here again? This amnesia fed the existential writing in the menus of the material desktop windows. These questions are also reflected in the scraped components of browser history — prompts and grasps, the product of an ecosystem of search.\n\nThat loop has a second screen. →"
+    }
+  ],
+  "pools": {
+    "traces": {
+      "title": "browser traces to poetry",
+      "items": [
+        {
+          "id": "artifact",
+          "text": "Desktop and browsing as we know them now are artifacts, the product of accumulated technical decisions, each investment making earlier choices more durable. The abstract windows in this project are artifacts of this space too: collaged, photographed, digitized, and placed on screen."
+        },
+        {
+          "id": "looking",
+          "text": "Ten days of looking, rendered as type. The font shifts with attention, monospace for coding, script for correspondence, a serif for online shopping. The heavier the word, the more times visited."
+        },
+        {
+          "id": "csv",
+          "text": "Browser history is only a small portion of what gets collected from the user. Mine was downloaded as a CSV and parsed to populate the text zones you see across these windows — a record of my visits, URL titles, and timestamps. Traces of greater interaction. Text in white represents daytime browsing, in black, at night. Code also categorizes text into five categories using keyword triggers. Each category — writing, commerce, code, search, default — populates in a different font."
+        },
+        {
+          "id": "wordgame",
+          "text": "After populating content from my browser history onto the paper collage, art-object windows, I designated zones for users to interact with the windows. Clicking around to find empty-appearing areas on the windows will pull up a poetic word game. A digital window prompts to select words from the browser history, plus some fillers, to create a line of text that populates the window."
+        },
+        {
+          "id": "silliness",
+          "text": "The generated text-art represents the silliness of the human experience. Some highlights: 'marimba lessons near me,' 'shake ass for progress,' 'crusty dog paws.' At any given moment on the desktop the window's content reveals desires and impulses, yet keeps most of the real information to itself. This mirrors the absurdity of browsing online. The content surrounds you, and the machine proves it knows you."
+        }
+      ]
+    },
+    "windows": {
+      "title": "abstract windows",
+      "items": [
+        {
+          "id": "neutral",
+          "text": "A dictionary of web shapes controls our perception of endless windows and tabs. Stripped of their text and images, as if the page is just loading, we're left with skeleton containers that organize and categorize blank space. As Donna Haraway notes, what appears to be everything, and appears to be neutral, is a trick — a partial perspective. In most cases, \"neutral\" visualizations are the perspective of the dominant, default group."
+        },
+        {
+          "id": "studio",
+          "text": "Working in the studio on these window collages started out soothing and became numbing. Creating constellations and layouts based on what I could remember most of using: split screen view, shopping tabs, scrolling feeds, calendar view, email list, search bars, chat boxes. Rectangles with curved corners rule this world."
+        },
+        {
+          "id": "layering",
+          "text": "Layering windows — in paper, then in code — was where the material and digital practice became most tangible. Drop shadows added onto physical windows, proportionate heights maintained relative to one another. Interface design layers its content through z-index and stacking order; collage layers through pressure and adhesive. The logic of layering is the same. Its residue is different."
+        },
+        {
+          "id": "embodiment",
+          "text": "Data Feminism elevates emotion and embodiment — one of the central goals in the presentation of this project. There is a false, gendered logic in data science that declares a binary between emotion and reason. In challenging this through data visualization, I present an androgynous design fluid between Mac OS X and Windows, between nostalgia and the contemporary, between the hand-made and the rendered."
+        }
+      ]
+    },
+    "google": {
+      "title": "search",
+      "items": [
+        {
+          "id": "googlenotes",
+          "text": "Search results are not neutral. In Algorithms of Oppression, Safiya Umoja Noble explains this clearly: even areas that seem free from commercial interest function in the interest of the most influential paid advertisers. SEO — or \"gaming the system\" as Noble describes it — is a multi-billion dollar industry that shapes the value of specific keywords and combinations. Public information continues to be outsourced to the private sphere, eroding the commons, a foundational tenant of democracy."
+        }
+      ]
+    }
+  }
+}
