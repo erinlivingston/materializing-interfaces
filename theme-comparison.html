@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Theme Comparison — Project Text Windows + Start Bar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --font-ui: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-ui);
+    background: #1a1a1e;
+    color: #f0ede8;
+    padding: 32px 24px 48px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 40px;
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+    max-width: 56em;
+  }
+
+  /* ─── Grid ──────────────────────────────────────────────── */
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    align-items: start;
+    max-width: 1080px;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .column-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .column-label__name {
+    color: rgba(255,255,255,0.85);
+  }
+
+  .column-label__desc {
+    font-weight: 400;
+    font-size: 10px;
+    color: rgba(255,255,255,0.38);
+    text-transform: none;
+    letter-spacing: 0.02em;
+    line-height: 1.45;
+  }
+
+  /* ─── Window mock ───────────────────────────────────────── */
+  .window-mock {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 16px 42px rgba(0,0,0,0.5);
+  }
+
+  .window-mock__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    user-select: none;
+  }
+
+  .window-mock__controls {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .window-mock__btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .window-mock__title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-transform: lowercase;
+  }
+
+  .window-mock__body {
+    padding: 14px 16px 16px;
+  }
+
+  .window-mock__body p {
+    font-size: 11px;
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+
+  .window-mock__body p:last-child { margin-bottom: 0; }
+
+  .window-mock__body h3 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-transform: lowercase;
+    margin-bottom: 8px;
+  }
+
+  .window-mock__prompt {
+    margin-top: 12px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-align: center;
+    text-transform: lowercase;
+  }
+
+  /* ─── Theme: Color-matched / spawn-themed ─────────────── */
+  /* Simulated from a typical sandy/teal abstract PNG average */
+  .window--spawn {
+    border: 1px solid rgba(108,86,58, 0.82);
+    box-shadow:
+      0 0 0 1px rgba(160,130,88, 0.38),
+      0 14px 36px rgba(40,28,12, 0.28);
+  }
+
+  .window--spawn .window-mock__header {
+    background: rgba(225,210,185, 0.92);
+    border-bottom: 1px solid rgba(148,118,72, 0.55);
+  }
+
+  .window--spawn .window-mock__title {
+    color: rgba(72,48,18, 0.98);
+  }
+
+  .window--spawn .window-mock__btn {
+    border: 1px solid rgba(108,86,58, 0.55);
+    background: rgba(255,255,255,0.88);
+  }
+
+  .window--spawn .window-mock__body {
+    background: linear-gradient(168deg,
+      rgba(240,228,210, 0.94),
+      rgba(232,218,195, 0.88)
+    );
+  }
+
+  .window--spawn .window-mock__body h3 {
+    color: rgba(72,48,18, 0.97);
+  }
+
+  .window--spawn .window-mock__body p {
+    color: rgba(64,44,16, 0.92);
+  }
+
+  .window--spawn .window-mock__prompt {
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(148,118,72, 0.38);
+    color: rgba(72,48,18, 0.75);
+  }
+
+  /* Pale variant — showing the "very light" problem with lighter PNGs */
+  .window--spawn-pale {
+    border: 1px solid rgba(168,192,202, 0.82);
+    box-shadow:
+      0 0 0 1px rgba(188,212,222, 0.38),
+      0 14px 36px rgba(8,14,18, 0.16);
+    margin-top: 0;
+  }
+
+  .window--spawn-pale .window-mock__header {
+    background: rgba(224,238,246, 0.92);
+    border-bottom: 1px solid rgba(148,192,212, 0.55);
+  }
+
+  .window--spawn-pale .window-mock__title {
+    color: rgba(58,98,128, 0.95);
+  }
+
+  .window--spawn-pale .window-mock__btn {
+    border: 1px solid rgba(148,192,212, 0.55);
+    background: rgba(255,255,255,0.88);
+  }
+
+  .window--spawn-pale .window-mock__body {
+    background: linear-gradient(168deg,
+      rgba(235,246,252, 0.96),
+      rgba(228,240,250, 0.92)
+    );
+  }
+
+  .window--spawn-pale .window-mock__body h3 {
+    color: rgba(58,98,128, 0.96);
+  }
+
+  .window--spawn-pale .window-mock__body p {
+    color: rgba(60,88,120, 0.88);
+  }
+
+  .window--spawn-pale .window-mock__prompt {
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(148,192,212, 0.35);
+    color: rgba(58,98,128, 0.68);
+  }
+
+  .pale-note {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: rgba(255,200,100,0.55);
+    margin-top: -8px;
+  }
+
+  /* ─── Theme: Landscape OS (black chrome / green accent) ── */
+  .window--landscape {
+    border: 1px solid rgba(46,125,50, 0.90);
+    box-shadow:
+      0 0 0 1px rgba(76,175,80, 0.35),
+      0 14px 36px rgba(0,0,0, 0.42);
+  }
+
+  .window--landscape .window-mock__header {
+    background: #111111;
+    border-bottom: 1px solid rgba(76,175,80, 0.55);
+  }
+
+  .window--landscape .window-mock__title {
+    color: #d4f5d4;
+  }
+
+  .window--landscape .window-mock__btn {
+    border: 1px solid rgba(76,175,80, 0.55);
+    background: rgba(255,255,255,0.18);
+  }
+
+  .window--landscape .window-mock__body {
+    background: linear-gradient(168deg, #f5f5f0, #f0f0eb);
+  }
+
+  .window--landscape .window-mock__body h3 {
+    color: #1a1a1a;
+  }
+
+  .window--landscape .window-mock__body p {
+    color: #1a1a1a;
+  }
+
+  .window--landscape .window-mock__prompt {
+    background: rgba(76,175,80, 0.12);
+    border: 1px solid rgba(76,175,80, 0.38);
+    color: rgba(46,125,50, 0.9);
+  }
+
+  /* ─── Theme: Ombre OS (plum chrome / pink accent) ──────── */
+  .window--ombre {
+    border: 1px solid rgba(74,21,40, 0.92);
+    box-shadow:
+      0 0 0 1px rgba(212,83,126, 0.38),
+      0 14px 36px rgba(26,13,20, 0.44);
+  }
+
+  .window--ombre .window-mock__header {
+    background: #2a1520;
+    border-bottom: 1px solid rgba(212,83,126, 0.45);
+  }
+
+  .window--ombre .window-mock__title {
+    color: #f0d8e8;
+  }
+
+  .window--ombre .window-mock__btn {
+    border: 1px solid rgba(212,83,126, 0.5);
+    background: rgba(255,255,255,0.18);
+  }
+
+  .window--ombre .window-mock__body {
+    background: linear-gradient(168deg, #fdf6f9, #f9eff4);
+  }
+
+  .window--ombre .window-mock__body h3 {
+    color: #1a0d14;
+  }
+
+  .window--ombre .window-mock__body p {
+    color: #1a0d14;
+  }
+
+  .window--ombre .window-mock__prompt {
+    background: rgba(212,83,126, 0.09);
+    border: 1px solid rgba(212,83,126, 0.32);
+    color: rgba(153,53,86, 0.88);
+  }
+
+  /* ─── Start bar mocks ───────────────────────────────────── */
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 8px;
+  }
+
+  .startbar-mock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    min-height: 34px;
+    border-radius: 6px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .startbar-mock__btn {
+    font-size: 11px;
+    font-weight: 400;
+    padding: 4px 10px;
+    border-radius: 5px;
+    letter-spacing: 0.02em;
+  }
+
+  .startbar-mock__spacer { flex: 1; }
+
+  .startbar-mock__clock {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    opacity: 0.88;
+    padding-right: 4px;
+  }
+
+  /* Start bar — all three share the same dark frosted glass base */
+  .startbar--base {
+    background: rgba(38,40,42,0.5);
+  }
+
+  .startbar--base .startbar-mock__btn {
+    background: rgba(43,34,34,0.08);
+    color: rgba(245,245,242,0.94);
+    border: 0;
+  }
+
+  .startbar--base .startbar-mock__clock {
+    color: rgba(220,222,218,0.88);
+  }
+
+  /* Landscape tint — slight green tint to start btn */
+  .startbar--landscape {
+    background: rgba(30,38,32, 0.55);
+  }
+
+  .startbar--landscape .startbar-mock__btn {
+    background: rgba(76,175,80, 0.1);
+    color: #d4f5d4;
+    border: 0;
+  }
+
+  .startbar--landscape .startbar-mock__clock {
+    color: rgba(180,220,180,0.82);
+  }
+
+  /* Ombre tint — slight plum tint */
+  .startbar--ombre {
+    background: rgba(40,20,30, 0.55);
+  }
+
+  .startbar--ombre .startbar-mock__btn {
+    background: rgba(212,83,126, 0.1);
+    color: #f0d8e8;
+    border: 0;
+  }
+
+  .startbar--ombre .startbar-mock__clock {
+    color: rgba(220,180,200,0.82);
+  }
+
+  /* ─── Color swatch strips ───────────────────────────────── */
+  .swatch-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .swatch__dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+  }
+
+  .swatch__label {
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.38);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* ─── Badge annotation ──────────────────────────────────── */
+  .badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .badge--current {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .badge--consider {
+    background: rgba(76,175,80,0.18);
+    color: rgba(130,220,140,0.85);
+    border: 1px solid rgba(76,175,80,0.28);
+  }
+
+  .badge--consider-pink {
+    background: rgba(212,83,126,0.18);
+    color: rgba(240,140,175,0.85);
+    border: 1px solid rgba(212,83,126,0.28);
+  }
+
+  /* ─── Divider ───────────────────────────────────────────── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 36px 0 28px;
+  }
+
+  /* ─── Note box ──────────────────────────────────────────── */
+  .note {
+    max-width: 720px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    font-size: 11px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.48);
+    margin-bottom: 32px;
+  }
+
+  .note strong {
+    color: rgba(255,255,255,0.72);
+    font-weight: 600;
+  }
+
+  /* ─── Changed design proposal ───────────────────────────── */
+  .proposal-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    max-width: 720px;
+    margin-top: 4px;
+  }
+
+  .proposal-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+</style>
+</head>
+<body>
+
+<h1>Theme Comparison</h1>
+<p class="subtitle">
+  Color palettes for <strong>browsertracestopoetry text windows</strong> and start bar —
+  current color-matched (spawn-themed) vs. OS-locked themes for landscape &amp; ombre display modes.
+  <br>Keep scrolling for the proposed header + prompt change.
+</p>
+
+<!-- ═══════════════════════════════════════════════════════════════════ SECTION 1 -->
+<p class="section-label" style="margin-bottom:20px;">Project text window themes</p>
+
+<div class="comparison-grid">
+
+  <!-- ── Column 1: Color-matched (spawn) ── -->
+  <div class="column">
+    <div class="column-label">
+      <span class="column-label__name">
+        Color-matched &nbsp;<span class="badge badge--current">current</span>
+      </span>
+      <span class="column-label__desc">
+        Header &amp; body hues are sampled from the parent abstract PNG via canvas pixel averaging.
+        Light-colored PNGs produce very washed-out windows (second example).
+      </span>
+    </div>
+
+    <!-- Sandy/warm PNG parent -->
+    <div class="window-mock window--spawn">
+      <div class="window-mock__header">
+        <div class="window-mock__controls">
+          <span class="window-mock__btn"></span>
+          <span class="window-mock__btn"></span>
+        </div>
+        <span class="window-mock__title">browser traces to poetry</span>
+      </div>
+      <div class="window-mock__body">
+        <h3>the desktop</h3>
+        <p>A virtual art object-based world that subverts what we know of the personal computing interface, and asks the user to consider the interaction and the traces they leave.</p>
+        <p>Every interaction with the interface is a small negotiation between the user and a system built before they arrived.</p>
+        <div class="window-mock__prompt">click more windows to learn more →</div>
+      </div>
+    </div>
+
+    <!-- Light/blue PNG parent — the "too pale" problem -->
+    <p class="pale-note">↓ light PNG parent → washed out</p>
+    <div class="window-mock window--spawn-pale">
+      <div class="window-mock__header">
+        <div class="window-mock__controls">
+          <span class="window-mock__btn"></span>
+          <span class="window-mock__btn"></span>
+        </div>
+        <span class="window-mock__title">browser traces to poetry</span>
+      </div>
+      <div class="window-mock__body">
+        <h3>the desktop</h3>
+        <p>A virtual art object-based world that subverts what we know of the personal computing interface, and asks the user to consider the interaction and the traces they leave.</p>
+        <p>Every interaction with the interface is a small negotiation between the user and a system built before they arrived.</p>
+        <div class="window-mock__prompt">click more windows to learn more →</div>
+      </div>
+    </div>
+
+    <div>
+      <p class="section-label">Start bar (current)</p>
+      <div class="startbar-mock startbar--base">
+        <span class="startbar-mock__btn">start</span>
+        <span class="startbar-mock__spacer"></span>
+        <span class="startbar-mock__clock">3:42 PM</span>
+      </div>
+    </div>
+
+    <div>
+      <p class="section-label" style="margin-bottom:8px;">Spawn palette swatches</p>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch__dot" style="background:rgba(108,86,58,0.88)"></div><span class="swatch__label">border</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:rgba(225,210,185,0.95)"></div><span class="swatch__label">header</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:rgba(240,228,210,0.97)"></div><span class="swatch__label">surface a</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:rgba(72,48,18,0.95)"></div><span class="swatch__label">text</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:rgba(232,218,195,0.95)"></div><span class="swatch__label">surface b</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Column 2: Landscape OS (black/green) ── -->
+  <div class="column">
+    <div class="column-label">
+      <span class="column-label__name">
+        Landscape OS &nbsp;<span class="badge badge--consider">consider</span>
+      </span>
+      <span class="column-label__desc">
+        Black chrome header + green accents — Windows-nod palette.
+        Consistent regardless of parent PNG. High contrast, readable body text.
+      </span>
+    </div>
+
+    <div class="window-mock window--landscape">
+      <div class="window-mock__header">
+        <div class="window-mock__controls">
+          <span class="window-mock__btn"></span>
+        </div>
+        <span class="window-mock__title">browser traces to poetry</span>
+      </div>
+      <div class="window-mock__body">
+        <h3>the desktop</h3>
+        <p>A virtual art object-based world that subverts what we know of the personal computing interface, and asks the user to consider the interaction and the traces they leave.</p>
+        <p>Every interaction with the interface is a small negotiation between the user and a system built before they arrived.</p>
+        <div class="window-mock__prompt">click more windows to learn more →</div>
+      </div>
+    </div>
+
+    <div>
+      <p class="section-label">Start bar (landscape)</p>
+      <div class="startbar-mock startbar--landscape">
+        <span class="startbar-mock__btn">start</span>
+        <span class="startbar-mock__spacer"></span>
+        <span class="startbar-mock__clock">3:42 PM</span>
+      </div>
+    </div>
+
+    <div>
+      <p class="section-label" style="margin-bottom:8px;">OS palette swatches</p>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch__dot" style="background:#111111"></div><span class="swatch__label">chrome</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:#4caf50"></div><span class="swatch__label">accent</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:#2e7d32"></div><span class="swatch__label">hover</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:#f5f5f0"></div><span class="swatch__label">body bg</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:#d4f5d4"></div><span class="swatch__label">title fg</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:#1a1a1a"></div><span class="swatch__label">text</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Column 3: Ombre OS (plum/pink) ── -->
+  <div class="column">
+    <div class="column-label">
+      <span class="column-label__name">
+        Ombre OS &nbsp;<span class="badge badge--consider-pink">consider</span>
+      </span>
+      <span class="column-label__desc">
+        Dark plum chrome + pink accents — Mac-nod palette.
+        Consistent regardless of parent PNG. Warm and legible body text.
+      </span>
+    </div>
+
+    <div class="window-mock window--ombre">
+      <div class="window-mock__header">
+        <div class="window-mock__controls">
+          <span class="window-mock__btn"></span>
+        </div>
+        <span class="window-mock__title">browser traces to poetry</span>
+      </div>
+      <div class="window-mock__body">
+        <h3>the desktop</h3>
+        <p>A virtual art object-based world that subverts what we know of the personal computing interface, and asks the user to consider the interaction and the traces they leave.</p>
+        <p>Every interaction with the interface is a small negotiation between the user and a system built before they arrived.</p>
+        <div class="window-mock__prompt">click more windows to learn more →</div>
+      </div>
+    </div>
+
+    <div>
+      <p class="section-label">Start bar (ombre)</p>
+      <div class="startbar-mock startbar--ombre">
+        <span class="startbar-mock__btn">start</span>
+        <span class="startbar-mock__spacer"></span>
+        <span class="startbar-mock__clock">3:42 PM</span>
+      </div>
+    </div>
+
+    <div>
+      <p class="section-label" style="margin-bottom:8px;">OS palette swatches</p>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch__dot" style="background:#2a1520"></div><span class="swatch__label">chrome</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:#d4537e"></div><span class="swatch__label">accent</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:#993556"></div><span class="swatch__label">hover</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:#fdf6f9"></div><span class="swatch__label">body bg</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:#f0d8e8"></div><span class="swatch__label">title fg</span></div>
+        <div class="swatch"><div class="swatch__dot" style="background:#1a0d14"></div><span class="swatch__label">text</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /comparison-grid -->
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ SECTION 2 -->
+<p class="section-label" style="margin-bottom:12px;">Proposed window chrome change — close only</p>
+
+<div class="note">
+  <strong>Current:</strong> two traffic-light dots (close + minimize) in top-left.<br>
+  <strong>Proposed:</strong> single close dot only, with a contextual prompt placed at the foot of the body — <em>"click more windows to learn more →"</em> — to guide the user without a minimize affordance that can orphan the window.
+</div>
+
+<div class="proposal-row">
+  <!-- Before -->
+  <div>
+    <p class="proposal-label">Before — two buttons</p>
+    <div class="window-mock window--landscape" style="max-width:340px;">
+      <div class="window-mock__header">
+        <div class="window-mock__controls">
+          <span class="window-mock__btn"></span>
+          <span class="window-mock__btn"></span>
+        </div>
+        <span class="window-mock__title">browser traces to poetry</span>
+      </div>
+      <div class="window-mock__body">
+        <h3>the desktop</h3>
+        <p>A virtual art object-based world that subverts what we know of the personal computing interface. Every interaction is a small negotiation between the user and a system built before they arrived.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- After -->
+  <div>
+    <p class="proposal-label">After — close only + prompt</p>
+    <div class="window-mock window--landscape" style="max-width:340px;">
+      <div class="window-mock__header">
+        <div class="window-mock__controls">
+          <span class="window-mock__btn"></span>
+        </div>
+        <span class="window-mock__title">browser traces to poetry</span>
+      </div>
+      <div class="window-mock__body">
+        <h3>the desktop</h3>
+        <p>A virtual art object-based world that subverts what we know of the personal computing interface. Every interaction is a small negotiation between the user and a system built before they arrived.</p>
+        <div class="window-mock__prompt">click more windows to learn more →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

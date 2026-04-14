@@ -70,7 +70,7 @@ let storyCircles = [];
 let storyCircleColors = [];
 let loading = false;
 let lastSpawnY = 0;
-let heatPhase = 0;
+
 let textOverlays = [];
 let breakPanels = [];
 let spawnCounter = 0;
@@ -457,22 +457,6 @@ function pickTextOverlay(item) {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-function drawHeatmapOverlay() {
-  heatPhase += 0.004;
-  const cx = vw * (0.5 + Math.sin(heatPhase * 0.7) * 0.3);
-  const cy = (vh * 0.5 - scrollY % vh) + Math.cos(heatPhase) * vh * 0.2;
-  const r = Math.max(vw, vh) * 0.7;
-  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-  grad.addColorStop(0, "rgba(220,80,60,0.08)");
-  grad.addColorStop(0.3, "rgba(240,180,50,0.06)");
-  grad.addColorStop(0.6, "rgba(60,140,200,0.05)");
-  grad.addColorStop(1, "rgba(40,30,80,0.02)");
-  ctx.save();
-  ctx.globalCompositeOperation = "overlay";
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, vw, vh);
-  ctx.restore();
-}
 
 function drawStoryCircles() {
   if (!storyCircleColors.length) return;
@@ -621,7 +605,6 @@ function render() {
     ctx.restore();
   }
 
-  drawHeatmapOverlay();
   drawStoryCircles();
 
   const frontier = scrollY + vh + buffer;
@@ -783,7 +766,6 @@ export async function initFeed(el) {
   breakPanels = [];
   storyCircles = [];
   storyCircleColors = [];
-  heatPhase = 0;
   touchVelocity = 0;
 
   canvas.addEventListener("click", handleFeedClick);

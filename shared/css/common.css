@@ -454,6 +454,8 @@ button.material-sm-avatar:focus-visible {
   white-space: nowrap;
   overflow: hidden;
   text-decoration: none;
+  cursor: pointer;
+  user-select: none;
 }
 
 .material-sm-see-item:hover {
@@ -589,6 +591,13 @@ button.material-sm-avatar:focus-visible {
 
 .material-sm-essay-p {
   margin: 0 0 1em;
+}
+
+.material-sm-essay-meta {
+  font-size: 0.78em;
+  opacity: 0.6;
+  font-style: italic;
+  letter-spacing: 0.01em;
 }
 
 .material-sm-essay-p:last-child {
@@ -1351,6 +1360,22 @@ button.material-sm-avatar:focus-visible {
   border-top: 1px solid var(--project-divider, rgba(120, 255, 64, 0.85));
   font-size: 12px;
 }
+
+/* "click more windows to learn more →" prompt at foot of essay text windows */
+.essay-window__more-prompt {
+  margin-top: 12px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: lowercase;
+  text-align: center;
+  color: var(--project-summary-fg, rgba(14, 102, 138, 0.82));
+  background: color-mix(in srgb, var(--project-header-bg, rgba(255, 255, 255, 0.9)) 85%, transparent);
+  border: 1px solid var(--project-divider, rgba(72, 128, 108, 0.38));
+}
+
 
 .content-window__body h2 {
   margin: 0 0 6px;

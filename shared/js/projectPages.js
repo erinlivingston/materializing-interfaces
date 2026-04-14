@@ -44,6 +44,46 @@ export function readProfilePhotoSrc() {
   }
 }
 
+/** Sources shown in the "see also" sidebar — clicking displays a brief note in the essay pane. */
+export const SEE_ALSO_SOURCES = [
+  {
+    id: "dear-data",
+    label: "Dear Data",
+    meta: "Giorgia Lupi & Stefanie Posavec, 2016",
+    note: "Two designers exchanged handmade data visualizations as weekly postcards for a year, each tracking something personal. An argument for the intimacy of data — that quantification can be a tool of self-expression and connection, not only extraction. The hand-drawn format is a direct influence on how physical mark-making enters this project.",
+  },
+  {
+    id: "data-feminism",
+    label: "Data Feminism",
+    meta: "Catherine D'Ignazio & Lauren F. Klein, 2020",
+    note: "Examines how power and privilege shape data collection, representation, and interpretation. Argues for centering emotion, embodiment, and the experiences of marginalized communities in data practice. The phrase used here — \"trivial actions are collected for profit\" — comes from this book, and its framework runs through every design decision in how browser history is surfaced.",
+  },
+  {
+    id: "haraway",
+    label: "Donna Haraway",
+    meta: "Situated Knowledges, 1988",
+    note: "Haraway argues that all knowledge is partial and positional — the \"view from nowhere\" is always someone's view from somewhere. Her concept of situated knowledge informs how browser history is treated in this project: not as neutral data, but as evidence of a particular, embodied perspective. What appears neutral is never the whole picture.",
+  },
+  {
+    id: "raw-data",
+    label: "Raw Data is an Oxymoron",
+    meta: "Lisa Gitelman, ed., 2013",
+    note: "A collection of essays arguing that data is never simply found — it is always made, within specific historical and institutional contexts. Classification systems embed hierarchies that shape what gets counted and who gets seen. The font and color categories applied to browser history in this project are a small illustration of that point: every classification is a choice.",
+  },
+  {
+    id: "mattern",
+    label: "Shannon Mattern",
+    meta: "A City Is Not a Computer, 2017",
+    note: "Mattern traces the long histories of infrastructure, media, and the built environment, pushing back against the idea that intelligence and efficiency are recent, computational inventions. Her work informs the project's interest in the desktop as an artifact — a set of accumulated technical decisions that feel inevitable only because they have been here long enough to become invisible.",
+  },
+  {
+    id: "manovich",
+    label: "Lev Manovich",
+    meta: "The Language of New Media, 2001",
+    note: "Manovich argues that the database has replaced narrative as the dominant cultural logic of digital media — we navigate, sort, and browse rather than follow a plot. Software isn't neutral; it encodes cultural assumptions into the gestures we use to move through information. The desktop interface, with its windows and folders, is one of the most powerful examples of this logic made tangible.",
+  },
+];
+
 /** Essays shown in the Start menu — sourced from essays.json. */
 export const START_MENU_ESSAYS = [
   {
@@ -115,34 +155,34 @@ const START_MENU_HTML = `
         <div class="material-sm-toc-name">the feed</div>
       </div>
       <div class="material-sm-section-label material-sm-section-label--spaced">see also</div>
-      <a class="material-sm-see-item" href="https://www.dear-data.com/" target="_blank" rel="noopener noreferrer">
+      <div class="material-sm-see-item" role="button" tabindex="0" data-source-id="dear-data">
         <span class="material-sm-see-ico" aria-hidden="true"></span>
         <span>Dear Data</span>
-      </a>
-      <a class="material-sm-see-item" href="https://mitpress.mit.edu/9780262043298/data-feminism/" target="_blank" rel="noopener noreferrer">
+      </div>
+      <div class="material-sm-see-item" role="button" tabindex="0" data-source-id="data-feminism">
         <span class="material-sm-see-ico" aria-hidden="true"></span>
         <span>Data Feminism</span>
-      </a>
-      <a class="material-sm-see-item" href="https://en.wikipedia.org/wiki/Donna_Haraway" target="_blank" rel="noopener noreferrer">
+      </div>
+      <div class="material-sm-see-item" role="button" tabindex="0" data-source-id="haraway">
         <span class="material-sm-see-ico" aria-hidden="true"></span>
         <span>Haraway</span>
-      </a>
-      <a class="material-sm-see-item" href="https://mitpress.mit.edu/9780262525352/raw-data-is-an-oxymoron/" target="_blank" rel="noopener noreferrer">
+      </div>
+      <div class="material-sm-see-item" role="button" tabindex="0" data-source-id="raw-data">
         <span class="material-sm-see-ico" aria-hidden="true"></span>
         <span>Raw Data is an Oxymoron</span>
-      </a>
-      <a class="material-sm-see-item" href="https://www.shannonmattern.org/" target="_blank" rel="noopener noreferrer">
+      </div>
+      <div class="material-sm-see-item" role="button" tabindex="0" data-source-id="mattern">
         <span class="material-sm-see-ico" aria-hidden="true"></span>
         <span>Shannon Mattern</span>
-      </a>
+      </div>
+      <div class="material-sm-see-item" role="button" tabindex="0" data-source-id="manovich">
+        <span class="material-sm-see-ico" aria-hidden="true"></span>
+        <span>Lev Manovich</span>
+      </div>
       <div class="material-sm-see-divider"></div>
       <a class="material-sm-see-item" href="#" target="_blank" rel="noopener noreferrer">
         <span class="material-sm-see-ico material-sm-see-ico--lock" aria-hidden="true"></span>
         <span>GitHub repo</span>
-      </a>
-      <a class="material-sm-see-item" href="#" target="_blank" rel="noopener noreferrer">
-        <span class="material-sm-see-ico material-sm-see-ico--sketch" aria-hidden="true"></span>
-        <span>p5.js sketches</span>
       </a>
     </div>
     <div class="material-sm-col-main">
@@ -223,6 +263,23 @@ export function initMaterialStartMenu(rootEl) {
       .join("");
     shell.querySelectorAll(".material-sm-toc-item").forEach((el, idx) => {
       el.classList.toggle("material-sm-toc-active", idx === i);
+    });
+  }
+
+  function showSource(id) {
+    const src = SEE_ALSO_SOURCES.find((s) => s.id === id);
+    if (!src) return;
+    pLabel.textContent = "source";
+    pTitle.textContent = src.label;
+    essayBody.innerHTML = `
+      <p class="material-sm-essay-p material-sm-essay-meta">${escapeHtml(src.meta)}</p>
+      <p class="material-sm-essay-p">${escapeHtml(src.note)}</p>
+    `;
+    shell.querySelectorAll(".material-sm-toc-item").forEach((el) => {
+      el.classList.remove("material-sm-toc-active");
+    });
+    shell.querySelectorAll(".material-sm-see-item[data-source-id]").forEach((el) => {
+      el.classList.toggle("material-sm-toc-active", el.dataset.sourceId === id);
     });
   }
 
@@ -319,6 +376,16 @@ export function initMaterialStartMenu(rootEl) {
     leftOpen = !leftOpen;
     colLeft.classList.toggle("material-sm-col-left--collapsed", !leftOpen);
     colBtn.innerHTML = leftOpen ? "&#8249;" : "&#8250;";
+  });
+
+  shell.querySelectorAll(".material-sm-see-item[data-source-id]").forEach((el) => {
+    el.addEventListener("click", () => showSource(el.dataset.sourceId));
+    el.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        showSource(el.dataset.sourceId);
+      }
+    });
   });
 
   shell.querySelectorAll("a.material-sm-see-item").forEach((a) => {

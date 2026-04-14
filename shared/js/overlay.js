@@ -636,7 +636,7 @@ function runAction(def, ctx) {
         const winItem = windows[_poolsWindowsIndex % windows.length];
         _poolsWindowsIndex += 1;
         spawnEssayTextWindow(
-          essaysData?.pools?.windows?.title || "abstract windows",
+          essaysData?.pools?.windows?.title || "abstract windows: design notes",
           winItem.text,
           {
             sourceAbstractWindow: ctx?.container?.classList?.contains("desktop-window")
@@ -1015,6 +1015,53 @@ function applyStartMenuSpawnTheme(targetEl) {
   targetEl.classList.add("desktop-window--spawn-start-os");
   targetEl.classList.remove("desktop-window--spawn-themed");
   clearSpawnThemeVars(targetEl);
+}
+
+/**
+ * Apply OS-theme colors to an essay text window without touching its layout.
+ * Uses --project-* CSS variables directly so the window keeps auto content height.
+ * Landscape → black chrome + green. Ombre → plum chrome + pink.
+ */
+function applyEssayOsTheme(container) {
+  if (!container) return;
+  const viewport = document.querySelector(".viewport");
+  const isOmbre = viewport?.classList.contains("viewport--bg-ombre");
+  const vars = isOmbre
+    ? {
+        "--project-window-border": "rgba(74,21,40,0.92)",
+        "--project-window-border-soft": "rgba(212,83,126,0.38)",
+        "--project-window-glow": "rgba(212,83,126,0.12)",
+        "--project-window-shadow-deep": "rgba(26,13,20,0.42)",
+        "--project-header-bg": "#2a1520",
+        "--project-divider": "rgba(212,83,126,0.45)",
+        "--project-title-fg": "#f0d8e8",
+        "--project-text": "#1a0d14",
+        "--project-heading": "#1a0d14",
+        "--project-link": "#d4537e",
+        "--project-link-hover": "#993556",
+        "--project-surface-a": "#fdf6f9",
+        "--project-surface-b": "#f9eff4",
+        "--project-summary-fg": "#d4537e",
+        "--project-accent": "#d4537e",
+      }
+    : {
+        "--project-window-border": "rgba(46,125,50,0.9)",
+        "--project-window-border-soft": "rgba(76,175,80,0.35)",
+        "--project-window-glow": "rgba(76,175,80,0.12)",
+        "--project-window-shadow-deep": "rgba(0,0,0,0.38)",
+        "--project-header-bg": "#111111",
+        "--project-divider": "rgba(76,175,80,0.55)",
+        "--project-title-fg": "#d4f5d4",
+        "--project-text": "#1a1a1a",
+        "--project-heading": "#1a1a1a",
+        "--project-link": "#4caf50",
+        "--project-link-hover": "#2e7d32",
+        "--project-surface-a": "#f5f5f0",
+        "--project-surface-b": "#f0f0eb",
+        "--project-summary-fg": "#4caf50",
+        "--project-accent": "#4caf50",
+      };
+  Object.entries(vars).forEach(([k, v]) => container.style.setProperty(k, v));
 }
 
 function applyUserInputModalTheme(panel, sourceWindowEl) {
@@ -1963,7 +2010,6 @@ async function spawnBuildProjectPageWindow(pageId, options = {}) {
   header.innerHTML = `
     <div class="content-window__controls" aria-hidden="true">
       <button type="button" class="content-window__control" data-action-id="closeSelf" tabindex="-1" aria-label="Close"></button>
-      <button type="button" class="content-window__control" data-action-id="minimizeSelf" tabindex="-1" aria-label="Minimize"></button>
     </div>
     <div class="content-window__title"></div>
   `;
@@ -2588,7 +2634,7 @@ function spawnEssayTextWindow(title, text, options = {}) {
   container.style.width = `${width}px`;
   bringToFront(container);
 
-  applyProjectPageSpawnTheme(container, options);
+  applyEssayOsTheme(container);
 
   const frame = document.createElement("div");
   frame.className = "desktop-window__frame desktop-window__frame--content";
@@ -2598,7 +2644,6 @@ function spawnEssayTextWindow(title, text, options = {}) {
   header.innerHTML = `
     <div class="content-window__controls" aria-hidden="true">
       <button type="button" class="content-window__control" data-action-id="closeSelf" tabindex="-1" aria-label="Close"></button>
-      <button type="button" class="content-window__control" data-action-id="minimizeSelf" tabindex="-1" aria-label="Minimize"></button>
     </div>
     <div class="content-window__title"></div>
   `;
@@ -2619,6 +2664,11 @@ function spawnEssayTextWindow(title, text, options = {}) {
     p.textContent = para.trim();
     body.appendChild(p);
   });
+
+  const morePrompt = document.createElement("p");
+  morePrompt.className = "essay-window__more-prompt";
+  morePrompt.textContent = "click more windows to learn more →";
+  body.appendChild(morePrompt);
 
   frame.append(header, body);
   container.appendChild(frame);
@@ -2675,7 +2725,6 @@ async function spawnProjectPageWindow(pageId, options = {}) {
     header.innerHTML = `
       <div class="content-window__controls" aria-hidden="true">
         <button type="button" class="content-window__control" data-action-id="closeSelf" tabindex="-1" aria-label="Close"></button>
-        <button type="button" class="content-window__control" data-action-id="minimizeSelf" tabindex="-1" aria-label="Minimize"></button>
       </div>
       <div class="content-window__title"></div>
     `;
