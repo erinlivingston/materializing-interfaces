@@ -1714,6 +1714,7 @@ button.material-sm-avatar:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100dvh;
   background-color: #1a2838;
   background-image: url("../../assets/desktopbackgrounddigital.jpg");
   background-size: cover;
@@ -1978,7 +1979,7 @@ button.material-sm-avatar:focus-visible {
 
 .feed-export-btn {
   position: absolute;
-  top: 14px;
+  top: 76px;
   right: 14px;
   z-index: 25;
   border: 1px solid rgba(20, 20, 20, 0.22);
@@ -1999,8 +2000,8 @@ button.material-sm-avatar:focus-visible {
 
 .mobile-info-btn {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
+  bottom: max(16px, calc(16px + env(safe-area-inset-bottom)));
+  right: max(16px, calc(16px + env(safe-area-inset-right)));
   z-index: 25;
   width: 42px;
   height: 42px;
