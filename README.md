@@ -1,97 +1,160 @@
 # Material Desktop
 
-An interactive “materialized desktop” site: a **desktop view** layers draggable abstract “windows” (scanned UI collages) over a chosen background, and a **mobile view** stages a generative feed and stories experience built from ad screenshot metadata and canvas rendering.
+**Material Desktop** is an interactive web project built as part of an MS thesis. It explores the visual and tactile language of digital interfaces by simulating two parallel environments: a draggable abstract desktop and a generative mobile feed. Both environments are rendered entirely in the browser with no build tools or frameworks — just plain HTML, CSS, and JavaScript.
 
-## Entry points
+---
 
-| Path | Purpose |
-|------|---------|
-| `index.html` | Simple landing page with links to desktop and mobile |
-| `desktop/index.html` | Full desktop experience (`data-view="desktop"`) |
-| `mobile/index.html` | Mobile-style app shell (`data-view="mobile"`) |
+## What it does
 
-Both views share `shared/css/common.css`. Paths assume you serve the repo from its root (see [Run locally](#run-locally)).
+The project has two distinct "views" that share the same asset library but behave independently.
 
-## Desktop vs mobile (high level)
+**Desktop view** presents a simulated desktop environment. When you open it, an entry screen (a frosted-glass panel with a password input) is layered over a background image. Dismissing it reveals a desktop populated with abstract "windows" — draggable panels containing scanned or collaged UI imagery. Each window can contain interactive click zones that trigger further actions: spawning new windows, opening essay-style project pages, showing menus, or cycling color filters. A start bar runs along the bottom, and a floating "Editor" icon sits on the canvas.
 
-**Desktop** is a single page driven by `shared/js/overlay.js`. It loads `assets/windows.config.json`, which defines each window image, interactive **click zones** (normalized coordinates), and **actions** (spawn another window, open a project page, menus, color filters, etc.). Windows are positioned in a `#window-layer` above the background; many behaviors are data-driven from JSON rather than hard-coded per window.
+**Mobile view** simulates an app-style feed experience. It is a small screen router with four named screens — `home`, `feed`, `stories`, and `project`. The feed generates an infinite-scroll canvas using advertisement screenshot metadata and riso-style rendering (a layered, risograph-inspired print aesthetic). Story slides are full-screen and tap-navigable. The mobile shell is designed to be embedded in the desktop view as a preview, and is also fully usable as a standalone URL.
 
-**Mobile** is a small **screen router** in `shared/js/mobileApp.js`. Four sections (`home`, `feed`, `stories`, `project`) map to DOM nodes in `mobile/index.html`. Only one screen is active at a time; switching screens runs matching `destroy*` then `init*` hooks so each screen can own canvas listeners and teardown cleanly. Mobile loads **p5** and `p5.riso.js` from a CDN for riso-style rendering used on the feed.
+---
 
-There is no shared runtime between desktop and mobile beyond CSS and some asset paths; they are two coordinated “faces” of the project.
+## Technical stack
 
-## JavaScript modules
+| Concern | Technology |
+|---------|-----------|
+| Languages | HTML5, CSS3, JavaScript (ES modules) |
+| Build system | None — served as static files |
+| Canvas / generative rendering | [p5.js](https://p5js.org/) v1.11.0 (CDN) + `p5.riso.js` (local) |
+| Fonts | Google Fonts (Lexend, Marck Script, Montserrat, Source Serif 4, Work Sans) |
+| Icons | Flaticon UIcons v3.3.1 (CDN) |
+| Data | JSON files for window config and ad metadata |
+| Persistence | `localStorage` for background preference |
 
-| Module | Used by | Role |
-|--------|---------|------|
-| `overlay.js` | Desktop only | Config load, window spawning, zones, drag/stack, start menu / code icon, desktop clock, entry overlay, background picker (landscape vs ombre), dynamic imports for poetry/history text |
-| `projectPages.js` | Desktop (via `overlay.js`) | Static HTML “essays” for project windows; links use `data-project-link` to open further pages in new content windows |
-| `browserHistoryPoetry.js` | Desktop (dynamic import from `overlay.js`) | Feeds optional word/poetry behavior into certain text zones |
-| `mobileApp.js` | Mobile | Bootstraps ad data, wires swipe-up-to-home, `navigateTo` / `goBack`, initial screen from `#hash` or `?screen=` |
-| `homeScreen.js` | Mobile | Homescreen with random paper texture and “click to enter” → feed; **i** → project |
-| `feedGenerator.js` | Mobile | Infinite-scroll canvas feed: ad fragments, riso layers (`risoAdRenderer.js`), paper texture, touch marks; story row taps → stories; back/info navigation |
-| `storiesGenerator.js` | Mobile | Full-screen story slides from random ad items; tap left/right to change slide; long-press pauses |
-| `projectScreen.js` | Mobile | Placeholder project / about copy with back to home |
-| `adDataLoader.js` | Mobile | Fetches and groups `assets/mobile_screenshots/meta/PNGdatamobileADS_100lines.json` |
-| `adCropper.js` | Mobile | Crops “safe” regions of ad images (avoids chrome) for fragments and colors |
-| `risoAdRenderer.js` | Mobile (`feedGenerator.js`) | Riso-style separation / drawing for feed tiles |
-| `p5.riso.js` | Mobile (script tag) | p5 riso helpers used with feed rendering |
+There is no npm, no bundler, no framework. Every file is loaded directly by the browser.
 
-## Desktop: how windows spawn
+---
 
-On first paint, a **glass entry** layer (inset frosted panel with backdrop blur, circular avatar placeholder, and a pill “click to enter” control) sits over the loaded desktop. Abstract windows sit below that panel (for backdrop blur); **folder icons** (`img_5510`) spawn into a dedicated layer above the glass, then **move into** the main window layer when you dismiss so stacking matches the rest of the session. **Any** pointer or keyboard input dismisses the entry layer.
+## Project structure
 
-1. **Startup** (`spawnInitialDesktopWindows`): After `windows.config.json` loads, the desktop spawns **three** random **interactive** abstract windows (excluding the large code-editor window id used elsewhere). It then spawns a **decorative cluster** of folder icons (`img_5510`) in two loose groups on the left and right of the viewport.
+```
+materialdesktop/
+├── index.html                  # Root landing page (auto-redirects to desktop or mobile)
+├── desktop/
+│   └── index.html              # Desktop view entry point
+├── mobile/
+│   └── index.html              # Mobile view entry point
+├── shared/
+│   ├── css/
+│   │   └── common.css          # Styles shared by both views
+│   └── js/
+│       ├── overlay.js          # All desktop logic (window spawning, zones, drag, menus, clock)
+│       ├── projectPages.js     # Essay/narrative HTML for project windows (desktop)
+│       ├── browserHistoryPoetry.js  # Feeds poetry text into desktop text zones
+│       ├── mobileApp.js        # Mobile router and screen lifecycle
+│       ├── homeScreen.js       # Mobile home screen
+│       ├── feedGenerator.js    # Infinite-scroll canvas feed
+│       ├── storiesGenerator.js # Full-screen story slides
+│       ├── projectScreen.js    # Mobile project/about screen
+│       ├── adDataLoader.js     # Loads and groups ad JSON data
+│       ├── adCropper.js        # Crops safe regions from ad images
+│       ├── risoAdRenderer.js   # Riso-style rendering for feed tiles
+│       └── p5.riso.js          # p5 riso helpers (local copy)
+└── assets/
+    ├── windows.config.json     # Defines every desktop window, its image, zones, and actions
+    ├── essays.json             # Essay/text content
+    ├── papertexture.jpg        # Paper texture used in home screen
+    ├── browserhistory_*.json   # Browser history data used for poetry behavior
+    ├── backgrounds/            # Desktop background images
+    ├── AbstractWindows/        # Window panel PNGs
+    ├── freedigitalpaper/       # Paper texture images for digital paper windows
+    ├── iconphotos/             # Avatar and icon images
+    └── mobile_screenshots/
+        ├── meta/               # Ad metadata JSON
+        └── (ad images)
+```
 
-2. **Zone actions**: Clicks on zones run actions defined in JSON or **builtins** in `overlay.js` (e.g. `openAbstractFromPool`, `spawnRandom`, `spawnDigitalPaper`, `openProjectPage`, `menu`, `close`, color cycling, user input stubs). Pool-based spawns track **`openWindowIds`** so the same abstract id is not duplicated; if the pool is exhausted or a random “spill” fires, the system may spawn a **digital paper** window instead.
+---
 
-3. **Digital paper windows**: Separate from config entries—random images from `initPaperSources()` inside `overlay.js`, full-window draggable “paper” layers.
+## How the desktop works
 
-4. **Project / content windows**: Narrative HTML from `projectPages.js` opens as `desktop-window--project-page` windows; the Start button opens the `start` page (includes desktop background radio: landscape vs ombre, persisted in `localStorage`).
+### Entry and startup
 
-5. **Debug / authoring**: Query params `?debugZones=1` and `?showZones=1` toggle debug UI and visible zones (see `overlay.js`).
+When `desktop/index.html` loads, `overlay.js` fetches `assets/windows.config.json` and then calls `spawnInitialDesktopWindows`, which places three randomly chosen abstract windows on the canvas and two loose clusters of folder icons on the left and right sides. A frosted-glass entry overlay sits on top. Any pointer or keyboard input dismisses it.
 
-## Mobile: navigation and spawning
+### Windows and click zones
 
-- **Initial screen**: `mobile/index.html#home` (default), or `#feed`, `#stories`, `#project`, or `?screen=feed` etc.
-- **Home → feed**: Tap/click the main entry surface (touch and click are deduplicated to avoid double fire).
-- **Feed → stories**: Tap one of the **story circles** in the feed header row.
-- **Stories**: Tap **left** / **right** thirds of the canvas for previous/next slide; before first / after last slide returns to **feed**. Back button (**←**) goes to **home**. Long-press pauses the story.
-- **Feed back**: Returns to **home**; **i** opens **project**.
-- **Swipe up** (vertical swipe with enough delta): From feed, stories, or project, jumps back to **home** (not from home).
-- **Project**: Back **←** returns to **home**.
+Each window in `windows.config.json` has an `id`, a source image path (`src`), a size specification (`sizeCm`), and an optional array of `zones`. Zones are defined in normalized coordinates (0–1 relative to the window size) so they scale correctly with the window. Each zone has an `action`, which is either a built-in string (e.g. `openAbstractFromPool`, `spawnRandom`, `menu`, `close`) or a data-driven descriptor. The full list of built-in actions lives in `overlay.js`.
 
-Feed content **spawns** continuously during scroll: new fragments and overlays are generated from the ad JSON (random items, crops, blend modes, riso inks keyed loosely off emotion tags, break panels, etc.). That logic lives in `feedGenerator.js` rather than in `windows.config.json`.
+### Window types
 
-## Configuration and assets (desktop)
+- **Abstract windows**: The main interactive panels, loaded from `windows.config.json`.
+- **Digital paper windows**: Decorative full-window layers with random paper texture images; spawned from `initPaperSources()` in `overlay.js`.
+- **Project/content windows**: Narrative HTML panels rendered from `projectPages.js`, opened by certain zone actions or the Start menu.
 
-- **`assets/windows.config.json`**: Window definitions (`id`, `src`, `sizeCm`, `zones`, `actions`). Sizing can scale relative to a reference window (`sizing.reference`).
+### Debugging
 
-- **Backgrounds**: Desktop backgrounds are under `assets/backgrounds/` (see `DESKTOP_BACKGROUNDS` in `overlay.js`).
+Append `?debugZones=1` or `?showZones=1` to the desktop URL to see click zone outlines and debug information.
 
-- **Abstract window PNGs**: Referenced from `windows.config.json` (e.g. `assets/AbstractWindows/`).
+---
 
-- **Paper textures**: Digital paper lists in `overlay.js` and `homeScreen.js` point at `assets/freedigitalpaper/` (and similar).
+## How the mobile works
 
-## Run locally (no build step)
+### Screen routing
 
-Plain HTML/CSS/JS. From the repo root:
+`mobileApp.js` manages four sections of `mobile/index.html` — `#screen-home`, `#screen-feed`, `#screen-stories`, and `#screen-project`. Only one is active at a time. Switching screens calls the outgoing screen's `destroy*` function and the incoming screen's `init*` function, so canvas listeners and event handlers are always cleaned up.
+
+### Navigation
+
+| Action | Result |
+|--------|--------|
+| Tap home surface | Go to feed |
+| Tap story circle in feed header | Go to stories |
+| Tap left / right third of story canvas | Previous / next story slide |
+| Past first or last slide | Return to feed |
+| Back button (`←`) in stories | Go to home |
+| Back button in feed | Go to home |
+| Info button (`i`) in feed | Go to project |
+| Swipe up (from feed, stories, or project) | Go to home |
+
+Initial screen can be set via URL hash (`#feed`) or query param (`?screen=feed`).
+
+### Feed generation
+
+`feedGenerator.js` generates the canvas feed dynamically as the user scrolls. Each tile is assembled from: a random crop of an ad image (`adCropper.js`), riso-style color separation (`risoAdRenderer.js`), a paper texture overlay, and touch marks. Ad items are loaded once via `adDataLoader.js` from the metadata JSON, then sampled randomly with blend modes and riso ink colors loosely keyed to emotion tags in the metadata.
+
+---
+
+## Key configuration files
+
+### `assets/windows.config.json`
+
+This is the primary data file for the desktop. It defines every window that can appear, including:
+- `id` — unique identifier
+- `src` — path to the window image
+- `sizeCm` — intended display size (can be relative to a reference window via `sizing.reference`)
+- `zones` — array of click regions with normalized coordinates and action descriptors
+
+### `assets/essays.json`
+
+Contains text content used in project pages and narrative windows.
+
+### Ad metadata JSON
+
+Lives at `assets/mobile_screenshots/meta/`. Contains an array of ad image records with fields for emotion tags, image paths, and other metadata used by the feed and stories generators.
+
+---
+
+## Running locally
+
+No installation required. The only requirement is serving the files over HTTP (browser security restrictions prevent `fetch()` from working on `file://` URLs).
 
 ```bash
 cd /path/to/materialdesktop
 python3 -m http.server 8000
 ```
 
-Then open:
+Then open in a browser:
 
-- http://localhost:8000/desktop/
-- http://localhost:8000/mobile/
-- http://localhost:8000/ — landing links
+| URL | View |
+|-----|------|
+| http://localhost:8000/ | Landing page (auto-redirects based on device) |
+| http://localhost:8000/desktop/ | Desktop view |
+| http://localhost:8000/mobile/ | Mobile view |
 
-Serving over `http://` is required for `fetch()` of JSON and images.
-
-## Optional next steps for you
-
-1. Extend `projectPages.js` and wire more `project.*` actions in JSON if you add pages.
-2. Add or swap assets under `assets/backgrounds/` and update paths in `overlay.js` if you rename files.
-3. Expand `assets/mobile_screenshots/meta/` data and tune feed/story weights in the mobile generators.
+The landing page detects device type via `window.matchMedia("(pointer: coarse)")` and viewport width (`<= 768px`). If either condition is true it redirects to the mobile view; otherwise to the desktop view.
